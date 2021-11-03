@@ -22,6 +22,7 @@ public class Venta {
         this.Cantidad = Cantidad;
     }
 // asdasd
+    //modificación desde mac xd
 // asdasda
     public String getFecha() {
         return Fecha;
