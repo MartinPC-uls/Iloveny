@@ -21,7 +21,7 @@ public class Venta {
         this.Rut = Rut;
         this.Cantidad = Cantidad;
     }
-
+// asdasd
     public String getFecha() {
         return Fecha;
     }
