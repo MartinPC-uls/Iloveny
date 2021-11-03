@@ -9,6 +9,8 @@ package a.Modelo;
  *
  * @author Roberto
  */
+
+// cambio añadido para testear xd (desde github.com)
 public class Compra {
     private String Fecha_pedido;
     private String Fecha_recibo;
