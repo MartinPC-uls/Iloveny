@@ -9,6 +9,8 @@ package a.Modelo;
  *
  * @author Roberto
  */
+
+// cambio añadido para testear xd (desde github.com)
 public class Articulo {
     private String Nombre;
     private String Ruta_imagen;
