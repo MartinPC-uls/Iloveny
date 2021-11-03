@@ -22,6 +22,7 @@ public class Venta {
         this.Cantidad = Cantidad;
     }
 // asdasd
+// asdasda
     public String getFecha() {
         return Fecha;
     }
