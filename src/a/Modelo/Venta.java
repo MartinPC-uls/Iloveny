@@ -21,39 +21,36 @@ public class Venta {
         this.Rut = Rut;
         this.Cantidad = Cantidad;
     }
-// asdasd
-    //modificación desde mac xd
-// asdasda
     public String getFecha() {
         return Fecha;
     }
 
     public void setFecha(String Fecha) {
-        this.Fecha = Fecha;
+	    this.Fecha = Fecha;
     }
 
     public String getNombre() {
-        return Articulo;
+	    return Articulo;
     }
 
     public void setNombre(String Nombre) {
-        this.Articulo = Nombre;
+	    this.Articulo = Nombre;
     }
 
     public int getRut() {
-        return Rut;
+	    return Rut;
     }
 
     public void setRut(int Rut) {
-        this.Rut = Rut;
+	    this.Rut = Rut;
     }
 
     public int getCantidad() {
-        return Cantidad;
+	    return Cantidad;
     }
 
     public void setCantidad(int Cantidad) {
-        this.Cantidad = Cantidad;
+	    this.Cantidad = Cantidad;
     }
     
 }

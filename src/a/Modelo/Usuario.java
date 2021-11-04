@@ -22,24 +22,24 @@ public class Usuario {
     private int Telefono;
 
     public Usuario(String Nombre, String Apellido, String Rut, String Correo, String Comuna, String Ciudad, String Calle, int Domicilio, int Region, int Telefono) {
-        this.Nombre = Nombre;
-        this.Apellido = Apellido;
-        this.Rut = Rut;
-        this.Correo = Correo;
-        this.Comuna = Comuna;
-        this.Ciudad = Ciudad;
-        this.Calle = Calle;
-        this.Domicilio = Domicilio;
-        this.Region = Region;
-        this.Telefono = Telefono;
+	 this.Nombre = Nombre;
+	 this.Apellido = Apellido;
+	 this.Rut = Rut;
+	 this.Correo = Correo;
+	 this.Comuna = Comuna;
+	 this.Ciudad = Ciudad;
+	 this.Calle = Calle;
+	 this.Domicilio = Domicilio;
+	 this.Region = Region;
+	 this.Telefono = Telefono;
     }
 
     public String getNombre() {
-        return Nombre;
+	    return Nombre;
     }
 
     public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+	    this.Nombre = Nombre;
     }
 
     public String getApellido() {
