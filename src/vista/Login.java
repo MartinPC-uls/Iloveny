@@ -32,6 +32,7 @@ public class Login {
 		frame.setBounds(100, 100, 889, 547);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		// comentario
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(0, 255, 0));
