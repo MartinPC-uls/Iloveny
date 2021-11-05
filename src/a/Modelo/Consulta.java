@@ -12,13 +12,10 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
+import java.util.Date;
 
-/**
- *
- * @author Roberto
- */
 public class Consulta extends Conexion{
-    
+	
     public ArrayList getListaArticulos(String orden){
         PreparedStatement ps;
         ResultSet rs;
@@ -55,5 +52,42 @@ public class Consulta extends Conexion{
         return null;
     }
     
-    
+    /**
+     * Esta funcion permite agregar una nueva fila a la tabla de RegistroCompra con sus correspondientes datos.
+     * @param NombreArticulo Corresponde al dato que se va a agregar en la columna NombreArticulo.
+     * @param Usuario Corresponde al dato que se va a agregar en la columna Usuario.
+     * @param idProv Corresponde al dato que se va a agregar en la columna idProv.
+     * @param UnidadesAdquiridas Corresponde al dato que se va a agregar en la columna UnidadesAdquiridas.
+     * @param CostoUnitario Corresponde al dato que se va a agregar en la columna CostoUnitario.
+     * @param FechaPedida Corresponde al dato que se va a agregar en la columna FechaPedida.
+     * @param FechaRecibo Corresponde al dato que se va a agregar en la columna FechaRecibo.
+     */
+    public void addNuevoRegistroCompra(String NombreArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "INSERT INTO RegistroCompra (NombreArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo)"
+        		+ " VALUES (?,?,?,?,?,?,?)";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, NombreArticulo);
+			ps.setString(2, Usuario);
+			ps.setInt(3, idProv);
+			ps.setInt(4,UnidadesAdquiridas);
+			ps.setInt(5,CostoUnitario);
+			ps.setDate(6, (java.sql.Date) FechaPedida);
+			ps.setDate(7, (java.sql.Date) FechaRecibo);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+ 
 }
