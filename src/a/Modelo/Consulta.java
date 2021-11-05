@@ -86,6 +86,7 @@ public class Consulta extends Conexion{
                 con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+                
             }
         }
     }

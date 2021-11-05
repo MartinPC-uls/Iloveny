@@ -45,6 +45,7 @@ public class Conexion {
             System.out.println("Conexion cerrada");
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
     }    
 }
