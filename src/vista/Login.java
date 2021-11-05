@@ -8,20 +8,7 @@ import java.awt.Color;
 
 public class Login {
 
-	private JFrame frame;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login window = new Login();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	public JFrame frame;
 
 	public Login() {
 		initialize();
