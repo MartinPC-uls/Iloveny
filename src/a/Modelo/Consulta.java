@@ -224,7 +224,7 @@ public class Consulta extends Conexion{
         return null;
     }
     
-    public boolean verificarAdmin(String Usuario, String Contraseña){
+    public boolean verificarAdmin(String Usuario, String Contrasena){
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
@@ -232,7 +232,7 @@ public class Consulta extends Conexion{
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Usuario);
-            ps.setString(2, Contraseña);
+            ps.setString(2, Contrasena);
             rs = ps.executeQuery();
             return rs.next();   
         } catch (SQLException ex) {
