@@ -5,6 +5,7 @@
  */
 package vista;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,9 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  *
@@ -23,16 +27,25 @@ import java.awt.event.MouseEvent;
 public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	public JPasswordField pwdJpasswordfield;
-	public JTextField txtJtextfield;
+	public JPasswordField txtPassword;
+	public JTextField txtUser;
 	public JButton btnLogin;
+	public JLabel lblErrorMessage;
+	public JLabel lblErrorImage;
+	public JPanel downPanelUser;
+	public JPanel downPanelPassword;
 	
     public Login() {
     	getContentPane().setBackground(new Color(51,51,51));
-        initialize();
+        try {
+		initialize();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     }
 
-    private void initialize() {
+    private void initialize() throws IOException {
     	setResizable(false);
         setVisible(true);
         setBounds(100, 100, 473, 652);
@@ -42,33 +55,93 @@ public class Login extends JFrame {
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         getContentPane().setLayout(null);
         
+        downPanelUser = new JPanel();
+        downPanelPassword = new JPanel();
+        
         JLabel lblLogin = new JLabel();
         lblLogin.setVerticalAlignment(SwingConstants.CENTER);
         lblLogin.setText("INICIO DE SESI\u00D3N");
         lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
         lblLogin.setForeground(Color.WHITE);
         lblLogin.setFont(new Font("Roboto Light", Font.PLAIN, 24));
-        lblLogin.setBounds(10, 170, 441, 35);
+        lblLogin.setBounds(0, 170, 467, 35);
         getContentPane().add(lblLogin);
         
         JPanel panel = new JPanel();
         panel.setBackground(new Color(51,51,51));
-        panel.setBounds(72, 216, 314, 346);
+        panel.setBounds(74, 216, 314, 346);
         getContentPane().add(panel);
         panel.setLayout(null);
         
-        txtJtextfield = new JTextField();
-        txtJtextfield.setCaretColor(Color.WHITE);
-        txtJtextfield.setBounds(41, 66, 273, 21);
-        panel.add(txtJtextfield);
-        txtJtextfield.setText("jTextField1");
-        txtJtextfield.setOpaque(false);
-        txtJtextfield.setForeground(Color.WHITE);
-        txtJtextfield.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        txtJtextfield.setBorder(null);
-        txtJtextfield.setBackground(new Color(51, 51, 51));
+        JLabel lblPasswordImage = new JLabel();
+        lblPasswordImage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblPasswordImage.setIcon(new ImageIcon(ImageIO.read(new File("res/images/lock.png"))));
+        lblPasswordImage.setBounds(0, 106, 18, 41);
+        panel.add(lblPasswordImage);
         
-        JPanel downPanelUser = new JPanel();
+        JLabel lblUserImage = new JLabel();
+        lblUserImage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblUserImage.setIcon(new ImageIcon(ImageIO.read(new File("res/images/person.png"))));
+        lblUserImage.setBounds(0, 60, 24, 41);
+        panel.add(lblUserImage);
+        
+        lblErrorImage = new JLabel();
+        lblErrorImage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblErrorImage.setIcon(new ImageIcon(ImageIO.read(new File("res/images/error.png"))));
+        lblErrorImage.setBounds(0, 158, 24, 21);
+        panel.add(lblErrorImage);
+        
+        lblErrorMessage = new JLabel("Acceso denegado");
+        lblErrorMessage.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblErrorMessage.setForeground(Color.RED);
+        lblErrorMessage.setBounds(34, 158, 280, 21);
+        panel.add(lblErrorMessage);
+        
+        lblErrorImage.setVisible(false);
+        lblErrorMessage.setVisible(false);
+        
+        JLabel lblImagen = new JLabel();
+        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+        lblImagen.setIcon(new ImageIcon(ImageIO.read(new File("res/images/person-icon.png"))));
+        lblImagen.setBounds(0, 31, 467, 128);
+        getContentPane().add(lblImagen);
+        
+        txtUser = new JTextField();
+        txtUser.setForeground(new Color(170, 170, 170));
+        txtUser.setText("Usuario");
+        txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		
+        		// cambiar downPanelUser a color rojo, si el usuario es incorrecto.
+        		if (text.length() == 0) {
+        			txtUser.setForeground(new Color(170, 170, 170));
+        			txtUser.setText("Usuario");
+        			downPanelUser.setBackground(Color.RED);
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        			downPanelUser.setBackground(Color.GREEN);
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color)) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
+        txtUser.setCaretColor(Color.WHITE);
+        txtUser.setBounds(41, 66, 273, 21);
+        panel.add(txtUser);
+        txtUser.setOpaque(false);
+        txtUser.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        txtUser.setBorder(null);
+        txtUser.setBackground(new Color(51, 51, 51));
+        
         downPanelUser.setBounds(-89, 98, 441, 3);
         panel.add(downPanelUser);
         downPanelUser.setPreferredSize(new Dimension(0, 3));
@@ -86,17 +159,41 @@ public class Login extends JFrame {
         );
         downPanelUser.setLayout(gl_downPanelUser);
         
-        pwdJpasswordfield = new JPasswordField();
-        pwdJpasswordfield.setCaretColor(Color.WHITE);
-        pwdJpasswordfield.setBounds(41, 112, 273, 21);
-        panel.add(pwdJpasswordfield);
-        pwdJpasswordfield.setText("jPasswordField1");
-        pwdJpasswordfield.setForeground(Color.WHITE);
-        pwdJpasswordfield.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        pwdJpasswordfield.setBorder(null);
-        pwdJpasswordfield.setBackground(new Color(51, 51, 51));
+        txtPassword = new JPasswordField();
+        txtPassword.addFocusListener(new FocusAdapter() {
+       	 @Override
+       	 public void focusLost(FocusEvent e) {
+         		String text = txtPassword.getText();
+         		
+         		// cambiar downPanelUser a color rojo, si el usuario es incorrecto.
+         		if (text.length() == 0) {
+         			txtPassword.setForeground(new Color(170, 170, 170));
+         			txtPassword.setText("password");
+         			downPanelPassword.setBackground(Color.RED);
+         		} else {
+         			txtPassword.setForeground(new Color(255, 255, 255));
+         			downPanelPassword.setBackground(Color.GREEN);
+         		}
+         	}
+         	@Override
+         	public void focusGained(FocusEvent e) {
+         		String text = txtPassword.getText();
+         		Color color = new Color(170, 170, 170);
+         		if (txtPassword.getForeground().equals(color)) {
+         			txtPassword.setText("");
+         			txtPassword.setForeground(new Color(255, 255, 255));
+         		}
+         	}
+        });
+        txtPassword.setCaretColor(Color.WHITE);
+        txtPassword.setBounds(41, 112, 273, 21);
+        panel.add(txtPassword);
+        txtPassword.setText("password");
+        txtPassword.setForeground(new Color(170, 170, 170));
+        txtPassword.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        txtPassword.setBorder(null);
+        txtPassword.setBackground(new Color(51, 51, 51));
         
-        JPanel downPanelPassword = new JPanel();
         downPanelPassword.setBounds(-67, 144, 441, 3);
         panel.add(downPanelPassword);
         downPanelPassword.setPreferredSize(new Dimension(0, 3));
@@ -123,24 +220,6 @@ public class Login extends JFrame {
         btnLogin.setBorder(null);
         btnLogin.setBackground(new Color(0, 153, 153));
         
-        JLabel lblImagen_1 = new JLabel("");
-        lblImagen_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblImagen_1.setIcon(new ImageIcon("C:\\Users\\ghanv\\OneDrive\\Escritorio\\images for work\\person.png"));
-        lblImagen_1.setBounds(0, 60, 24, 41);
-        panel.add(lblImagen_1);
-        
-        JLabel lblImagen_1_1 = new JLabel("");
-        lblImagen_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-        lblImagen_1_1.setIcon(new ImageIcon("C:\\Users\\ghanv\\OneDrive\\Escritorio\\images for work\\lock.png"));
-        lblImagen_1_1.setBounds(0, 106, 24, 41);
-        panel.add(lblImagen_1_1);
-        
-        JLabel lblImagen = new JLabel("");
-        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
-        lblImagen.setIcon(new ImageIcon("C:\\Users\\ghanv\\OneDrive\\Escritorio\\images for work\\person-icon.png"));
-        lblImagen.setBounds(0, 31, 457, 128);
-        getContentPane().add(lblImagen);
 
-        //pack();
     }
 }

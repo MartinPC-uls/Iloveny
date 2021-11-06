@@ -9,32 +9,41 @@ import java.awt.event.MouseEvent;
 import vista.Login;
 import a.Modelo.Consulta;
 
-public class ControladorLogin {
+public class ControladorLogin extends Login {
 	
-	
+	private static final long serialVersionUID = 1L;
+
 	public ControladorLogin() {
 		Consulta consulta = new Consulta();
-		Login login = new Login();
-		login.btnLogin.addMouseListener(new MouseAdapter() {
+		btnLogin.addMouseListener(new MouseAdapter() {
 	    	@Override
 	    	public void mouseEntered(MouseEvent e) {
-	    		login.btnLogin.setBackground(new Color(0, 200, 200));
+	    		btnLogin.setBackground(new Color(0, 200, 200));
 	    	}
 	    	@Override
 	    	public void mouseExited(MouseEvent e) {
-	    		login.btnLogin.setBackground(new Color(0, 153, 153));
+	    		btnLogin.setBackground(new Color(0, 153, 153));
 	    	}
 	    });
 		
-        login.btnLogin.addActionListener(new ActionListener() {
+        btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		if(consulta.verificarAdmin(login.txtJtextfield.getText(), login.pwdJpasswordfield.getText())) {
+        		if(consulta.verificarAdmin(txtUser.getText(), txtPassword.getText())) {
         			System.out.println("Logeado dentro del sistema.");
+        			lblErrorImage.setVisible(false);
+        			lblErrorMessage.setVisible(false);
+        			downPanelUser.setBackground(Color.GREEN);
+        			downPanelPassword.setBackground(Color.GREEN);
         			// abrir ventana nueva..
         		} else {
-        			System.out.println("No existe/ mala contrasena");
+        			System.out.println("No existe / mala contrasena");
+        			lblErrorImage.setVisible(true);
+        			lblErrorMessage.setVisible(true);
+        			downPanelUser.setBackground(Color.RED);
+        			downPanelPassword.setBackground(Color.RED);
         		}
         	}
         });
 	}
+	
 }
