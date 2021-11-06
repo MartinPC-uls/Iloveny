@@ -23,8 +23,9 @@ import java.awt.event.MouseEvent;
 public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPasswordField pwdJpasswordfield;
-	private JTextField txtJtextfield;
+	public JPasswordField pwdJpasswordfield;
+	public JTextField txtJtextfield;
+	public JButton btnLogin;
 	
     public Login() {
     	getContentPane().setBackground(new Color(51,51,51));
@@ -32,7 +33,7 @@ public class Login extends JFrame {
     }
 
     private void initialize() {
-        
+        setVisible(true);
         setBounds(100, 100, 473, 652);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -112,17 +113,7 @@ public class Login extends JFrame {
         );
         downPanelPassword.setLayout(gl_downPanelPassword);
         
-        JButton btnLogin = new JButton();
-        btnLogin.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseEntered(MouseEvent e) {
-        		btnLogin.setBackground(new Color(0, 200, 200));
-        	}
-        	@Override
-        	public void mouseExited(MouseEvent e) {
-        		btnLogin.setBackground(new Color(0, 153, 153));
-        	}
-        });
+        btnLogin = new JButton();
         btnLogin.setBounds(0, 271, 314, 40);
         panel.add(btnLogin);
         btnLogin.setText("INGRESAR");

@@ -229,7 +229,7 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT * FROM Administrador WHERE Usuario=? AND Contraseña=?;";
+        String sql = "SELECT * FROM administrador WHERE Usuario=? AND Contrasena=?";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Usuario);
