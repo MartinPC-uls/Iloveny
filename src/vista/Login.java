@@ -13,6 +13,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -111,6 +113,16 @@ public class Login extends JFrame {
         downPanelPassword.setLayout(gl_downPanelPassword);
         
         JButton btnLogin = new JButton();
+        btnLogin.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseEntered(MouseEvent e) {
+        		btnLogin.setBackground(new Color(0, 200, 200));
+        	}
+        	@Override
+        	public void mouseExited(MouseEvent e) {
+        		btnLogin.setBackground(new Color(0, 153, 153));
+        	}
+        });
         btnLogin.setBounds(0, 271, 314, 40);
         panel.add(btnLogin);
         btnLogin.setText("INGRESAR");
