@@ -12,10 +12,11 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
- * @author Roberto
+ * @author Roberto and Felipe B. B)
  */
 public class Consulta extends Conexion{
     
@@ -555,6 +556,544 @@ public class Consulta extends Conexion{
             Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }   
+    /**
+     * Esta funcion permite agregar una nueva fila a la tabla de RegistroCompra con sus correspondientes datos.
+     * @param NombreArticulo Corresponde al dato que se va a agregar en la columna NombreArticulo.
+     * @param Usuario Corresponde al dato que se va a agregar en la columna Usuario.
+     * @param idProv Corresponde al dato que se va a agregar en la columna idProv.
+     * @param UnidadesAdquiridas Corresponde al dato que se va a agregar en la columna UnidadesAdquiridas.
+     * @param CostoUnitario Corresponde al dato que se va a agregar en la columna CostoUnitario.
+     * @param FechaPedida Corresponde al dato que se va a agregar en la columna FechaPedida.
+     * @param FechaRecibo Corresponde al dato que se va a agregar en la columna FechaRecibo.
+     */
+    public void addRegistroCompra(String NombreArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
+        PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "INSERT INTO RegistroCompra (NombreArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
+        		+ " VALUES (?,?,?,?,?,?,?)";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, NombreArticulo);
+			ps.setString(2, Usuario);
+			ps.setInt(3, idProv);
+			ps.setInt(4,UnidadesAdquiridas);
+			ps.setInt(5,CostoUnitario);
+			ps.setDate(6, (java.sql.Date) FechaPedida);
+			ps.setDate(7, (java.sql.Date) FechaRecibo);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    /**
+     * Esta funcion permite agregar una nueva fila a la tabla de RegistroVenta con sus correspondientes datos.
+     * @param NombreArticulo Corresponde al dato que se va a agregar en la columna NombreArticulo.
+     * @param Rut Corresponde al dato que se va a agregar en la columna RUT.
+     * @param CantidadVendida Corresponde al dato que se va a agregar en la columna CantidadVendida.
+     * @param FechaVenta Corresponde al dato que se va a agregar en la columna FechaVenta.
+     */
+    public void addRegistroVenta(String NombreArticulo, String Rut, int CantidadVendida, Date FechaVenta) {
+    	PreparedStatement ps;
+    	Connection con = conectar();
+    	String sql = "INSERT INTO RegistroVenta (NombreArticulo, Rut, CantidadVendida, FechaVenta) "
+    			+ "VALUES (?,?,?,?)";
+    	try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, NombreArticulo);
+			ps.setString(2, Rut);
+			ps.setInt(3, CantidadVendida);
+			ps.setDate(4, (java.sql.Date) FechaVenta);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    /**
+     * Obtiene los datos de la tabla RegistrosCompra en conjunto de la proveedores
+     * @param orden Es el atributo por el cual se va a ordenar la tabla (default: FechaPedida).
+     * @return Retorna un arrayList con los datos obtenidos de la consulta.
+     */
+    public ArrayList getRegistrosCompra (String orden) {
+    	PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT NombreArticulo, Usuario, NombreProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo "
+        		+ "FROM RegistroCompra, Proveedor "
+        		+ "WHERE RegistroCompra.idProv = Proveedor.idProv "
+        		+ "ORDER BY ?";
+        try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, orden);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("Usuario"));
+                columna.add(rs.getString("NombreProv"));
+                columna.add(rs.getString("UnidadesAdquiridas"));
+                columna.add(rs.getString("CostoUnitario"));
+                columna.add(rs.getString("FechaPedida"));
+                columna.add(rs.getString("FechaRecibo"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
+    /**
+     * Obtiene los datos de la tabla de RegistrosVenta
+     * @param orden Es el parametro que determinará el orden de la lista.
+     * @return retorna una lista de arreglos con los datos obtenidos de la consulta.
+     */
+    public ArrayList getRegistrosVenta(String orden) {
+    	PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * "
+        		+ "FROM RegistroVenta "
+        		+ "ORDER BY ?";
+        try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, orden);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("Rut"));
+                columna.add(rs.getString("FechaVenta"));
+                columna.add(rs.getString("CantidadVendida"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
+    /**
+     * Borra una fila de la tabla RegistroCompra.
+     * @param NombreArticulo Este parametro sirve para identificar la fila que se quiere borrar.
+     * @param FechaPedida Este parametro sirve para identificar la fila que se quiere borrar.
+     */
+    public void delRegistroCompra(String NombreArticulo, Date FechaPedida) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE * FROM RegistroCompra "
+        		+ "WHERE NombreArticulo = ? "
+        		+ "AND FechaPedida = ?";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, NombreArticulo);
+			ps.setDate(2, (java.sql.Date) FechaPedida);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public boolean updtRegistroCompra(String UsuarioNuevo, String UsuarioAntiguo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaPedidaAntigua,  Date FechaRecibo, String ArticuloNuevo, String ArticuloAntiguo) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "UPDATE RegistroCompra "
+        		+ "SET NombreArticulo = ?, Usuario = ?, idProv= ?, UnidadesAdquiridas = ?, CostoUnitario= ?, FechaPedida = ?, FechaRecibo =? "
+        		+ "WHERE NombreArticulo = ? "
+        		+ "AND Usuario = ? "
+        		+ "AND FechaPedida = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, ArticuloNuevo);
+            ps.setString(2, UsuarioNuevo);
+            ps.setInt(3, idProv);
+            ps.setInt(4, UnidadesAdquiridas);
+            ps.setInt(5, CostoUnitario);
+            ps.setDate(6, (java.sql.Date) FechaPedidaNueva);
+            ps.setDate(7, (java.sql.Date) FechaRecibo);
+            ps.setString(8, ArticuloAntiguo);
+            ps.setString(9, UsuarioAntiguo);
+            ps.setDate(10, (java.sql.Date) FechaPedidaAntigua);
+            ps.execute();
+            ps.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public boolean updtRegistroVenta(int CantidadVendida, Date FechaVentaNueva, Date FechaVentaAntigua, String ArticuloNuevo, String ArticuloAntiguo, String rutNuevo, String rutAntiguo) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "UPDATE RegistroCompra "
+        		+ "SET NombreArticulo = ?, Rut = ?, FechaVenta = ?, CantidadVendida = ? "
+        		+"WHERE NombreArticulo = ? "
+        		+ "AND Rut = ? "
+        		+ "AND FechaVenta = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, ArticuloNuevo);
+            ps.setString(2, rutNuevo);
+            ps.setDate(3, (java.sql.Date) FechaVentaNueva);
+            ps.setInt(4, CantidadVendida);
+            ps.setString(5, ArticuloAntiguo);
+            ps.setString(6,rutAntiguo);
+            ps.setDate(7, (java.sql.Date) FechaVentaAntigua);
+            ps.execute();
+            ps.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    /**
+     * Borra una fila de la tabla RegistroVenta.
+     * @param NombreArticulo Este parametro sirve para identificar la fila que se quiere borrar.
+     * @param FechaVenta Este parametro sirve para identificar la fila que se quiere borrar.
+     */
+    public void delRegistroVenta(String NombreArticulo, Date FechaVenta){
+    	PreparedStatement ps;
+        Connection con = conectar();
+    	String sql = "DELETE * FROM RegistroVenta "
+    			+ "WHERE NombreArticulo = ? "
+    			+ "AND FechaVenta = ?";
+    	try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, NombreArticulo);
+			ps.setDate(2, (java.sql.Date) FechaVenta);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void addUsuario (String NombreUsuario, String Apellidos, String Rut, String Telefono, String Email) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+    	String sql = "INSERT INTO Usuario (NombreUsuario, Apellidos, Rut, Telefono, Email) "
+    			+ "VALUES (?,?,?,?,?)";
+    	try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, NombreUsuario);
+			ps.setString(2, Apellidos);
+			ps.setString(3, Rut);
+			ps.setString(4, Telefono);
+			ps.setString(5, Email);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void addDireccion(String Rut, int idRegion, int NumeroDomicilio, String Calle, String Ciudad, String Comuna) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "INSERT INTO Direccion (Rut, idRegion, NumeroDomicilio, Calle, Ciudad, Comuna) "
+        		+ "VALUES (?,?,?,?,?,?)";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, Rut);
+			ps.setInt(2, idRegion);
+			ps.setInt(3, NumeroDomicilio);
+			ps.setString(4, Calle);
+			ps.setString(5, Ciudad);
+			ps.setString(6, Comuna);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public ArrayList getTodoUsuarios(String orden) {
+    	PreparedStatement ps;
+    	ResultSet rs;
+        Connection con = conectar();
+    	String sql = "SELECT NombreUsuario, Rut, NombreRegion, Comuna, Ciudad, Calle, NumeroDomicilio "
+    			+ "FROM Usuario, Direccion, Region "
+    			+ "WHERE Usuario.Rut = Direccion.Rut "
+    			+ "AND Direccion.idRegion = Region.idRegion "
+    			+ "ORDER BY ?";
+    	try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, orden);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("NombreUsuario"));
+                columna.add(rs.getString("Rut"));
+                columna.add(rs.getString("NombreRegion"));
+                columna.add(rs.getString("Comuna"));
+                columna.add(rs.getString("Ciudad"));
+                columna.add(rs.getString("Calle"));
+                columna.add(rs.getString("NumeroDomicilio"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
+    public ArrayList getUsuarios(String orden) {
+    	PreparedStatement ps;
+    	ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * FROM Usuario ORDER BY ?";
+        try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, orden);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("NombreUsuario"));
+                columna.add(rs.getString("Apellidos"));
+                columna.add(rs.getString("Rut"));
+                columna.add(rs.getString("Telefono"));
+                columna.add(rs.getString("Email"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
+    public ArrayList getUsuarioEspecifico(String Rut) {
+    	PreparedStatement ps;
+    	ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * "
+        		+ "FROM Usuario "
+        		+ "WHERE Rut = ?";
+        try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, Rut);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("NombreUsuario"));
+                columna.add(rs.getString("Apellidos"));
+                columna.add(rs.getString("Rut"));
+                columna.add(rs.getString("Telefono"));
+                columna.add(rs.getString("Email"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
+    public boolean updtUsuario(String rutNuevo, String rutAntiguo, String NombreUsuario, String Apellidos, String Telefono, String Email) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+    	String sql = "UPDATE Usuario "
+    			+ "SET NombreUsuario = ?, Apellidos = ?, Rut = ?, Telefono = ?, Email = ?  "
+    			+ "WHERE Rut = ?";
+    	 try {
+             ps = con.prepareStatement(sql);
+             ps.setString(1, NombreUsuario);
+             ps.setString(2, Apellidos);
+             ps.setString(3, rutNuevo);
+             ps.setString(4, Telefono);
+             ps.setString(5, Email);
+             ps.setString(6,rutAntiguo);
+             ps.execute();
+             ps.close();
+             return true;
+         } catch (SQLException ex) {
+             Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+             return false;
+         }finally {
+             try {
+                 con.close();
+             } catch (SQLException ex) {
+                 Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+             }
+         }
+    }
+    
+    public boolean updtDireccion(String rutNuevo, int idRegion, int NumeroDomicilio, String Calle, String Ciudad, String Comuna, String rutAntiguo) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+    	String sql = "UPDATE Direccion "
+    			+ "SET Rut = ?, idRegion = ?, NumeroDomicilio = ?, Calle = ?, Ciudad = ?, Comuna = ? "
+    			+ "WHERE Rut = ?";
+    	try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, rutNuevo);
+            ps.setInt(2, idRegion);
+            ps.setInt(3, NumeroDomicilio);
+            ps.setString(4, Calle);
+            ps.setString(5, Ciudad);
+            ps.setString(6, Comuna);
+            ps.setString(7, rutAntiguo);
+            ps.execute();
+            ps.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void delUsuario(String Rut) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE * "
+        		+ "From Usuario "
+        		+ "WHERE Rut = ?";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, Rut);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void delDireccion(String Rut) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE * "
+        		+ "From Direccion "
+        		+ "WHERE Rut = ?";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setString(1, Rut);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
             try {
                 con.close();
             } catch (SQLException ex) {
