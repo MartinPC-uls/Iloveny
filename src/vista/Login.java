@@ -33,6 +33,7 @@ public class Login extends JFrame {
     }
 
     private void initialize() {
+    	setResizable(false);
         setVisible(true);
         setBounds(100, 100, 473, 652);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,6 +115,7 @@ public class Login extends JFrame {
         downPanelPassword.setLayout(gl_downPanelPassword);
         
         btnLogin = new JButton();
+        btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnLogin.setBounds(0, 271, 314, 40);
         panel.add(btnLogin);
         btnLogin.setText("INGRESAR");
