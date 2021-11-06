@@ -30,7 +30,7 @@ public class ControladorLogin {
         	public void actionPerformed(ActionEvent arg0) {
         		if(consulta.verificarAdmin(login.txtJtextfield.getText(), login.pwdJpasswordfield.getText())) {
         			System.out.println("Logeado dentro del sistema.");
-        			// abrir ventana nueva.
+        			// abrir ventana nueva..
         		} else {
         			System.out.println("No existe/ mala contrasena");
         		}
