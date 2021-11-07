@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.awt.event.MouseMotionAdapter;
 
 /**
  *
@@ -34,15 +35,19 @@ public class Login extends JFrame {
 	public JLabel lblErrorImage;
 	public JPanel downPanelUser;
 	public JPanel downPanelPassword;
+	public JPanel botonX;
+	public JLabel lblX;
+	public JPanel header;
 	
     public Login() {
+    	setUndecorated(true);
     	getContentPane().setBackground(new Color(51,51,51));
         try {
 		initialize();
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+		}
     }
 
     private void initialize() throws IOException {
@@ -63,7 +68,7 @@ public class Login extends JFrame {
         lblLogin.setText("INICIO DE SESI\u00D3N");
         lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
         lblLogin.setForeground(Color.WHITE);
-        lblLogin.setFont(new Font("Roboto Light", Font.PLAIN, 24));
+        lblLogin.setFont(new Font("Roboto Medium", Font.PLAIN, 24));
         lblLogin.setBounds(0, 170, 467, 35);
         getContentPane().add(lblLogin);
         
@@ -75,19 +80,19 @@ public class Login extends JFrame {
         
         JLabel lblPasswordImage = new JLabel();
         lblPasswordImage.setHorizontalAlignment(SwingConstants.CENTER);
-        lblPasswordImage.setIcon(new ImageIcon(ImageIO.read(new File("res/images/lock.png"))));
+        lblPasswordImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/lock.png")));
         lblPasswordImage.setBounds(0, 106, 18, 41);
         panel.add(lblPasswordImage);
         
         JLabel lblUserImage = new JLabel();
         lblUserImage.setHorizontalAlignment(SwingConstants.CENTER);
-        lblUserImage.setIcon(new ImageIcon(ImageIO.read(new File("res/images/person.png"))));
+        lblUserImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/person.png")));
         lblUserImage.setBounds(0, 60, 24, 41);
         panel.add(lblUserImage);
         
         lblErrorImage = new JLabel();
         lblErrorImage.setHorizontalAlignment(SwingConstants.CENTER);
-        lblErrorImage.setIcon(new ImageIcon(ImageIO.read(new File("res/images/error.png"))));
+        lblErrorImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/error.png")));
         lblErrorImage.setBounds(0, 158, 24, 21);
         panel.add(lblErrorImage);
         
@@ -102,7 +107,7 @@ public class Login extends JFrame {
         
         JLabel lblImagen = new JLabel();
         lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
-        lblImagen.setIcon(new ImageIcon(ImageIO.read(new File("res/images/person-icon.png"))));
+        lblImagen.setIcon(new ImageIcon(Login.class.getResource("/imagenes/person-icon.png")));
         lblImagen.setBounds(0, 31, 467, 128);
         getContentPane().add(lblImagen);
         
@@ -169,6 +174,27 @@ public class Login extends JFrame {
         btnLogin.setBorderPainted(false);
         btnLogin.setBorder(null);
         btnLogin.setBackground(new Color(0, 153, 153));
+        
+        JFrame ventana = this;
+        header = new JPanel();
+        header.setBounds(0, 0, 473, 27);
+        header.setBackground(new Color(51,51,51));
+        getContentPane().add(header);
+        header.setLayout(null);
+        
+        botonX = new JPanel();
+        botonX.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        botonX.setBackground(new Color(51,51,51));
+        botonX.setBounds(446, 0, 27, 27);
+        header.add(botonX);
+        botonX.setLayout(null);
+        
+        lblX = new JLabel("X");
+        lblX.setHorizontalAlignment(SwingConstants.CENTER);
+        lblX.setForeground(Color.WHITE);
+        lblX.setFont(new Font("Roboto", Font.BOLD, 15));
+        lblX.setBounds(0, 0, 27, 27);
+        botonX.add(lblX);
         
 
     }

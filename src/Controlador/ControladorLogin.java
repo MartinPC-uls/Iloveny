@@ -8,6 +8,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 
@@ -23,17 +24,61 @@ import a.Modelo.Consulta;
 
 public class ControladorLogin {
 	
-	Timer tm;
+	private int xMouse;
+	private int yMouse;
+	
 
 	public ControladorLogin() {
 		Login login = new Login();
 		Consulta consulta = new Consulta();
+		eventoBotonX(login);
+		eventoHeader(login);
 		eventoCambioColorBtnLogin(login);
 		eventoCambiarTxtUser(login);
 		eventoCambiarTxtPassword(login);
 		eventoClickBtnLogin(login,consulta);
 	}
 	
+	private void eventoHeader(Login login) {
+		login.header.addMouseMotionListener(new MouseMotionAdapter() {
+        	@Override
+        	public void mouseDragged(MouseEvent e) {
+        		int x = e.getXOnScreen();
+        		int y = e.getYOnScreen();
+        		login.setLocation(x - xMouse, y- yMouse);
+        	}
+        });
+       login.header.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mousePressed(MouseEvent e) {
+        		xMouse= e.getX();
+        		yMouse= e.getY();
+        	}
+        });
+	}
+
+	private void eventoBotonX(Login login) {
+		login.botonX.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseEntered(MouseEvent e) {
+        		login.botonX.setBackground(new Color(255,0,0));
+        	}
+        	@Override
+        	public void mouseExited(MouseEvent e) {
+        		login.botonX.setBackground(new Color(51,51,51));
+        	}
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		System.exit(0);
+        	}
+        	@Override
+        	public void mousePressed(MouseEvent e) {
+        		login.botonX.setBackground(new Color(139,0,0));
+        	}
+        });
+		
+	}
+
 	private void eventoCambiarTxtPassword(Login login) {
 		login.txtPassword.addFocusListener(new FocusAdapter() {
 	       	 @Override
@@ -95,9 +140,11 @@ public class ControladorLogin {
 
 	private void mostrarAlerta(boolean isPositivo) throws HeadlessException, IOException {
 		if(isPositivo) {
-			JOptionPane.showMessageDialog(null, "Bienvenido","Mensaje",JOptionPane.PLAIN_MESSAGE,new ImageIcon(ImageIO.read(new File("res/images/success-icon.png"))));
+			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/success-icon.png"));
+			JOptionPane.showMessageDialog(null, "Bienvenido","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
 		} else {
-			JOptionPane.showMessageDialog(null, "Credenciales no encontradas","Mensaje",JOptionPane.PLAIN_MESSAGE,new ImageIcon(ImageIO.read(new File("res/images/Exclamation-mark-icon.png"))));
+			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+			JOptionPane.showMessageDialog(null, "Credenciales no encontradas","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
 		}
 	}
 	
