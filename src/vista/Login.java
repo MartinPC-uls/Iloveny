@@ -177,7 +177,7 @@ public class Login extends JFrame {
         
         JFrame ventana = this;
         header = new JPanel();
-        header.setBounds(0, 0, 473, 27);
+        header.setBounds(0, 0, 473, 35);
         header.setBackground(new Color(51,51,51));
         getContentPane().add(header);
         header.setLayout(null);
