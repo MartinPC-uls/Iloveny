@@ -72,9 +72,15 @@ public class Login extends JFrame {
         lblLogin.setBounds(0, 170, 467, 35);
         getContentPane().add(lblLogin);
         
+        JLabel lblImagen = new JLabel();
+        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+        lblImagen.setIcon(new ImageIcon(Login.class.getResource("/imagenes/person-icon.png")));
+        lblImagen.setBounds(0, 31, 467, 128);
+        getContentPane().add(lblImagen);
+        
         JPanel panel = new JPanel();
         panel.setBackground(new Color(51,51,51));
-        panel.setBounds(74, 216, 314, 346);
+        panel.setBounds(78, 216, 314, 346);
         getContentPane().add(panel);
         panel.setLayout(null);
         
@@ -104,12 +110,6 @@ public class Login extends JFrame {
         
         lblErrorImage.setVisible(false);
         lblErrorMessage.setVisible(false);
-        
-        JLabel lblImagen = new JLabel();
-        lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
-        lblImagen.setIcon(new ImageIcon(Login.class.getResource("/imagenes/person-icon.png")));
-        lblImagen.setBounds(0, 31, 467, 128);
-        getContentPane().add(lblImagen);
         
         txtUser = new JTextField();
         txtUser.setForeground(new Color(170, 170, 170));
