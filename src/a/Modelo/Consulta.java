@@ -459,7 +459,7 @@ public class Consulta extends Conexion{
             ps.setString(3, ArticuloAntiguo);
             ps.execute();
             return true;
-        } catch (SQLException ex) {
+        } catch (SQLException ex) { 
             Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }finally {

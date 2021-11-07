@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+import vista.Administracion;
 import vista.Login;
 import a.Modelo.Consulta;
 
@@ -109,29 +110,25 @@ public class ControladorLogin {
         			login.lblErrorMessage.setVisible(false);
         			login.downPanelUser.setBackground(Color.GREEN);
         			login.downPanelPassword.setBackground(Color.GREEN);
-        			try {
+        				try {
 						mostrarAlerta(true);
 					} catch (HeadlessException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-        			// abrir ventana nueva..
+        			ControladorAdministracion administracion = new ControladorAdministracion();
         		} else {
         			System.out.println("No existe / mala contrasena");
         			login.lblErrorImage.setVisible(true);
         			login.lblErrorMessage.setVisible(true);
         			login.downPanelUser.setBackground(Color.RED);
         			login.downPanelPassword.setBackground(Color.RED);
-        			try {
+        				try {
 						mostrarAlerta(false);
 					} catch (HeadlessException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
         		}
