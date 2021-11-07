@@ -17,11 +17,14 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JTable;
 
+import a.Modelo.Consulta;
+
 public class Administracion {
 
 	public JFrame frame;
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
-	private JTable table;
+	private JTable tablaUsuarios;
+	Consulta consulta = new Consulta();
 
 	public Administracion() {
 		initialize();
@@ -53,24 +56,33 @@ public class Administracion {
 		layeredPane_1.add(panel_2, "name_54256623111200");
 		panel_2.setLayout(null);
 		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(51, 51, 51));
-		layeredPane_1.add(panel_3, "name_54331093143100");
-		panel_3.setLayout(null);
+		JPanel panelUsuarios = new JPanel();
+		panelUsuarios.setBackground(new Color(51, 51, 51));
+		layeredPane_1.add(panelUsuarios, "name_54331093143100");
+		panelUsuarios.setLayout(null);
 		
-		table = new JTable();
-		table.setBounds(10, 203, 711, 345);
-		panel_3.add(table);
+		tablaUsuarios = new JTable();
+		tablaUsuarios.setBounds(10, 203, 711, 345);
+		panelUsuarios.add(tablaUsuarios);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setBounds(445, 11, 89, 23);
-		panel_3.add(btnNewButton_1);
+		JButton btnModificar = new JButton("Modificar");
+		btnModificar.setBounds(344, 18, 119, 37);
+		panelUsuarios.add(btnModificar);
+		
+		JButton btnAgregar = new JButton("Agregar...");
+		btnAgregar.setBounds(473, 18, 119, 37);
+		panelUsuarios.add(btnAgregar);
+		
+		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(602, 18, 119, 37);
+		panelUsuarios.add(btnEliminar);
 		
 		JButton btnNewButton = new JButton("USUARIOS");
 		btnNewButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panel_1);
+				switchPanels(panelUsuarios);
+				//consulta.getUsuarios(orden)
 			}
 		});
 		btnNewButton.setFocusPainted(false);
@@ -118,7 +130,7 @@ public class Administracion {
 		btnNewButton_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panel_3);
+				switchPanels(panelUsuarios);
 			}
 		});
 		btnNewButton_2.setFocusPainted(false);
