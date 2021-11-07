@@ -12,48 +12,44 @@ package a.Modelo;
 
 // cambio añadido para testear xd (desde github.com)
 public class Articulo {
-    private String Nombre;
-    private String Ruta_imagen;
-    private String Marca;
+    private int idTipoObj;
+    private int idMarca;
+    private String NombreArticulo;
     private int Stock;
-    private int Tipo; 
-    //private ? Medida;
-    // ?: array, obj, x...
-    //El tipo debe ser un número dentro de la lista de tipos
-    //qué pasa si el usuario elimina un tipo? // El usuario no podrá eliminar el tipo
-    //Debemos definir qué Tipos tienen una u otra medida
-    
-    //Constructor:
-    public Articulo(String Nombre, String Ruta_imagen, String Marca, int Stock, int Tipo){
-        this.Nombre = Nombre;
-        this.Ruta_imagen = Ruta_imagen;
-        this.Marca = Marca;
+    private String RutaImg;
+    private int PrecioUnitario;
+
+    public Articulo(int idTipoObj, int idMarca, String NombreArticulo, int Stock, String RutaImg, int PrecioUnitario) {
+        this.idTipoObj = idTipoObj;
+        this.idMarca = idMarca;
+        this.NombreArticulo = NombreArticulo;
         this.Stock = Stock;
-        this.Tipo = Tipo;
+        this.RutaImg = RutaImg;
+        this.PrecioUnitario = PrecioUnitario;
     }
 
-    public String getNombre() {
-        return Nombre;
+    public int getIdTipoObj() {
+        return idTipoObj;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setIdTipoObj(int idTipoObj) {
+        this.idTipoObj = idTipoObj;
     }
 
-    public String getRuta_imagen() {
-        return Ruta_imagen;
+    public int getIdMarca() {
+        return idMarca;
     }
 
-    public void setRuta_imagen(String Ruta_imagen) {
-        this.Ruta_imagen = Ruta_imagen;
+    public void setIdMarca(int idMarca) {
+        this.idMarca = idMarca;
     }
 
-    public String getMarca() {
-        return Marca;
+    public String getNombreArticulo() {
+        return NombreArticulo;
     }
 
-    public void setMarca(String Marca) {
-        this.Marca = Marca;
+    public void setNombreArticulo(String NombreArticulo) {
+        this.NombreArticulo = NombreArticulo;
     }
 
     public int getStock() {
@@ -64,12 +60,20 @@ public class Articulo {
         this.Stock = Stock;
     }
 
-    public int getTipo() {
-        return Tipo;
+    public String getRutaImg() {
+        return RutaImg;
     }
 
-    public void setTipo(int Tipo) {
-        this.Tipo = Tipo;
+    public void setRutaImg(String RutaImg) {
+        this.RutaImg = RutaImg;
+    }
+
+    public int getPrecioUnitario() {
+        return PrecioUnitario;
+    }
+
+    public void setPrecioUnitario(int PrecioUnitario) {
+        this.PrecioUnitario = PrecioUnitario;
     }
     
 }

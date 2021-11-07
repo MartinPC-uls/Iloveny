@@ -10,36 +10,26 @@ package a.Modelo;
  * @author Roberto
  */
 public class Usuario {
-    private String Nombre;
+    private String NombreUsuario;
     private String Apellido;
     private String Rut;
-    private String Correo;
-    private String Comuna;
-    private String Ciudad;
-    private String Calle;
-    private int Domicilio; // Departamento
-    private int Region;
-    private int Telefono;
+    private String Email;
+    private String Telefono;
 
-    public Usuario(String Nombre, String Apellido, String Rut, String Correo, String Comuna, String Ciudad, String Calle, int Domicilio, int Region, int Telefono) {
-	 this.Nombre = Nombre;
-	 this.Apellido = Apellido;
-	 this.Rut = Rut;
-	 this.Correo = Correo;
-	 this.Comuna = Comuna;
-	 this.Ciudad = Ciudad;
-	 this.Calle = Calle;
-	 this.Domicilio = Domicilio;
-	 this.Region = Region;
-	 this.Telefono = Telefono;
+    public Usuario(String NombreUsuario, String Apellido, String Rut, String Email, String Telefono) {
+        this.NombreUsuario = NombreUsuario;
+        this.Apellido = Apellido;
+        this.Rut = Rut;
+        this.Email = Email;
+        this.Telefono = Telefono;
     }
 
-    public String getNombre() {
-	    return Nombre;
+    public String getNombreUsuario() {
+        return NombreUsuario;
     }
 
-    public void setNombre(String Nombre) {
-	    this.Nombre = Nombre;
+    public void setNombreUsuario(String NombreUsuario) {
+        this.NombreUsuario = NombreUsuario;
     }
 
     public String getApellido() {
@@ -58,59 +48,19 @@ public class Usuario {
         this.Rut = Rut;
     }
 
-    public String getCorreo() {
-        return Correo;
+    public String getEmail() {
+        return Email;
     }
 
-    public void setCorreo(String Correo) {
-        this.Correo = Correo;
+    public void setEmail(String Email) {
+        this.Email = Email;
     }
 
-    public String getComuna() {
-        return Comuna;
-    }
-
-    public void setComuna(String Comuna) {
-        this.Comuna = Comuna;
-    }
-
-    public String getCiudad() {
-        return Ciudad;
-    }
-
-    public void setCiudad(String Ciudad) {
-        this.Ciudad = Ciudad;
-    }
-
-    public String getCalle() {
-        return Calle;
-    }
-
-    public void setCalle(String Calle) {
-        this.Calle = Calle;
-    }
-
-    public int getDomicilio() {
-        return Domicilio;
-    }
-
-    public void setDomicilio(int Domicilio) {
-        this.Domicilio = Domicilio;
-    }
-
-    public int getRegion() {
-        return Region;
-    }
-
-    public void setRegion(int Region) {
-        this.Region = Region;
-    }
-
-    public int getTelefono() {
+    public String getTelefono() {
         return Telefono;
     }
 
-    public void setTelefono(int Telefono) {
+    public void setTelefono(String Telefono) {
         this.Telefono = Telefono;
     }
     

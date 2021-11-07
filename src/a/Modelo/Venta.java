@@ -5,52 +5,56 @@
  */
 package a.Modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author Roberto
  */
 public class Venta {
-    private String Fecha;
-    private String Articulo;
-    private int Rut;
-    private int Cantidad;
+    private Date Fecha;
+    private String NombreArticulo;
+    private String Rut;
+    private int CantidadVendida;
 
-    public Venta(String Fecha, String Nombre, int Rut, int Cantidad) {
+    public Venta(Date Fecha, String NombreArticulo, String Rut, int CantidadVendida) {
         this.Fecha = Fecha;
-        this.Articulo = Nombre;
+        this.NombreArticulo = NombreArticulo;
         this.Rut = Rut;
-        this.Cantidad = Cantidad;
+        this.CantidadVendida = CantidadVendida;
     }
-    public String getFecha() {
+
+    public Date getFecha() {
         return Fecha;
     }
 
-    public void setFecha(String Fecha) {
-	    this.Fecha = Fecha;
+    public void setFecha(Date Fecha) {
+        this.Fecha = Fecha;
     }
 
-    public String getNombre() {
-	    return Articulo;
+    public String getNombreArticulo() {
+        return NombreArticulo;
     }
 
-    public void setNombre(String Nombre) {
-	    this.Articulo = Nombre;
+    public void setNombreArticulo(String NombreArticulo) {
+        this.NombreArticulo = NombreArticulo;
     }
 
-    public int getRut() {
-	    return Rut;
+    public String getRut() {
+        return Rut;
     }
 
-    public void setRut(int Rut) {
-	    this.Rut = Rut;
+    public void setRut(String Rut) {
+        this.Rut = Rut;
     }
 
-    public int getCantidad() {
-	    return Cantidad;
+    public int getCantidadVendida() {
+        return CantidadVendida;
     }
 
-    public void setCantidad(int Cantidad) {
-	    this.Cantidad = Cantidad;
+    public void setCantidadVendida(int CantidadVendida) {
+        this.CantidadVendida = CantidadVendida;
     }
+
     
 }

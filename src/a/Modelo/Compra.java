@@ -5,6 +5,8 @@
  */
 package a.Modelo;
 
+import java.util.Date;
+
 /**
  *
  * @author Roberto
@@ -12,46 +14,56 @@ package a.Modelo;
 
 // cambio añadido para testear xd (desde github.com)
 public class Compra {
-    private String Fecha_pedido;
-    private String Fecha_recibo;
-    private String Proveedor;
+    private String NombreArticulo ;
+    private Date FechaPedida;
+    private Date FechaRecibo;
+    private int idProv;
     private String Usuario;
     private String Articulo;
-    private int Precio_unitario;
-    private int Cantidad;
+    private int CostoUnitario;
+    private int UnidadesAdquiridas;
 
-    public Compra(String Fecha_pedido, String Fecha_recibo, String Proveedor, String Usuario, String Articulo, int Precio_unitario, int Cantidad) {
-        this.Fecha_pedido = Fecha_pedido;
-        this.Fecha_recibo = Fecha_recibo;
-        this.Proveedor = Proveedor;
+    public Compra(String NombreArticulo, Date FechaPedida, Date FechaRecibo, int idProv, String Usuario, String Articulo, int CostoUnitario, int UnidadesAdquiridas) {
+        this.NombreArticulo = NombreArticulo;
+        this.FechaPedida = FechaPedida;
+        this.FechaRecibo = FechaRecibo;
+        this.idProv = idProv;
         this.Usuario = Usuario;
         this.Articulo = Articulo;
-        this.Precio_unitario = Precio_unitario;
-        this.Cantidad = Cantidad;
+        this.CostoUnitario = CostoUnitario;
+        this.UnidadesAdquiridas = UnidadesAdquiridas;
     }
 
-    public String getFecha_pedido() {
-        return Fecha_pedido;
+    public String getNombreArticulo() {
+        return NombreArticulo;
     }
 
-    public void setFecha_pedido(String Fecha_pedido) {
-        this.Fecha_pedido = Fecha_pedido;
+    public void setNombreArticulo(String NombreArticulo) {
+        this.NombreArticulo = NombreArticulo;
     }
 
-    public String getFecha_recibo() {
-        return Fecha_recibo;
+    public Date getFechaPedida() {
+        return FechaPedida;
     }
 
-    public void setFecha_recibo(String Fecha_recibo) {
-        this.Fecha_recibo = Fecha_recibo;
+    public void setFechaPedida(Date FechaPedida) {
+        this.FechaPedida = FechaPedida;
     }
 
-    public String getProveedor() {
-        return Proveedor;
+    public Date getFechaRecibo() {
+        return FechaRecibo;
     }
 
-    public void setProveedor(String Proveedor) {
-        this.Proveedor = Proveedor;
+    public void setFechaRecibo(Date FechaRecibo) {
+        this.FechaRecibo = FechaRecibo;
+    }
+
+    public int getIdProv() {
+        return idProv;
+    }
+
+    public void setIdProv(int idProv) {
+        this.idProv = idProv;
     }
 
     public String getUsuario() {
@@ -70,23 +82,22 @@ public class Compra {
         this.Articulo = Articulo;
     }
 
-    public int getPrecio_unitario() {
-        return Precio_unitario;
+    public int getCostoUnitario() {
+        return CostoUnitario;
     }
 
-    public void setPrecio_unitario(int Precio_unitario) {
-        this.Precio_unitario = Precio_unitario;
+    public void setCostoUnitario(int CostoUnitario) {
+        this.CostoUnitario = CostoUnitario;
     }
 
-    public int getCantidad() {
-        return Cantidad;
+    public int getUnidadesAdquiridas() {
+        return UnidadesAdquiridas;
     }
 
-    public void setCantidad(int Cantidad) {
-        this.Cantidad = Cantidad;
+    public void setUnidadesAdquiridas(int UnidadesAdquiridas) {
+        this.UnidadesAdquiridas = UnidadesAdquiridas;
     }
+
     
-    
-    //me gustan los humedales
     
 }
