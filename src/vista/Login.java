@@ -109,31 +109,6 @@ public class Login extends JFrame {
         txtUser = new JTextField();
         txtUser.setForeground(new Color(170, 170, 170));
         txtUser.setText("Usuario");
-        txtUser.addFocusListener(new FocusAdapter() {
-        	@Override
-        	public void focusLost(FocusEvent e) {
-        		String text = txtUser.getText();
-        		
-        		// cambiar downPanelUser a color rojo, si el usuario es incorrecto.
-        		if (text.length() == 0) {
-        			txtUser.setForeground(new Color(170, 170, 170));
-        			txtUser.setText("Usuario");
-        			downPanelUser.setBackground(Color.RED);
-        		} else {
-        			txtUser.setForeground(new Color(255, 255, 255));
-        			downPanelUser.setBackground(Color.GREEN);
-        		}
-        	}
-        	@Override
-        	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
-        		Color color = new Color(170, 170, 170);
-        		if (txtUser.getForeground().equals(color)) {
-        			txtUser.setText("");
-        			txtUser.setForeground(new Color(255, 255, 255));
-        		}
-        	}
-        });
         txtUser.setCaretColor(Color.WHITE);
         txtUser.setBounds(41, 66, 273, 21);
         panel.add(txtUser);
@@ -160,31 +135,6 @@ public class Login extends JFrame {
         downPanelUser.setLayout(gl_downPanelUser);
         
         txtPassword = new JPasswordField();
-        txtPassword.addFocusListener(new FocusAdapter() {
-       	 @Override
-       	 public void focusLost(FocusEvent e) {
-         		String text = txtPassword.getText();
-         		
-         		// cambiar downPanelUser a color rojo, si el usuario es incorrecto.
-         		if (text.length() == 0) {
-         			txtPassword.setForeground(new Color(170, 170, 170));
-         			txtPassword.setText("password");
-         			downPanelPassword.setBackground(Color.RED);
-         		} else {
-         			txtPassword.setForeground(new Color(255, 255, 255));
-         			downPanelPassword.setBackground(Color.GREEN);
-         		}
-         	}
-         	@Override
-         	public void focusGained(FocusEvent e) {
-         		String text = txtPassword.getText();
-         		Color color = new Color(170, 170, 170);
-         		if (txtPassword.getForeground().equals(color)) {
-         			txtPassword.setText("");
-         			txtPassword.setForeground(new Color(255, 255, 255));
-         		}
-         	}
-        });
         txtPassword.setCaretColor(Color.WHITE);
         txtPassword.setBounds(41, 112, 273, 21);
         panel.add(txtPassword);
