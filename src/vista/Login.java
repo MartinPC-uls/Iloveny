@@ -33,6 +33,8 @@ public class Login extends JFrame {
 	public JButton btnLogin;
 	public JLabel lblErrorMessage;
 	public JLabel lblErrorImage;
+	public JLabel lblLoadingImage;
+	public JLabel lblConectado;
 	public JPanel downPanelUser;
 	public JPanel downPanelPassword;
 	public JPanel botonX;
@@ -102,12 +104,26 @@ public class Login extends JFrame {
         lblErrorImage.setBounds(0, 158, 24, 21);
         panel.add(lblErrorImage);
         
+        lblLoadingImage = new JLabel();
+        lblLoadingImage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblLoadingImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/loading.png")));
+        lblLoadingImage.setBounds(0, 158, 24, 21);
+        panel.add(lblLoadingImage);
+        
         lblErrorMessage = new JLabel("Acceso denegado");
         lblErrorMessage.setFont(new Font("Segoe UI", Font.BOLD, 13));
         lblErrorMessage.setForeground(Color.RED);
         lblErrorMessage.setBounds(34, 158, 280, 21);
         panel.add(lblErrorMessage);
         
+        lblConectado = new JLabel("Conectando...");
+        lblConectado.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblConectado.setForeground(Color.YELLOW);
+        lblConectado.setBounds(34, 158, 280, 21);
+        panel.add(lblConectado);
+        
+        lblLoadingImage.setVisible(false);
+        lblConectado.setVisible(false);
         lblErrorImage.setVisible(false);
         lblErrorMessage.setVisible(false);
         
@@ -167,6 +183,7 @@ public class Login extends JFrame {
         downPanelPassword.setLayout(gl_downPanelPassword);
         
         btnLogin = new JButton();
+        btnLogin.setFocusPainted(false);
         btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnLogin.setBounds(0, 271, 314, 40);
         panel.add(btnLogin);

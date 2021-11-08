@@ -152,6 +152,8 @@ public class ControladorLogin {
 		login.btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		if(consulta.verificarAdmin(login.txtUser.getText(), login.txtPassword.getText())) {
+        			login.lblConectado.setVisible(true);
+        			login.lblLoadingImage.setVisible(true);
         			System.out.println("Logeado dentro del sistema.");
         			login.lblErrorImage.setVisible(false);
         			login.lblErrorMessage.setVisible(false);
