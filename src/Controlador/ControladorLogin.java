@@ -165,6 +165,7 @@ public class ControladorLogin {
 						e.printStackTrace();
 					}
         			ControladorAdministracion administracion = new ControladorAdministracion();
+        			login.setVisible(false);
         		} else {
         			System.out.println("No existe / mala contrasena");
         			login.lblErrorImage.setVisible(true);
