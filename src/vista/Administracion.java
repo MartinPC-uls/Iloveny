@@ -12,13 +12,20 @@ import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import a.Modelo.Consulta;
 import java.awt.SystemColor;
@@ -32,6 +39,7 @@ public class Administracion {
 	Consulta consulta = new Consulta();
 	private JTable table;
 	public DefaultTableModel model;
+	private ArrayList<ArrayList<String>> usuarios; 
 
 	public Administracion() {
 		initialize();
@@ -73,6 +81,11 @@ public class Administracion {
 		panelUsuarios.add(btnModificar);
 		
 		JButton btnAgregar = new JButton("Agregar...");
+		btnAgregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				// Abrir ventana de agregar usuario
+			}
+		});
 		btnAgregar.setBounds(473, 18, 119, 37);
 		panelUsuarios.add(btnAgregar);
 		
@@ -91,15 +104,19 @@ public class Administracion {
 				new Object[][] {
 				},
 				new String[] {
-					"RUT", "Nota", "Puntaje"
+					"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
 				}
 		));
 		model = (DefaultTableModel)table.getModel();
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
-		table.getColumnModel().getColumn(0).setPreferredWidth(300);
-		table.getColumnModel().getColumn(1).setPreferredWidth(300);
-		table.getColumnModel().getColumn(2).setPreferredWidth(300);
+		table.getColumnModel().getColumn(0).setPreferredWidth(150);
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);
+		table.getColumnModel().getColumn(2).setPreferredWidth(150);
+		table.getColumnModel().getColumn(3).setPreferredWidth(150);
+		table.getColumnModel().getColumn(4).setPreferredWidth(150);
+		table.getTableHeader().setOpaque(false);
+		table.getTableHeader().setForeground(new Color(255, 255, 255));
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setOpaque(false);
 		scrollPane.setOpaque(false);
@@ -190,6 +207,46 @@ public class Administracion {
 		
 		frame.setBounds(100, 100, 943, 598);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+		table.setRowSorter(sorter);
+		
+		JButton btnNewButton_1 = new JButton("Actualizar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				refresh();
+			}
+		});
+		btnNewButton_1.setBounds(632, 192, 89, 23);
+		panelUsuarios.add(btnNewButton_1);
+		
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
+		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
+		
+		getUsuarios();
+	}
+	
+	public void refresh() {
+		int rowCount = model.getRowCount();
+		for (int i = rowCount - 1; i >= 0; i--) {
+			model.removeRow(i);
+		}
+		getUsuarios();
+	}
+	
+	public void getUsuarios() {
+		usuarios = new ArrayList<ArrayList<String>>();
+		usuarios = consulta.getUsuarios("nombreusuario");
+		ArrayList<String> elementos;
+		for (int i = 0; i < usuarios.size(); i++) {
+			elementos = new ArrayList<String>();
+			for (int j = 0; j < usuarios.get(i).size(); j++) {
+				elementos.add(usuarios.get(i).get(j));
+			}
+			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4)});
+		}
 	}
 	
 	public void switchPanels(JPanel panel) {

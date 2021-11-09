@@ -938,9 +938,11 @@ public class Consulta extends Conexion{
         	ps = con.prepareStatement(sql);
         	ps.setString(1, orden);
             rs = ps.executeQuery();
-            ArrayList<ArrayList> fila = new ArrayList<>();
+            ArrayList<ArrayList<String>> fila = new ArrayList<>();
+            ArrayList<String> columna;
+            
             while(rs.next()){
-                ArrayList<String> columna = new ArrayList<>();
+       	  columna = new ArrayList<>();
                 columna.add(rs.getString("NombreUsuario"));
                 columna.add(rs.getString("Apellidos"));
                 columna.add(rs.getString("Rut"));

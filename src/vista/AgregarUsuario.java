@@ -12,20 +12,21 @@ import javax.swing.WindowConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class AgregarArticulo extends JFrame{
+public class AgregarUsuario extends JFrame{
+
+	private static final long serialVersionUID = 1744095522065285861L;
 	public JTextField textoID;
 	public JTextField textoNombre;
 	public JTextField textoCantidad;
 	public JTextField textoPrecio;
 	public JTextField textField_4;
-	public JTextField textField_5;
-	public JLabel lblidTipoObjeto;
-	public JLabel lblIngreseElNombre;
-	public JLabel lblIngreseLaCantidad;
-	public JLabel lblIngreseElPrecio;
+	public JLabel lblNombre;
+	public JLabel lblApellidos;
+	public JLabel lblRut;
+	public JLabel lblTelefono;
 	public JButton btnAgregar;
 	
-	public AgregarArticulo() {
+	public AgregarUsuario() {
 		setUndecorated(true);
     	getContentPane().setBackground(new Color(51,51,51));
         try {
@@ -49,7 +50,7 @@ public class AgregarArticulo extends JFrame{
         
         JLabel lblAgregar = new JLabel();
         lblAgregar.setVerticalAlignment(SwingConstants.CENTER);
-        lblAgregar.setText("Agregar Art\u00EDculo");
+        lblAgregar.setText("Agregar Usuario");
         lblAgregar.setHorizontalAlignment(SwingConstants.CENTER);
         lblAgregar.setForeground(Color.WHITE);
         lblAgregar.setFont(new Font("Roboto Medium", Font.PLAIN, 24));
@@ -81,30 +82,25 @@ public class AgregarArticulo extends JFrame{
         textField_4.setBounds(24, 322, 408, 20);
         getContentPane().add(textField_4);
         
-        textField_5 = new JTextField();
-        textField_5.setColumns(10);
-        textField_5.setBounds(24, 379, 408, 20);
-        getContentPane().add(textField_5);
+        lblNombre = new JLabel("Nombre:");
+        lblNombre.setForeground(Color.WHITE);
+        lblNombre.setBounds(24, 75, 192, 14);
+        getContentPane().add(lblNombre);
         
-        lblidTipoObjeto = new JLabel("Ingrese la ID del art\u00EDculo:");
-        lblidTipoObjeto.setForeground(Color.WHITE);
-        lblidTipoObjeto.setBounds(24, 75, 192, 14);
-        getContentPane().add(lblidTipoObjeto);
+        lblApellidos = new JLabel("Apellidos");
+        lblApellidos.setForeground(Color.WHITE);
+        lblApellidos.setBounds(24, 129, 192, 14);
+        getContentPane().add(lblApellidos);
         
-        lblIngreseElNombre = new JLabel("Ingrese el nombre del art\u00EDculo:");
-        lblIngreseElNombre.setForeground(Color.WHITE);
-        lblIngreseElNombre.setBounds(24, 129, 192, 14);
-        getContentPane().add(lblIngreseElNombre);
+        lblRut = new JLabel("Rut:");
+        lblRut.setForeground(Color.WHITE);
+        lblRut.setBounds(24, 185, 192, 14);
+        getContentPane().add(lblRut);
         
-        lblIngreseLaCantidad = new JLabel("Ingrese la cantidad del art\u00EDculo:");
-        lblIngreseLaCantidad.setForeground(Color.WHITE);
-        lblIngreseLaCantidad.setBounds(24, 185, 192, 14);
-        getContentPane().add(lblIngreseLaCantidad);
-        
-        lblIngreseElPrecio = new JLabel("Ingrese el precio del art\u00EDculo:");
-        lblIngreseElPrecio.setForeground(Color.WHITE);
-        lblIngreseElPrecio.setBounds(24, 239, 192, 14);
-        getContentPane().add(lblIngreseElPrecio);
+        lblTelefono = new JLabel("Telefono:");
+        lblTelefono.setForeground(Color.WHITE);
+        lblTelefono.setBounds(24, 239, 192, 14);
+        getContentPane().add(lblTelefono);
         
         btnAgregar = new JButton();
         btnAgregar.setText("AGREGAR");
@@ -114,6 +110,11 @@ public class AgregarArticulo extends JFrame{
         btnAgregar.setBackground(new Color(0, 153, 153));
         btnAgregar.setBounds(76, 440, 314, 40);
         getContentPane().add(btnAgregar);
+        
+        JLabel lblEmail = new JLabel("Email:");
+        lblEmail.setForeground(Color.WHITE);
+        lblEmail.setBounds(24, 297, 192, 14);
+        getContentPane().add(lblEmail);
         
 	}
 }
