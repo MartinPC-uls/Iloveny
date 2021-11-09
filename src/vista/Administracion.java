@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -16,15 +18,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import a.Modelo.Consulta;
+import java.awt.SystemColor;
+import java.awt.Dimension;
+import javax.swing.JLabel;
 
 public class Administracion {
 
 	public JFrame frame;
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
-	private JTable tablaUsuarios;
 	Consulta consulta = new Consulta();
+	private JTable table;
+	public DefaultTableModel model;
 
 	public Administracion() {
 		initialize();
@@ -61,10 +68,6 @@ public class Administracion {
 		layeredPane_1.add(panelUsuarios, "name_54331093143100");
 		panelUsuarios.setLayout(null);
 		
-		tablaUsuarios = new JTable();
-		tablaUsuarios.setBounds(10, 203, 711, 345);
-		panelUsuarios.add(tablaUsuarios);
-		
 		JButton btnModificar = new JButton("Modificar");
 		btnModificar.setBounds(344, 18, 119, 37);
 		panelUsuarios.add(btnModificar);
@@ -76,6 +79,41 @@ public class Administracion {
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.setBounds(602, 18, 119, 37);
 		panelUsuarios.add(btnEliminar);
+		
+		table = new JTable();
+		//table.setBackground(Color.GRAY);
+		//table.setSize(new Dimension(100, 100));
+		//table.setForeground(Color.WHITE);
+		//table.setOpaque(false);
+		//table.setBackground(new Color(51,51,51));
+		//table.setFillsViewportHeight(false);
+		table.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"RUT", "Nota", "Puntaje"
+				}
+		));
+		model = (DefaultTableModel)table.getModel();
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table.getColumnModel().getColumn(0).setPreferredWidth(300);
+		table.getColumnModel().getColumn(1).setPreferredWidth(300);
+		table.getColumnModel().getColumn(2).setPreferredWidth(300);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.getViewport().setOpaque(false);
+		scrollPane.setOpaque(false);
+		//table.setBackground(SystemColor.menu);
+		//scrollPane.getViewport().setBackground(SystemColor.menu);
+		//scrollPane.setBackground(SystemColor.menu);
+		//scrollPane.getViewport().setBackground(SystemColor.menu);
+		//scrollPane.getViewport().setBackground(new Color(51,51,51));
+		scrollPane.setBounds(10, 226, 711, 322);
+		table.setBounds(0, 0, scrollPane.getWidth(), scrollPane.getHeight());
+		
+		table.getTableHeader().setBackground(new Color(51,51,51));
+		
+		panelUsuarios.add(scrollPane);
 		
 		JButton btnNewButton = new JButton("USUARIOS");
 		btnNewButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
