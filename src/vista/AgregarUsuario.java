@@ -31,13 +31,11 @@ public class AgregarUsuario extends Administracion {
 	private JFrame _frame;
 	
 	public AgregarUsuario() {
-        try {
-		initialize();
-		 //_frame.setUndecorated(true);
-		 _frame.getContentPane().setBackground(new Color(51,51,51));
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		try {
+       	 	initialize();
+			_frame.getContentPane().setBackground(new Color(51,51,51));
+        	} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -46,12 +44,9 @@ public class AgregarUsuario extends Administracion {
 		 _frame.setResizable(false);
 	        _frame.setVisible(true);
 	        _frame.setBounds(100, 100, 473, 520);
-	        _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 	        _frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	        _frame.getContentPane().setLayout(null);
-	        
-	        
 	        
 	        JLabel lblAgregar = new JLabel();
 	        lblAgregar.setVerticalAlignment(SwingConstants.CENTER);
@@ -134,4 +129,14 @@ public class AgregarUsuario extends Administracion {
 	        _frame.getContentPane().add(lblEmail);
         
 	}
+	
+	public void setElements(String nombre, String apellidos, String rut, String telefonos, String email) {
+		txtNombre.setText(nombre);
+		txtApellidos.setText(apellidos);
+		txtRut.setText(rut);
+		txtTelefono.setText(telefonos);
+		txtEmail.setText(email);
+		btnAgregar.setText("MODIFICAR");
+	}
+	
 }

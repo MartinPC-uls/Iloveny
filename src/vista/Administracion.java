@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -70,6 +72,18 @@ public class Administracion {
 		panelUsuarios.setLayout(null);
 		
 		JButton btnModificar = new JButton("Modificar");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int row = table.getSelectedRow();
+				String nombre = table.getValueAt(row, 0).toString();
+				String apellidos = table.getValueAt(row, 1).toString();
+				String rut = table.getValueAt(row, 2).toString();
+				String telefonos = table.getValueAt(row, 3).toString();
+				String email = table.getValueAt(row, 4).toString();
+				AgregarUsuario agregarUsuario = new AgregarUsuario();
+				agregarUsuario.setElements(nombre, apellidos, rut, telefonos, email);
+			}
+		});
 		btnModificar.setBounds(344, 18, 119, 37);
 		panelUsuarios.add(btnModificar);
 		
@@ -83,6 +97,17 @@ public class Administracion {
 		panelUsuarios.add(btnAgregar);
 		
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int row = table.getSelectedRow();
+				String value = table.getValueAt(row, 2).toString(); // RUT
+				System.out.println(value);
+				int confirm = JOptionPane.showConfirmDialog(frame, "¿Está seguro que quiere eliminar " + value + "?");
+				if (JOptionPane.YES_OPTION == confirm) {
+					consulta.delUsuario(value);
+				}
+			}
+		});
 		btnEliminar.setBounds(602, 18, 119, 37);
 		panelUsuarios.add(btnEliminar);
 		
@@ -233,7 +258,6 @@ public class Administracion {
 			for (int j = 0; j < usuarios.get(i).size(); j++) {
 				elementos.add(usuarios.get(i).get(j));
 			}
-			System.out.println("Añadiendo usuarios: " + elementos.get(0));
 			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4)});
 		}
 	}

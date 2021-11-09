@@ -29,7 +29,6 @@ public class Conexion {
         try {
             Class.forName("org.postgresql.Driver");
             con = (Connection) DriverManager.getConnection(this.url, this.user, this.password);
-            System.out.println("Conexion establecida");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -42,7 +41,6 @@ public class Conexion {
     public void desconectar(){
         try {
             con.close();
-            System.out.println("Conexion cerrada");
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
             

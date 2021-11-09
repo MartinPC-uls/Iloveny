@@ -1061,9 +1061,7 @@ public class Consulta extends Conexion{
     public void delUsuario(String Rut) {
     	PreparedStatement ps;
         Connection con = conectar();
-        String sql = "DELETE * "
-        		+ "From Usuario "
-        		+ "WHERE Rut = ?";
+        String sql = "DELETE FROM Usuario WHERE Rut = ?";
         try {
 			ps = con.prepareStatement(sql);
 			ps.setString(1, Rut);
