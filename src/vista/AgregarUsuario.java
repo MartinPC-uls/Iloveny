@@ -8,29 +8,33 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import a.Modelo.Consulta;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class AgregarUsuario extends JFrame{
+public class AgregarUsuario extends Administracion {
 
-	private static final long serialVersionUID = 1744095522065285861L;
-	public JTextField textoID;
-	public JTextField textoNombre;
-	public JTextField textoCantidad;
-	public JTextField textoPrecio;
-	public JTextField textField_4;
+	public JTextField txtNombre;
+	public JTextField txtApellidos;
+	public JTextField txtRut;
+	public JTextField txtTelefono;
+	public JTextField txtEmail;
 	public JLabel lblNombre;
 	public JLabel lblApellidos;
 	public JLabel lblRut;
 	public JLabel lblTelefono;
 	public JButton btnAgregar;
+	private Consulta consulta = new Consulta();
+	private JFrame _frame;
 	
 	public AgregarUsuario() {
-		setUndecorated(true);
-    	getContentPane().setBackground(new Color(51,51,51));
         try {
 		initialize();
+		 //_frame.setUndecorated(true);
+		 _frame.getContentPane().setBackground(new Color(51,51,51));
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -38,83 +42,96 @@ public class AgregarUsuario extends JFrame{
 	}
 	
 	private void initialize() throws IOException {
-		setResizable(false);
-        setVisible(true);
-        setBounds(100, 100, 473, 520);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        getContentPane().setLayout(null);
-        
-        
-        JLabel lblAgregar = new JLabel();
-        lblAgregar.setVerticalAlignment(SwingConstants.CENTER);
-        lblAgregar.setText("Agregar Usuario");
-        lblAgregar.setHorizontalAlignment(SwingConstants.CENTER);
-        lblAgregar.setForeground(Color.WHITE);
-        lblAgregar.setFont(new Font("Roboto Medium", Font.PLAIN, 24));
-        lblAgregar.setBounds(0, 29, 473, 35);
-        getContentPane().add(lblAgregar);
-        
-        textoID = new JTextField();
-        textoID.setBounds(24, 96, 408, 20);
-        getContentPane().add(textoID);
-        textoID.setColumns(10);
-        
-        textoNombre = new JTextField();
-        textoNombre.setColumns(10);
-        textoNombre.setBounds(24, 154, 408, 20);
-        getContentPane().add(textoNombre);
-        
-        textoCantidad = new JTextField();
-        textoCantidad.setColumns(10);
-        textoCantidad.setBounds(24, 208, 408, 20);
-        getContentPane().add(textoCantidad);
-        
-        textoPrecio = new JTextField();
-        textoPrecio.setColumns(10);
-        textoPrecio.setBounds(24, 265, 408, 20);
-        getContentPane().add(textoPrecio);
-        
-        textField_4 = new JTextField();
-        textField_4.setColumns(10);
-        textField_4.setBounds(24, 322, 408, 20);
-        getContentPane().add(textField_4);
-        
-        lblNombre = new JLabel("Nombre:");
-        lblNombre.setForeground(Color.WHITE);
-        lblNombre.setBounds(24, 75, 192, 14);
-        getContentPane().add(lblNombre);
-        
-        lblApellidos = new JLabel("Apellidos");
-        lblApellidos.setForeground(Color.WHITE);
-        lblApellidos.setBounds(24, 129, 192, 14);
-        getContentPane().add(lblApellidos);
-        
-        lblRut = new JLabel("Rut:");
-        lblRut.setForeground(Color.WHITE);
-        lblRut.setBounds(24, 185, 192, 14);
-        getContentPane().add(lblRut);
-        
-        lblTelefono = new JLabel("Telefono:");
-        lblTelefono.setForeground(Color.WHITE);
-        lblTelefono.setBounds(24, 239, 192, 14);
-        getContentPane().add(lblTelefono);
-        
-        btnAgregar = new JButton();
-        btnAgregar.setText("AGREGAR");
-        btnAgregar.setFocusPainted(false);
-        btnAgregar.setBorderPainted(false);
-        btnAgregar.setBorder(null);
-        btnAgregar.setBackground(new Color(0, 153, 153));
-        btnAgregar.setBounds(76, 440, 314, 40);
-        getContentPane().add(btnAgregar);
-        
-        JLabel lblEmail = new JLabel("Email:");
-        lblEmail.setForeground(Color.WHITE);
-        lblEmail.setBounds(24, 297, 192, 14);
-        getContentPane().add(lblEmail);
+		 _frame = new JFrame();
+		 _frame.setResizable(false);
+	        _frame.setVisible(true);
+	        _frame.setBounds(100, 100, 473, 520);
+	        _frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+	        _frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	        _frame.getContentPane().setLayout(null);
+	        
+	        
+	        
+	        JLabel lblAgregar = new JLabel();
+	        lblAgregar.setVerticalAlignment(SwingConstants.CENTER);
+	        lblAgregar.setText("Agregar Usuario");
+	        lblAgregar.setHorizontalAlignment(SwingConstants.CENTER);
+	        lblAgregar.setForeground(Color.WHITE);
+	        lblAgregar.setFont(new Font("Roboto Medium", Font.PLAIN, 24));
+	        lblAgregar.setBounds(0, 29, 473, 35);
+	        _frame.getContentPane().add(lblAgregar);
+	        
+	        txtNombre = new JTextField();
+	        txtNombre.setBounds(24, 96, 408, 20);
+	        _frame.getContentPane().add(txtNombre);
+	        txtNombre.setColumns(10);
+	        
+	        txtApellidos = new JTextField();
+	        txtApellidos.setColumns(10);
+	        txtApellidos.setBounds(24, 154, 408, 20);
+	        _frame.getContentPane().add(txtApellidos);
+	        
+	        txtRut = new JTextField();
+	        txtRut.setColumns(10);
+	        txtRut.setBounds(24, 208, 408, 20);
+	        _frame.getContentPane().add(txtRut);
+	        
+	        txtTelefono = new JTextField();
+	        txtTelefono.setColumns(10);
+	        txtTelefono.setBounds(24, 265, 408, 20);
+	        _frame.getContentPane().add(txtTelefono);
+	        
+	        txtEmail = new JTextField();
+	        txtEmail.setColumns(10);
+	        txtEmail.setBounds(24, 322, 408, 20);
+	        _frame.getContentPane().add(txtEmail);
+	        
+	        lblNombre = new JLabel("Nombre:");
+	        lblNombre.setForeground(Color.WHITE);
+	        lblNombre.setBounds(24, 75, 192, 14);
+	        _frame.getContentPane().add(lblNombre);
+	        
+	        lblApellidos = new JLabel("Apellidos");
+	        lblApellidos.setForeground(Color.WHITE);
+	        lblApellidos.setBounds(24, 129, 192, 14);
+	        _frame.getContentPane().add(lblApellidos);
+	        
+	        lblRut = new JLabel("Rut:");
+	        lblRut.setForeground(Color.WHITE);
+	        lblRut.setBounds(24, 185, 192, 14);
+	        _frame.getContentPane().add(lblRut);
+	        
+	        lblTelefono = new JLabel("Telefono:");
+	        lblTelefono.setForeground(Color.WHITE);
+	        lblTelefono.setBounds(24, 239, 192, 14);
+	        _frame.getContentPane().add(lblTelefono);
+	        
+	        btnAgregar = new JButton();
+	        btnAgregar.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent arg0) {
+	        		String nombreUsuario = txtNombre.getText();
+	        		String apellidos = txtApellidos.getText();
+	        		String rut = txtRut.getText();
+	        		String telefono = txtTelefono.getText();
+	        		String email = txtEmail.getText();
+	        		consulta.addUsuario(nombreUsuario, apellidos, rut, telefono, email);
+	        		refresh();
+	        		_frame.dispose();
+	        	}
+	        });
+	        btnAgregar.setText("AGREGAR");
+	        btnAgregar.setFocusPainted(false);
+	        btnAgregar.setBorderPainted(false);
+	        btnAgregar.setBorder(null);
+	        btnAgregar.setBackground(new Color(0, 153, 153));
+	        btnAgregar.setBounds(76, 440, 314, 40);
+	        _frame.getContentPane().add(btnAgregar);
+	        
+	        JLabel lblEmail = new JLabel("Email:");
+	        lblEmail.setForeground(Color.WHITE);
+	        lblEmail.setBounds(24, 297, 192, 14);
+	        _frame.getContentPane().add(lblEmail);
         
 	}
 }

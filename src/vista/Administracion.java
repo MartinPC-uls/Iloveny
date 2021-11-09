@@ -1,14 +1,10 @@
 package vista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,18 +24,15 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import a.Modelo.Consulta;
-import java.awt.SystemColor;
-import java.awt.Dimension;
-import javax.swing.JLabel;
 
 public class Administracion {
 
 	public JFrame frame;
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
 	Consulta consulta = new Consulta();
-	private JTable table;
+	public JTable table;
 	public DefaultTableModel model;
-	private ArrayList<ArrayList<String>> usuarios; 
+	public ArrayList<ArrayList<String>> usuarios; 
 
 	public Administracion() {
 		initialize();
@@ -83,7 +76,7 @@ public class Administracion {
 		JButton btnAgregar = new JButton("Agregar...");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// Abrir ventana de agregar usuario
+				AgregarUsuario agregarUsuario = new AgregarUsuario();
 			}
 		});
 		btnAgregar.setBounds(473, 18, 119, 37);
@@ -94,12 +87,6 @@ public class Administracion {
 		panelUsuarios.add(btnEliminar);
 		
 		table = new JTable();
-		//table.setBackground(Color.GRAY);
-		//table.setSize(new Dimension(100, 100));
-		//table.setForeground(Color.WHITE);
-		//table.setOpaque(false);
-		//table.setBackground(new Color(51,51,51));
-		//table.setFillsViewportHeight(false);
 		table.setModel(new DefaultTableModel(
 				new Object[][] {
 				},
@@ -230,6 +217,7 @@ public class Administracion {
 	
 	public void refresh() {
 		int rowCount = model.getRowCount();
+		System.out.println(rowCount);
 		for (int i = rowCount - 1; i >= 0; i--) {
 			model.removeRow(i);
 		}
@@ -245,6 +233,7 @@ public class Administracion {
 			for (int j = 0; j < usuarios.get(i).size(); j++) {
 				elementos.add(usuarios.get(i).get(j));
 			}
+			System.out.println("Añadiendo usuarios: " + elementos.get(0));
 			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4)});
 		}
 	}
