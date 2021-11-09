@@ -251,7 +251,7 @@ public class Consulta extends Conexion{
     public boolean addMedidaG(int Largo, int Alto, int Ancho, String Articulo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO MedidaGeneral (Largo,Alto,Ancho,NombreArticulo) VALUES (?,?,?,?);";
+        String sql = "INSERT INTO MedidaGeneral (Largo,Alto,Ancho,idArticulo) VALUES (?,?,?,?);";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, Largo);
@@ -275,7 +275,7 @@ public class Consulta extends Conexion{
     public boolean addMedidaE(String Medida, String Articulo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO MedidaEspecifica (Medida,NombreArticulo) VALUES (?,?);";
+        String sql = "INSERT INTO MedidaEspecifica (Medida,idArticulo) VALUES (?,?);";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Medida);
@@ -294,18 +294,19 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean addArticulo(int idTipoObj,int idMarca,String NombreArticulo,int Stock, String RutaImg,int PrecioUnitario){
+    public boolean addArticulo(int idTipoObj,int idMarca,int idArticulo,int Stock,String descripcion, String RutaImg,int PrecioUnitario){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO Articulo (idTipoObj, idMarca, NombreArticulo, Stock, RutaImg, PrecioUnitario) VALUES (?,?,?,?,?,?);";
+        String sql = "INSERT INTO Articulo (idTipoObj, idMarca, idArticulo, Stock, RutaImg, PrecioUnitario, descripcion) VALUES (?,?,?,?,?,?);";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idTipoObj);
             ps.setInt(2, idMarca);
-            ps.setString(3, NombreArticulo);
+            ps.setInt(3, idArticulo);
             ps.setInt(4, Stock);
             ps.setString(5, RutaImg);
             ps.setInt(6, PrecioUnitario);
+            ps.setString(7, descripcion);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -332,7 +333,7 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("idArticulo"));
                 columna.add(rs.getString("Largo"));
                 columna.add(rs.getString("Alto"));
                 columna.add(rs.getString("Ancho"));
@@ -363,7 +364,7 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("idArticulo"));
                 columna.add(rs.getString("Medida"));
                 fila.add(columna);
             }
@@ -381,20 +382,20 @@ public class Consulta extends Conexion{
     }
     
     /**
-     * Devuelve en orden Articulo, Tipo, Marca, Stock, PrecioUnitario
+     * Devuelve en orden idArticulo, Tipo, Marca, Stock, PrecioUnitario y descripcion
      * @param orden : String que indica el orden de la tabla. 
-     * Debe ser: NombreArticulo, NombreTipo, NombreMarca, Stock o PrecioUnitario.
-     * Mandar NombreArticulo por defecto.
+     * Debe ser: IdArticulo, NombreTipo, NombreMarca, Stock o PrecioUnitario.
+     * Mandar idArticulo por defecto.
      * @return ArrayList. Dentro de cada elemento del ArrayList, se encuentra otro ArrayList String con los datos de cada columna.
      */
     public ArrayList getListaArticulo(String orden){
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT NombreArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario"
-                    + "FROM Articulo, Marca, TipoObj"
-                    + "WHERE Articulo.idMarca = Marca.idMarca"
-                    + "AND Articulo.idTipoObj = TipoObjeto.idTipoObj" 
+        String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion "
+                    + "FROM Articulo, Marca, TipoObj "
+                    + "WHERE Articulo.idMarca = Marca.idMarca "
+                    + "AND Articulo.idTipoObj = TipoObjeto.idTipoObj "
                     + "ORDER BY ? ;";
         try {
             ps = con.prepareStatement(sql);
@@ -403,11 +404,12 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("idArticulo"));
                 columna.add(rs.getString("NombreTipo"));
                 columna.add(rs.getString("NombreMarca"));
                 columna.add(rs.getString("Stock"));
                 columna.add(rs.getString("PrecioUnitario"));
+                columna.add(rs.getString("descripcion"));
                 fila.add(columna);
             }
             return fila;
@@ -423,17 +425,17 @@ public class Consulta extends Conexion{
         return null;
     }
     
-    public boolean updtMedidaG(int Largo, int Alto, int Ancho, String ArticuloNuevo, String ArticuloAntiguo){
+    public boolean updtMedidaG(int Largo, int Alto, int Ancho, int idArticuloNuevo, int idArticuloAntiguo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "UPDATE MedidaGeneral SET Largo= ?,Alto= ?,Ancho= ?,NombreArticulo= ? WHERE NombreArticulo = ?";
+        String sql = "UPDATE MedidaGeneral SET Largo= ?,Alto= ?,Ancho= ?,idArticulo= ? WHERE idArticulo = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, Largo);
             ps.setInt(2, Alto);
             ps.setInt(3, Ancho);
-            ps.setString(4, ArticuloNuevo);
-            ps.setString(5, ArticuloAntiguo);
+            ps.setInt(4, idArticuloNuevo);
+            ps.setInt(5, idArticuloAntiguo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -448,15 +450,15 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtMedidaE(String Medida, String ArticuloNuevo, String ArticuloAntiguo){
+    public boolean updtMedidaE(String Medida, int idArticuloNuevo, int idArticuloAntiguo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "UPDATE MedidaEspecifica SET Medida= ? ,NombreArticulo= ? WHERE NombreArticulo = ?;";
+        String sql = "UPDATE MedidaEspecifica SET Medida= ? ,idArticulo= ? WHERE idArticulo = ?;";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Medida);
-            ps.setString(2, ArticuloNuevo);
-            ps.setString(3, ArticuloAntiguo);
+            ps.setInt(2, idArticuloNuevo);
+            ps.setInt(3, idArticuloAntiguo);
             ps.execute();
             return true;
         } catch (SQLException ex) { 
@@ -471,19 +473,22 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtArticulo(int idTipoObj,int idMarca,String NombreArticulo,int Stock, String RutaImg,int PrecioUnitario, String NombreArticuloAntiguo){
+    public boolean updtArticulo(int idTipoObj,int idMarca,int idArticuloNuevo,int Stock,int PrecioUnitario, int idArticuloAntiguo,String descripcion, String RutaImg){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "UPDATE Articulo SET IdTipoObjeto= ?, idMarca= ?, NombreArticulo= ?, Stock= ?, RutaImg= ?, PrecioUnitario =? WHERE NombreArticulo = ?;";
+        String sql = "UPDATE Articulo "
+        		+ "SET IdTipoObjeto= ?, idMarca= ?, idArticulo= ?, Stock= ?, RutaImg= ?, PrecioUnitario =?, descripcion = ? "
+        		+ "WHERE idArticulo = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idTipoObj);
             ps.setInt(2, idMarca);
-            ps.setString(3, NombreArticulo);
+            ps.setInt(3, idArticuloNuevo);
             ps.setInt(4, Stock);
             ps.setString(5, RutaImg);
             ps.setInt(6, PrecioUnitario);
-            ps.setString(7, NombreArticuloAntiguo);
+            ps.setString(7, descripcion);
+            ps.setInt(8, idArticuloAntiguo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -498,14 +503,14 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean delArticulo(String Articulo){
+    public boolean delArticulo(int idArticulo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "DELETE * FROM Articulo WHERE NombreArticulo = ?;";
+        String sql = "DELETE FROM Articulo WHERE idArticulo = ?;";
         
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, Articulo);
+            ps.setInt(1, idArticulo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -520,14 +525,14 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean delMedidaG(String Articulo){
+    public boolean delMedidaG(int idArticulo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "DELETE * FROM MedidaGeneral WHERE NombreArticulo = ?;";
+        String sql = "DELETE FROM MedidaGeneral WHERE idArticulo = ?;";
         
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, Articulo);
+            ps.setInt(1, idArticulo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -542,14 +547,14 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean delMedidaE(String Articulo){
+    public boolean delMedidaE(int idArticulo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "DELETE * FROM MedidaEspecifica WHERE NombreArticulo = ?;";
+        String sql = "DELETE FROM MedidaEspecifica WHERE idArticulo = ?;";
         
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, Articulo);
+            ps.setInt(1, idArticulo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -565,7 +570,7 @@ public class Consulta extends Conexion{
     }   
     /**
      * Esta funcion permite agregar una nueva fila a la tabla de RegistroCompra con sus correspondientes datos.
-     * @param NombreArticulo Corresponde al dato que se va a agregar en la columna NombreArticulo.
+     * @param idArticulo Corresponde al dato que se va a agregar en la columna idArticulo.
      * @param Usuario Corresponde al dato que se va a agregar en la columna Usuario.
      * @param idProv Corresponde al dato que se va a agregar en la columna idProv.
      * @param UnidadesAdquiridas Corresponde al dato que se va a agregar en la columna UnidadesAdquiridas.
@@ -573,14 +578,14 @@ public class Consulta extends Conexion{
      * @param FechaPedida Corresponde al dato que se va a agregar en la columna FechaPedida.
      * @param FechaRecibo Corresponde al dato que se va a agregar en la columna FechaRecibo.
      */
-    public void addRegistroCompra(String NombreArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
+    public void addRegistroCompra(int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO RegistroCompra (NombreArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
+        String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
         		+ " VALUES (?,?,?,?,?,?,?)";
         try {
 			ps = con.prepareStatement(sql);
-			ps.setString(1, NombreArticulo);
+			ps.setInt(1, idArticulo);
 			ps.setString(2, Usuario);
 			ps.setInt(3, idProv);
 			ps.setInt(4,UnidadesAdquiridas);
@@ -602,19 +607,19 @@ public class Consulta extends Conexion{
     
     /**
      * Esta funcion permite agregar una nueva fila a la tabla de RegistroVenta con sus correspondientes datos.
-     * @param NombreArticulo Corresponde al dato que se va a agregar en la columna NombreArticulo.
+     * @param idArticulo Corresponde al dato que se va a agregar en la columna idArticulo.
      * @param Rut Corresponde al dato que se va a agregar en la columna RUT.
      * @param CantidadVendida Corresponde al dato que se va a agregar en la columna CantidadVendida.
      * @param FechaVenta Corresponde al dato que se va a agregar en la columna FechaVenta.
      */
-    public void addRegistroVenta(String NombreArticulo, String Rut, int CantidadVendida, Date FechaVenta) {
+    public void addRegistroVenta(int idArticulo, String Rut, int CantidadVendida, Date FechaVenta) {
     	PreparedStatement ps;
     	Connection con = conectar();
-    	String sql = "INSERT INTO RegistroVenta (NombreArticulo, Rut, CantidadVendida, FechaVenta) "
+    	String sql = "INSERT INTO RegistroVenta (idArticulo, Rut, CantidadVendida, FechaVenta) "
     			+ "VALUES (?,?,?,?)";
     	try {
 			ps = con.prepareStatement(sql);
-			ps.setString(1, NombreArticulo);
+			ps.setInt(1, idArticulo);
 			ps.setString(2, Rut);
 			ps.setInt(3, CantidadVendida);
 			ps.setDate(4, (java.sql.Date) FechaVenta);
@@ -641,7 +646,7 @@ public class Consulta extends Conexion{
     	PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT NombreArticulo, Usuario, NombreProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo "
+        String sql = "SELECT idArticulo, Usuario, NombreProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo "
         		+ "FROM RegistroCompra, Proveedor "
         		+ "WHERE RegistroCompra.idProv = Proveedor.idProv "
         		+ "ORDER BY ?";
@@ -652,7 +657,7 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("idArticulo"));
                 columna.add(rs.getString("Usuario"));
                 columna.add(rs.getString("NombreProv"));
                 columna.add(rs.getString("UnidadesAdquiridas"));
@@ -694,7 +699,7 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                columna.add(rs.getString("NombreArticulo"));
+                columna.add(rs.getString("idArticulo"));
                 columna.add(rs.getString("Rut"));
                 columna.add(rs.getString("FechaVenta"));
                 columna.add(rs.getString("CantidadVendida"));
@@ -716,18 +721,18 @@ public class Consulta extends Conexion{
     
     /**
      * Borra una fila de la tabla RegistroCompra.
-     * @param NombreArticulo Este parametro sirve para identificar la fila que se quiere borrar.
+     * @param idArticulo Este parametro sirve para identificar la fila que se quiere borrar.
      * @param FechaPedida Este parametro sirve para identificar la fila que se quiere borrar.
      */
-    public void delRegistroCompra(String NombreArticulo, Date FechaPedida) {
+    public void delRegistroCompra(int idArticulo, Date FechaPedida) {
     	PreparedStatement ps;
         Connection con = conectar();
-        String sql = "DELETE * FROM RegistroCompra "
-        		+ "WHERE NombreArticulo = ? "
+        String sql = "DELETE FROM RegistroCompra "
+        		+ "WHERE idArticulo = ? "
         		+ "AND FechaPedida = ?";
         try {
 			ps = con.prepareStatement(sql);
-			ps.setString(1, NombreArticulo);
+			ps.setInt(1, idArticulo);
 			ps.setDate(2, (java.sql.Date) FechaPedida);
 			ps.execute();
 			ps.close();
@@ -743,24 +748,24 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtRegistroCompra(String UsuarioNuevo, String UsuarioAntiguo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaPedidaAntigua,  Date FechaRecibo, String ArticuloNuevo, String ArticuloAntiguo) {
+    public boolean updtRegistroCompra(String UsuarioNuevo, String UsuarioAntiguo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaPedidaAntigua,  Date FechaRecibo, int idArticuloNuevo, int idArticuloAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE RegistroCompra "
-        		+ "SET NombreArticulo = ?, Usuario = ?, idProv= ?, UnidadesAdquiridas = ?, CostoUnitario= ?, FechaPedida = ?, FechaRecibo =? "
-        		+ "WHERE NombreArticulo = ? "
+        		+ "SET idArticulo = ?, Usuario = ?, idProv= ?, UnidadesAdquiridas = ?, CostoUnitario= ?, FechaPedida = ?, FechaRecibo =? "
+        		+ "WHERE idArticulo = ? "
         		+ "AND Usuario = ? "
         		+ "AND FechaPedida = ?";
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, ArticuloNuevo);
+            ps.setInt(1, idArticuloNuevo);
             ps.setString(2, UsuarioNuevo);
             ps.setInt(3, idProv);
             ps.setInt(4, UnidadesAdquiridas);
             ps.setInt(5, CostoUnitario);
             ps.setDate(6, (java.sql.Date) FechaPedidaNueva);
             ps.setDate(7, (java.sql.Date) FechaRecibo);
-            ps.setString(8, ArticuloAntiguo);
+            ps.setInt(8, idArticuloAntiguo);
             ps.setString(9, UsuarioAntiguo);
             ps.setDate(10, (java.sql.Date) FechaPedidaAntigua);
             ps.execute();
@@ -778,21 +783,21 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtRegistroVenta(int CantidadVendida, Date FechaVentaNueva, Date FechaVentaAntigua, String ArticuloNuevo, String ArticuloAntiguo, String rutNuevo, String rutAntiguo) {
+    public boolean updtRegistroVenta(int CantidadVendida, Date FechaVentaNueva, Date FechaVentaAntigua, int idArticuloNuevo, int idArticuloAntiguo, String rutNuevo, String rutAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE RegistroCompra "
-        		+ "SET NombreArticulo = ?, Rut = ?, FechaVenta = ?, CantidadVendida = ? "
-        		+"WHERE NombreArticulo = ? "
+        		+ "SET idArticulo = ?, Rut = ?, FechaVenta = ?, CantidadVendida = ? "
+        		+"WHERE idArticulo = ? "
         		+ "AND Rut = ? "
         		+ "AND FechaVenta = ?";
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, ArticuloNuevo);
+            ps.setInt(1, idArticuloNuevo);
             ps.setString(2, rutNuevo);
             ps.setDate(3, (java.sql.Date) FechaVentaNueva);
             ps.setInt(4, CantidadVendida);
-            ps.setString(5, ArticuloAntiguo);
+            ps.setInt(5, idArticuloAntiguo);
             ps.setString(6,rutAntiguo);
             ps.setDate(7, (java.sql.Date) FechaVentaAntigua);
             ps.execute();
@@ -812,18 +817,18 @@ public class Consulta extends Conexion{
     
     /**
      * Borra una fila de la tabla RegistroVenta.
-     * @param NombreArticulo Este parametro sirve para identificar la fila que se quiere borrar.
+     * @param idArticulo Este parametro sirve para identificar la fila que se quiere borrar.
      * @param FechaVenta Este parametro sirve para identificar la fila que se quiere borrar.
      */
-    public void delRegistroVenta(String NombreArticulo, Date FechaVenta){
+    public void delRegistroVenta(int idArticulo, Date FechaVenta){
     	PreparedStatement ps;
         Connection con = conectar();
-    	String sql = "DELETE * FROM RegistroVenta "
-    			+ "WHERE NombreArticulo = ? "
+    	String sql = "DELETE FROM RegistroVenta "
+    			+ "WHERE idArticulo = ? "
     			+ "AND FechaVenta = ?";
     	try {
 			ps = con.prepareStatement(sql);
-			ps.setString(1, NombreArticulo);
+			ps.setInt(1, idArticulo);
 			ps.setDate(2, (java.sql.Date) FechaVenta);
 			ps.execute();
 			ps.close();
@@ -1081,7 +1086,7 @@ public class Consulta extends Conexion{
     public void delDireccion(String Rut) {
     	PreparedStatement ps;
         Connection con = conectar();
-        String sql = "DELETE * "
+        String sql = "DELETE "
         		+ "From Direccion "
         		+ "WHERE Rut = ?";
         try {
