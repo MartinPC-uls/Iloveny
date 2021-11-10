@@ -248,7 +248,7 @@ public class Consulta extends Conexion{
         }   
     } 
     
-    public boolean addMedidaG(int Largo, int Alto, int Ancho, String Articulo){
+    public boolean addMedidaG(int Largo, int Alto, int Ancho, int idArticulo){
         PreparedStatement ps;
         Connection con = conectar();
         String sql = "INSERT INTO MedidaGeneral (Largo,Alto,Ancho,idArticulo) VALUES (?,?,?,?);";
@@ -257,7 +257,7 @@ public class Consulta extends Conexion{
             ps.setInt(1, Largo);
             ps.setInt(2, Alto);
             ps.setInt(3, Ancho);
-            ps.setString(4, Articulo);
+            ps.setInt(4, idArticulo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -272,14 +272,14 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean addMedidaE(String Medida, String Articulo){
+    public boolean addMedidaE(String Medida, int idArticulo){
         PreparedStatement ps;
         Connection con = conectar();
         String sql = "INSERT INTO MedidaEspecifica (Medida,idArticulo) VALUES (?,?);";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Medida);
-            ps.setString(2, Articulo);
+            ps.setInt(2, idArticulo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -472,22 +472,21 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtArticulo(int idTipoObj,int idMarca,int idArticuloNuevo,int Stock,int PrecioUnitario, int idArticuloAntiguo,String descripcion, String RutaImg){
+    public boolean updtArticulo(int idTipoObj,int idMarca,int Stock,int PrecioUnitario, int idArticuloAntiguo,String descripcion, String RutaImg){
         PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE Articulo "
-        		+ "SET IdTipoObjeto= ?, idMarca= ?, idArticulo= ?, Stock= ?, RutaImg= ?, PrecioUnitario =?, descripcion = ? "
+        		+ "SET IdTipoObjeto= ?, idMarca= ?, Stock= ?, RutaImg= ?, PrecioUnitario =?, descripcion = ? "
         		+ "WHERE idArticulo = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idTipoObj);
             ps.setInt(2, idMarca);
-            ps.setInt(3, idArticuloNuevo);
-            ps.setInt(4, Stock);
-            ps.setString(5, RutaImg);
-            ps.setInt(6, PrecioUnitario);
-            ps.setString(7, descripcion);
-            ps.setInt(8, idArticuloAntiguo);
+            ps.setInt(3, Stock);
+            ps.setString(4, RutaImg);
+            ps.setInt(5, PrecioUnitario);
+            ps.setString(6, descripcion);
+            ps.setInt(7, idArticuloAntiguo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
