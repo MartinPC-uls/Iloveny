@@ -294,19 +294,18 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean addArticulo(int idTipoObj,int idMarca,int idArticulo,int Stock,String descripcion, String RutaImg,int PrecioUnitario){
+    public boolean addArticulo(int idTipoObj,int idMarca,int Stock,String descripcion, String RutaImg,int PrecioUnitario){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO Articulo (idTipoObj, idMarca, idArticulo, Stock, RutaImg, PrecioUnitario, descripcion) VALUES (?,?,?,?,?,?);";
+        String sql = "INSERT INTO Articulo (idTipoObj, idMarca, Stock, RutaImg, PrecioUnitario, descripcion) VALUES (?,?,?,?,?,?);";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idTipoObj);
             ps.setInt(2, idMarca);
-            ps.setInt(3, idArticulo);
-            ps.setInt(4, Stock);
-            ps.setString(5, RutaImg);
-            ps.setInt(6, PrecioUnitario);
-            ps.setString(7, descripcion);
+            ps.setInt(3, Stock);
+            ps.setString(4, RutaImg);
+            ps.setInt(5, PrecioUnitario);
+            ps.setString(6, descripcion);
             ps.execute();
             return true;
         } catch (SQLException ex) {
