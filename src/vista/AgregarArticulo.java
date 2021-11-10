@@ -9,8 +9,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import a.Modelo.Consulta;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -21,7 +26,8 @@ public class AgregarArticulo extends Administracion {
 	public JTextField textoMarca;
 	public JTextField textoTipo;
 	public JTextField textoStock;
-	public JTextField textPrecio;
+	public JTextField textoPrecio;
+	public JTextField textoURLImagen;
 	public JLabel lblNombre;
 	public JLabel lblMarca;
 	public JLabel lblTipo;
@@ -30,8 +36,9 @@ public class AgregarArticulo extends Administracion {
 	public JButton btnAgregar;
 	private JLabel panelImagen;
 	private JLabel lblUrlImagen;
-	private JTextField textURLImagen;
 	private JFrame frame;
+	private Consulta consulta = new Consulta();
+	private JDialog _frame;
 	
 	public AgregarArticulo(JButton button) {
 	        try {
@@ -41,7 +48,7 @@ public class AgregarArticulo extends Administracion {
 		}
 	}
 	
-	private void initialize(JButton button) throws IOException {
+	private void initialize(JButton buttonToPress) throws IOException {
 		 frame = new JFrame();
 		 frame.setResizable(false);
 		 
@@ -85,22 +92,22 @@ public class AgregarArticulo extends Administracion {
 	        textoStock.setBounds(24, 265, 408, 20);
 	        frame.getContentPane().add(textoStock);
 	        
-	        textPrecio = new JTextField();
-	        textPrecio.setColumns(10);
-	        textPrecio.setBounds(24, 322, 408, 20);
-	        frame.getContentPane().add(textPrecio);
+	        textoPrecio = new JTextField();
+	        textoPrecio.setColumns(10);
+	        textoPrecio.setBounds(24, 322, 408, 20);
+	        frame.getContentPane().add(textoPrecio);
 	        
 	        lblNombre = new JLabel("Ingrese el nombre del art\u00EDculo:");
 	        lblNombre.setForeground(Color.WHITE);
 	        lblNombre.setBounds(24, 75, 192, 14);
 	        frame.getContentPane().add(lblNombre);
 	        
-	        lblMarca = new JLabel("Ingrese ID de marca:");
+	        lblMarca = new JLabel("Seleccionar marca:");
 	        lblMarca.setForeground(Color.WHITE);
 	        lblMarca.setBounds(24, 129, 192, 14);
 	        frame.getContentPane().add(lblMarca);
 	        
-	        lblTipo = new JLabel("Ingrese ID de tipo de art\u00EDculo:");
+	        lblTipo = new JLabel("Seleccionar Art\u00EDculo:");
 	        lblTipo.setForeground(Color.WHITE);
 	        lblTipo.setBounds(24, 185, 192, 14);
 	        frame.getContentPane().add(lblTipo);
@@ -110,19 +117,19 @@ public class AgregarArticulo extends Administracion {
 	        lblStock.setBounds(24, 239, 192, 14);
 	        frame.getContentPane().add(lblStock);
 	        
-	        btnAgregar = new JButton();
+	        btnAgregar = new JButton();/*
 	        btnAgregar.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent arg0) {
 	        		// something else...
 	        		button.doClick(); // refresh
 	        	}
-	        });
+	        });*/
 	        btnAgregar.setText("AGREGAR");
 	        btnAgregar.setFocusPainted(false);
 	        btnAgregar.setBorderPainted(false);
 	        btnAgregar.setBorder(null);
 	        btnAgregar.setBackground(new Color(0, 153, 153));
-	        btnAgregar.setBounds(76, 440, 314, 40);
+	        btnAgregar.setBounds(79, 432, 314, 40);
 	        frame.getContentPane().add(btnAgregar);
 	        
 	        JLabel lblPrecio = new JLabel("Ingrese precio:");
@@ -134,15 +141,34 @@ public class AgregarArticulo extends Administracion {
 	        panelImagen.setBounds(505, 76, 170, 163);
 	        frame.getContentPane().add(panelImagen);
 	        
-	        lblUrlImagen = new JLabel("URL imagen:");
+	        lblUrlImagen = new JLabel("Ingrese URL imagen:");
 	        lblUrlImagen.setForeground(Color.WHITE);
 	        lblUrlImagen.setBounds(24, 353, 192, 14);
 	        frame.getContentPane().add(lblUrlImagen);
 	        
-	        textURLImagen = new JTextField();
-	        textURLImagen.setColumns(10);
-	        textURLImagen.setBounds(24, 378, 408, 20);
-	        frame.getContentPane().add(textURLImagen);
+	        textoURLImagen = new JTextField();
+	        textoURLImagen.setColumns(10);
+	        textoURLImagen.setBounds(24, 378, 408, 20);
+	        frame.getContentPane().add(textoURLImagen);
+	        
+	        btnAgregar.addActionListener(new ActionListener() {
+	        	public void actionPerformed(ActionEvent arg0) {
+	        		
+	        		String IDMarca = textoMarca.getText();
+	        		String IDTipo = textoTipo.getText();
+	        		String stock = textoStock.getText();
+	        		String precio = textoPrecio.getText();
+	        		String descripcion = textoNombre.getText();
+	        		String imagen = textoURLImagen.getText();
+	        		if (btnAgregar.getText().equals("AGREGAR")) {
+		        		consulta.addArticulo(IDTipo, IDMarca, stock, descripcion, imagen, precio);
+	        		} else if (btnAgregar.getText().equals("MODIFICAR")){
+	        			consulta.updtArticulo(IDTipo, IDMarca, stock, precio, articuloantiguo, descripcion, imagen);			//DE DONDE CHUCHA SACO LA DESCRIPCIÓN????
+	        		}
+	        		buttonToPress.doClick();
+	        		_frame.dispose();
+	        	}
+	        });
         
 	}
 }

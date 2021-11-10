@@ -42,6 +42,7 @@ public class Administracion extends JFrame {
 	public DefaultTableModel model2;
 	public DefaultTableModel model;
 	public ArrayList<ArrayList<String>> usuarios; 
+	public ArrayList<ArrayList<String>> articulos; 
 	public JButton btnNewButton_1;
 	public JPanel panelArticulos;
 
@@ -336,6 +337,19 @@ public class Administracion extends JFrame {
 				elementos.add(usuarios.get(i).get(j));
 			}
 			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4)});
+		}
+	}
+	
+	public void addArticulos() {
+		articulos = new ArrayList<ArrayList<String>>();
+		articulos = consulta.getListaArticulo("nombrearticulo");
+		ArrayList<String> elementos;
+		for (int i = 0; i < articulos.size(); i++) {
+			elementos = new ArrayList<String>();
+			for (int j = 0; j < articulos.get(i).size(); j++) {
+				elementos.add(articulos.get(i).get(j));
+			}
+			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4), elementos.get(5)});
 		}
 	}
 	
