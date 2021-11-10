@@ -391,7 +391,7 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion "
+        String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion, rutaimg "
                     + "FROM Articulo, Marca, TipoObj "
                     + "WHERE Articulo.idMarca = Marca.idMarca "
                     + "AND Articulo.idTipoObj = TipoObj.idTipoObj "
@@ -409,6 +409,7 @@ public class Consulta extends Conexion{
                 columna.add(rs.getString("Stock"));
                 columna.add(rs.getString("PrecioUnitario"));
                 columna.add(rs.getString("descripcion"));
+                columna.add(rs.getString("rutaimg"));
                 fila.add(columna);
             }
             return fila;
