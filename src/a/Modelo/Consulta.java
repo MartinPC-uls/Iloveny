@@ -395,7 +395,7 @@ public class Consulta extends Conexion{
                     + "FROM Articulo, Marca, TipoObj "
                     + "WHERE Articulo.idMarca = Marca.idMarca "
                     + "AND Articulo.idTipoObj = TipoObj.idTipoObj "
-                    + "ORDER BY ? ";
+                    + "ORDER BY ? ;";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, orden);

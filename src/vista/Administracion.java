@@ -321,6 +321,9 @@ public class Administracion extends JFrame {
 		
 		panelArticulos.add(scrollPane1);
 		
+		TableRowSorter<TableModel> sorter2 = new TableRowSorter<TableModel>(table2.getModel());
+		table2.setRowSorter(sorter2);
+		
 		JButton btnActualizar = new JButton("Actualizar");
 		btnActualizar.setBounds(632, 192, 89, 23);
 		panelArticulos.add(btnActualizar);
@@ -373,7 +376,7 @@ public class Administracion extends JFrame {
 	public void addArticulos() {
 		// "idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"
 		articulos = new ArrayList<ArrayList<String>>();
-		articulos = consulta.getListaArticulo("idArticulo");
+		articulos = consulta.getListaArticulo("idarticulo");
 		ArrayList<String> elementos;
 		for (int i = 0; i < articulos.size(); i++) {
 			elementos = new ArrayList<String>();
