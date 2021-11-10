@@ -18,6 +18,8 @@ import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -26,45 +28,47 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import a.Modelo.Consulta;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Component;
 
-public class Administracion {
+public class Administracion extends JFrame {
 
-	public JFrame frame;
+	//public JFrame frame;
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
 	Consulta consulta = new Consulta();
 	public JTable table;
+	public JTable table2;
+	public DefaultTableModel model2;
 	public DefaultTableModel model;
 	public ArrayList<ArrayList<String>> usuarios; 
+	public JButton btnNewButton_1;
+	public JPanel panelArticulos;
 
 	public Administracion() {
 		initialize();
 	}
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(51, 51, 51));
-		frame.getContentPane().setLayout(null);
+		//new JFrame();
+		getContentPane().setBackground(new Color(51, 51, 51));
+		getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(34, 34, 34));
 		panel.setBounds(0, 0, 197, 559);
-		frame.getContentPane().add(panel);
+		getContentPane().add(panel);
 		panel.setLayout(null);
 		
 		layeredPane_1 = new JLayeredPane();
 		layeredPane_1.setBounds(196, 0, 731, 559);
-		frame.getContentPane().add(layeredPane_1);
+		getContentPane().add(layeredPane_1);
 		layeredPane_1.setLayout(new CardLayout(0, 0));
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(51, 51, 51));
 		layeredPane_1.add(panel_1, "name_54251509904100");
 		panel_1.setLayout(null);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(51, 51, 51));
-		layeredPane_1.add(panel_2, "name_54256623111200");
-		panel_2.setLayout(null);
 		
 		JPanel panelUsuarios = new JPanel();
 		panelUsuarios.setBackground(new Color(51, 51, 51));
@@ -80,7 +84,7 @@ public class Administracion {
 				String rut = table.getValueAt(row, 2).toString();
 				String telefonos = table.getValueAt(row, 3).toString();
 				String email = table.getValueAt(row, 4).toString();
-				AgregarUsuario agregarUsuario = new AgregarUsuario();
+				AgregarUsuario agregarUsuario = new AgregarUsuario(btnNewButton_1);
 				agregarUsuario.setElements(nombre, apellidos, rut, telefonos, email);
 			}
 		});
@@ -90,7 +94,7 @@ public class Administracion {
 		JButton btnAgregar = new JButton("Agregar...");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				AgregarUsuario agregarUsuario = new AgregarUsuario();
+				AgregarUsuario agregarUsuario = new AgregarUsuario(btnNewButton_1);
 			}
 		});
 		btnAgregar.setBounds(473, 18, 119, 37);
@@ -102,9 +106,10 @@ public class Administracion {
 				int row = table.getSelectedRow();
 				String value = table.getValueAt(row, 2).toString(); // RUT
 				System.out.println(value);
-				int confirm = JOptionPane.showConfirmDialog(frame, "¿Está seguro que quiere eliminar " + value + "?");
+				int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
 				if (JOptionPane.YES_OPTION == confirm) {
 					consulta.delUsuario(value);
+					refresh();
 				}
 			}
 		});
@@ -166,14 +171,14 @@ public class Administracion {
 		btnNewButton.setForeground(Color.WHITE);
 		btnNewButton.setBackground(new Color(34,34,34));
 		btnNewButton.setBorder(null);
-		btnNewButton.setBounds(0, 151, 197, 43);
+		btnNewButton.setBounds(0, 195, 197, 43);
 		panel.add(btnNewButton);
 		
 		JButton btnArtculos = new JButton("ART\u00CDCULOS");
 		btnArtculos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnArtculos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panel_2);
+				switchPanels(panelArticulos);
 			}
 		});
 		btnArtculos.setFocusPainted(false);
@@ -190,7 +195,7 @@ public class Administracion {
 		btnArtculos.setForeground(Color.WHITE);
 		btnArtculos.setBackground(new Color(34,34,34));
 		btnArtculos.setBorder(null);
-		btnArtculos.setBounds(0, 205, 197, 43);
+		btnArtculos.setBounds(0, 249, 197, 43);
 		panel.add(btnArtculos);
 		
 		JButton btnNewButton_2 = new JButton("New button");
@@ -214,16 +219,22 @@ public class Administracion {
 		btnNewButton_2.setForeground(Color.WHITE);
 		btnNewButton_2.setBackground(new Color(34,34,34));
 		btnNewButton_2.setBorder(null);
-		btnNewButton_2.setBounds(0, 259, 197, 43);
+		btnNewButton_2.setBounds(0, 303, 197, 43);
 		panel.add(btnNewButton_2);
 		
-		frame.setBounds(100, 100, 943, 598);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ImageIcon iloveny_icon = new ImageIcon(Administracion.class.getResource("/imagenes/iloveny-icon.png"));
+		JLabel lblIcono = new JLabel("");
+		lblIcono.setBounds(26, 11, 140, 140);
+		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
+		panel.add(lblIcono);
+		
+		setBounds(100, 100, 943, 598);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
 		table.setRowSorter(sorter);
 		
-		JButton btnNewButton_1 = new JButton("Actualizar");
+		btnNewButton_1 = new JButton("Actualizar");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				refresh();
@@ -232,12 +243,78 @@ public class Administracion {
 		btnNewButton_1.setBounds(632, 192, 89, 23);
 		panelUsuarios.add(btnNewButton_1);
 		
+		JLabel lblNewLabel = new JLabel("Usuarios");
+		lblNewLabel.setFont(new Font("Roboto Light", Font.PLAIN, 41));
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setBounds(10, 13, 175, 42);
+		panelUsuarios.add(lblNewLabel);
+		
+		panelArticulos = new JPanel();
+		panelArticulos.setLayout(null);
+		panelArticulos.setBackground(new Color(51, 51, 51));
+		layeredPane_1.add(panelArticulos, "name_47993813931900");
+		
+		JButton btnModificar_1 = new JButton("Modificar");
+		btnModificar_1.setBounds(344, 18, 119, 37);
+		panelArticulos.add(btnModificar_1);
+		
+		JButton btnAgregar_1 = new JButton("Agregar...");
+		btnAgregar_1.setBounds(473, 18, 119, 37);
+		panelArticulos.add(btnAgregar_1);
+		
+		JButton btnEliminar_1 = new JButton("Eliminar");
+		btnEliminar_1.setBounds(602, 18, 119, 37);
+		panelArticulos.add(btnEliminar_1);
+		
+		table2 = new JTable();
+		table2.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
+				}
+		));
+		model2 = (DefaultTableModel)table.getModel();
+		table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table2.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table2.getColumnModel().getColumn(0).setPreferredWidth(150);
+		table2.getColumnModel().getColumn(1).setPreferredWidth(150);
+		table2.getColumnModel().getColumn(2).setPreferredWidth(150);
+		table2.getColumnModel().getColumn(3).setPreferredWidth(150);
+		table2.getColumnModel().getColumn(4).setPreferredWidth(150);
+		table2.getTableHeader().setOpaque(false);
+		table2.getTableHeader().setForeground(new Color(255, 255, 255));
+		JScrollPane scrollPane1 = new JScrollPane(table2);
+		scrollPane1.getViewport().setOpaque(false);
+		scrollPane1.setOpaque(false);
+		//table.setBackground(SystemColor.menu);
+		//scrollPane.getViewport().setBackground(SystemColor.menu);
+		//scrollPane.setBackground(SystemColor.menu);
+		//scrollPane.getViewport().setBackground(SystemColor.menu);
+		//scrollPane.getViewport().setBackground(new Color(51,51,51));
+		scrollPane1.setBounds(10, 226, 711, 322);
+		table2.setBounds(0, 0, scrollPane1.getWidth(), scrollPane1.getHeight());
+		
+		table2.getTableHeader().setBackground(new Color(51,51,51));
+		
+		panelUsuarios.add(scrollPane1);
+		
+		JButton btnActualizar = new JButton("Actualizar");
+		btnActualizar.setBounds(632, 192, 89, 23);
+		panelArticulos.add(btnActualizar);
+		
+		JLabel lblArticulos = new JLabel("Usuarios");
+		lblArticulos.setForeground(Color.WHITE);
+		lblArticulos.setFont(new Font("Roboto Light", Font.PLAIN, 41));
+		lblArticulos.setBounds(10, 13, 175, 42);
+		panelArticulos.add(lblArticulos);
+		
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
 		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		sorter.setSortKeys(sortKeys);
 		
-		getUsuarios();
+		addUsuarios();
 	}
 	
 	public void refresh() {
@@ -246,10 +323,10 @@ public class Administracion {
 		for (int i = rowCount - 1; i >= 0; i--) {
 			model.removeRow(i);
 		}
-		getUsuarios();
+		addUsuarios();
 	}
 	
-	public void getUsuarios() {
+	public void addUsuarios() {
 		usuarios = new ArrayList<ArrayList<String>>();
 		usuarios = consulta.getUsuarios("nombreusuario");
 		ArrayList<String> elementos;

@@ -6,7 +6,7 @@ public class ControladorAdministracion {
 
 	public ControladorAdministracion() {
 		Administracion administracion = new Administracion();
-		administracion.frame.setVisible(true);
+		administracion.setVisible(true);
 	}
 	
 }

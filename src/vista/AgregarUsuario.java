@@ -12,6 +12,8 @@ import a.Modelo.Consulta;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -28,19 +30,21 @@ public class AgregarUsuario extends Administracion {
 	public JLabel lblTelefono;
 	public JButton btnAgregar;
 	private Consulta consulta = new Consulta();
-	private JFrame _frame;
+	private JDialog _frame;
 	
-	public AgregarUsuario() {
+	private String rutAntiguo = "";
+	
+	public AgregarUsuario(JButton buttonToPress) {
 		try {
-       	 	initialize();
+       	 	initialize(buttonToPress);
 			_frame.getContentPane().setBackground(new Color(51,51,51));
         	} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void initialize() throws IOException {
-		 _frame = new JFrame();
+	private void initialize(JButton buttonToPress) throws IOException {
+		 _frame = new JDialog();
 		 _frame.setResizable(false);
 	        _frame.setVisible(true);
 	        _frame.setBounds(100, 100, 473, 520);
@@ -110,8 +114,12 @@ public class AgregarUsuario extends Administracion {
 	        		String rut = txtRut.getText();
 	        		String telefono = txtTelefono.getText();
 	        		String email = txtEmail.getText();
-	        		consulta.addUsuario(nombreUsuario, apellidos, rut, telefono, email);
-	        		refresh();
+	        		if (btnAgregar.getText().equals("AGREGAR")) {
+		        		consulta.addUsuario(nombreUsuario, apellidos, rut, telefono, email);
+	        		} else if (btnAgregar.getText().equals("MODIFICAR")){
+	        			consulta.updtUsuario(rut, rutAntiguo, nombreUsuario, apellidos, telefono, email);
+	        		}
+	        		buttonToPress.doClick();
 	        		_frame.dispose();
 	        	}
 	        });
@@ -136,6 +144,7 @@ public class AgregarUsuario extends Administracion {
 		txtRut.setText(rut);
 		txtTelefono.setText(telefonos);
 		txtEmail.setText(email);
+		rutAntiguo = rut;
 		btnAgregar.setText("MODIFICAR");
 	}
 	
