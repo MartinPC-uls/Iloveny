@@ -39,6 +39,7 @@ public class AgregarArticulo extends Administracion {
 	private JFrame frame;
 	private Consulta consulta = new Consulta();
 	private JDialog _frame;
+	private int idArticuloAntiguo = 0;
 	
 	public AgregarArticulo(JButton button) {
 	        try {
@@ -154,21 +155,32 @@ public class AgregarArticulo extends Administracion {
 	        btnAgregar.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent arg0) {
 	        		
-	        		String IDMarca = textoMarca.getText();
-	        		String IDTipo = textoTipo.getText();
-	        		String stock = textoStock.getText();
-	        		String precio = textoPrecio.getText();
+	        		int IDMarca = Integer.parseInt(textoMarca.getText());
+	        		int IDTipo = Integer.parseInt(textoTipo.getText());
+	        		int stock = Integer.parseInt(textoStock.getText());
+	        		int precioUnitario = Integer.parseInt(textoPrecio.getText());
 	        		String descripcion = textoNombre.getText();
 	        		String imagen = textoURLImagen.getText();
 	        		if (btnAgregar.getText().equals("AGREGAR")) {
-		        		consulta.addArticulo(IDTipo, IDMarca, stock, descripcion, imagen, precio);
+		        		consulta.addArticulo(IDTipo, IDMarca, stock, descripcion, imagen, precioUnitario);
 	        		} else if (btnAgregar.getText().equals("MODIFICAR")){
-	        			consulta.updtArticulo(IDTipo, IDMarca, stock, precio, articuloantiguo, descripcion, imagen);			//DE DONDE CHUCHA SACO LA DESCRIPCIÓN????
+	        			
+	        			consulta.updtArticulo(IDTipo, IDMarca, stock, precioUnitario, idArticuloAntiguo, descripcion, imagen);
 	        		}
 	        		buttonToPress.doClick();
 	        		_frame.dispose();
 	        	}
 	        });
         
+	}
+	
+	public void setElements(String idArticuloAntiguo, String IDMarca, String IDTipo, String stock, String precioUnitario, String descripcion, String imagen) {
+		textoMarca.setText(IDMarca);
+		textoTipo.setText(IDTipo);
+		textoStock.setText(stock);
+		textoPrecio.setText(precioUnitario);
+		textoNombre.setText(descripcion);
+		textoURLImagen.setText("imagen");
+		this.idArticuloAntiguo = Integer.parseInt(idArticuloAntiguo);
 	}
 }

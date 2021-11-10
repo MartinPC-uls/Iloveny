@@ -1,4 +1,4 @@
-	package vista;
+package vista;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -17,5 +17,4 @@ public class Inicializador {
 		
 		ControladorLogin ventana = new ControladorLogin();
     }
-	
 }

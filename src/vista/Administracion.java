@@ -110,7 +110,7 @@ public class Administracion extends JFrame {
 				int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
 				if (JOptionPane.YES_OPTION == confirm) {
 					consulta.delUsuario(value);
-					refresh();
+					refresh_usuarios();
 				}
 			}
 		});
@@ -238,7 +238,7 @@ public class Administracion extends JFrame {
 		btnNewButton_1 = new JButton("Actualizar");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				refresh();
+				refresh_usuarios();
 			}
 		});
 		btnNewButton_1.setBounds(632, 192, 89, 23);
@@ -256,10 +256,29 @@ public class Administracion extends JFrame {
 		layeredPane_1.add(panelArticulos, "name_47993813931900");
 		
 		JButton btnModificar_1 = new JButton("Modificar");
+		btnModificar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int row = table2.getSelectedRow();
+				String idArticulo = table.getValueAt(row, 0).toString();
+				String IDMarca = table.getValueAt(row, 1).toString();
+				String IDTipo = table.getValueAt(row, 2).toString();
+				String stock = table.getValueAt(row, 3).toString();
+				String precioUnitario = table.getValueAt(row, 4).toString();
+				String descripcion = table.getValueAt(row, 5).toString();
+				String imagen = table.getValueAt(row, 6).toString();
+				AgregarArticulo agregarArticulo = new AgregarArticulo(btnNewButton_1);
+				agregarArticulo.setElements(idArticulo, IDMarca, IDTipo, stock, precioUnitario, descripcion, imagen);
+			}
+		});
 		btnModificar_1.setBounds(344, 18, 119, 37);
 		panelArticulos.add(btnModificar_1);
 		
 		JButton btnAgregar_1 = new JButton("Agregar...");
+		btnAgregar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO
+			}
+		});
 		btnAgregar_1.setBounds(473, 18, 119, 37);
 		panelArticulos.add(btnAgregar_1);
 		
@@ -272,17 +291,19 @@ public class Administracion extends JFrame {
 				new Object[][] {
 				},
 				new String[] {
-					"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
+					"idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"
 				}
 		));
-		model2 = (DefaultTableModel)table.getModel();
+		model2 = (DefaultTableModel)table2.getModel();
 		table2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table2.setPreferredScrollableViewportSize(table.getPreferredSize());
+		table2.setPreferredScrollableViewportSize(table2.getPreferredSize());
 		table2.getColumnModel().getColumn(0).setPreferredWidth(150);
 		table2.getColumnModel().getColumn(1).setPreferredWidth(150);
 		table2.getColumnModel().getColumn(2).setPreferredWidth(150);
 		table2.getColumnModel().getColumn(3).setPreferredWidth(150);
 		table2.getColumnModel().getColumn(4).setPreferredWidth(150);
+		table2.getColumnModel().getColumn(5).setPreferredWidth(150);
+		table2.getColumnModel().getColumn(6).setPreferredWidth(150);
 		table2.getTableHeader().setOpaque(false);
 		table2.getTableHeader().setForeground(new Color(255, 255, 255));
 		JScrollPane scrollPane1 = new JScrollPane(table2);
@@ -298,7 +319,7 @@ public class Administracion extends JFrame {
 		
 		table2.getTableHeader().setBackground(new Color(51,51,51));
 		
-		panelUsuarios.add(scrollPane1);
+		panelArticulos.add(scrollPane1);
 		
 		JButton btnActualizar = new JButton("Actualizar");
 		btnActualizar.setBounds(632, 192, 89, 23);
@@ -316,13 +337,22 @@ public class Administracion extends JFrame {
 		sorter.setSortKeys(sortKeys);
 		
 		addUsuarios();
+		addArticulos();
 	}
 	
-	public void refresh() {
+	public void refresh_usuarios() {
 		int rowCount = model.getRowCount();
 		System.out.println(rowCount);
 		for (int i = rowCount - 1; i >= 0; i--) {
 			model.removeRow(i);
+		}
+		addUsuarios();
+	}
+	public void refresh_articulos() {
+		int rowCount = model2.getRowCount();
+		System.out.println(rowCount);
+		for (int i = rowCount - 1; i >= 0; i--) {
+			model2.removeRow(i);
 		}
 		addUsuarios();
 	}
@@ -341,15 +371,16 @@ public class Administracion extends JFrame {
 	}
 	
 	public void addArticulos() {
+		// "idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"
 		articulos = new ArrayList<ArrayList<String>>();
-		articulos = consulta.getListaArticulo("nombrearticulo");
+		articulos = consulta.getListaArticulo("idArticulo");
 		ArrayList<String> elementos;
 		for (int i = 0; i < articulos.size(); i++) {
 			elementos = new ArrayList<String>();
 			for (int j = 0; j < articulos.get(i).size(); j++) {
 				elementos.add(articulos.get(i).get(j));
 			}
-			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4), elementos.get(5)});
+			model2.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4), elementos.get(5), elementos.get(6)});
 		}
 	}
 	

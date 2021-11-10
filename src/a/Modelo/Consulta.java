@@ -394,8 +394,8 @@ public class Consulta extends Conexion{
         String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion "
                     + "FROM Articulo, Marca, TipoObj "
                     + "WHERE Articulo.idMarca = Marca.idMarca "
-                    + "AND Articulo.idTipoObj = TipoObjeto.idTipoObj "
-                    + "ORDER BY ? ;";
+                    + "AND Articulo.idTipoObj = TipoObj.idTipoObj "
+                    + "ORDER BY ? ";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, orden);
