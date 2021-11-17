@@ -192,7 +192,6 @@ public class Login extends JFrame {
         btnLogin.setBorder(null);
         btnLogin.setBackground(new Color(0, 153, 153));
         
-        JFrame ventana = this;
         header = new JPanel();
         header.setBounds(0, 0, 473, 35);
         header.setBackground(new Color(51,51,51));

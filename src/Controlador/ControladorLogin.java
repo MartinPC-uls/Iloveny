@@ -26,7 +26,6 @@ public class ControladorLogin {
 	
 	private int xMouse;
 	private int yMouse;
-	
 
 	public ControladorLogin() {
 		Login login = new Login();

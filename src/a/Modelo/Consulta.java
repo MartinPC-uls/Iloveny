@@ -577,11 +577,11 @@ public class Consulta extends Conexion{
      * @param FechaPedida Corresponde al dato que se va a agregar en la columna FechaPedida.
      * @param FechaRecibo Corresponde al dato que se va a agregar en la columna FechaRecibo.
      */
-    public void addRegistroCompra(int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
+    public void addRegistroCompra(int idCompra,int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
-        		+ " VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo, idCompra) "
+        		+ " VALUES (?,?,?,?,?,?,?,?)";
         try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, idArticulo);
@@ -591,6 +591,7 @@ public class Consulta extends Conexion{
 			ps.setInt(5,CostoUnitario);
 			ps.setDate(6, (java.sql.Date) FechaPedida);
 			ps.setDate(7, (java.sql.Date) FechaRecibo);
+			ps.setInt(8, idCompra);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -611,17 +612,18 @@ public class Consulta extends Conexion{
      * @param CantidadVendida Corresponde al dato que se va a agregar en la columna CantidadVendida.
      * @param FechaVenta Corresponde al dato que se va a agregar en la columna FechaVenta.
      */
-    public void addRegistroVenta(int idArticulo, String Rut, int CantidadVendida, Date FechaVenta) {
+    public void addRegistroVenta(int idArticulo, String Rut, int CantidadVendida, Date FechaVenta, int idVenta) {
     	PreparedStatement ps;
     	Connection con = conectar();
-    	String sql = "INSERT INTO RegistroVenta (idArticulo, Rut, CantidadVendida, FechaVenta) "
-    			+ "VALUES (?,?,?,?)";
+    	String sql = "INSERT INTO RegistroVenta (idArticulo, Rut, CantidadVendida, FechaVenta, idventa) "
+    			+ "VALUES (?,?,?,?,?)";
     	try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, idArticulo);
 			ps.setString(2, Rut);
 			ps.setInt(3, CantidadVendida);
 			ps.setDate(4, (java.sql.Date) FechaVenta);
+			ps.setInt(5, idVenta);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -645,7 +647,7 @@ public class Consulta extends Conexion{
     	PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT idArticulo, Usuario, NombreProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo "
+        String sql = "SELECT idArticulo, Usuario, NombreProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo, idCompra "
         		+ "FROM RegistroCompra, Proveedor "
         		+ "WHERE RegistroCompra.idProv = Proveedor.idProv "
         		+ "ORDER BY ?";
@@ -663,6 +665,7 @@ public class Consulta extends Conexion{
                 columna.add(rs.getString("CostoUnitario"));
                 columna.add(rs.getString("FechaPedida"));
                 columna.add(rs.getString("FechaRecibo"));
+                columna.add(rs.getString("idcompra"));
                 fila.add(columna);
             }
             ps.close();
@@ -702,6 +705,7 @@ public class Consulta extends Conexion{
                 columna.add(rs.getString("Rut"));
                 columna.add(rs.getString("FechaVenta"));
                 columna.add(rs.getString("CantidadVendida"));
+                columna.add(rs.getString("idventa"));
                 fila.add(columna);
             }
             ps.close();
@@ -723,16 +727,14 @@ public class Consulta extends Conexion{
      * @param idArticulo Este parametro sirve para identificar la fila que se quiere borrar.
      * @param FechaPedida Este parametro sirve para identificar la fila que se quiere borrar.
      */
-    public void delRegistroCompra(int idArticulo, Date FechaPedida) {
+    public void delRegistroCompra(int idCompra) {
     	PreparedStatement ps;
         Connection con = conectar();
         String sql = "DELETE FROM RegistroCompra "
-        		+ "WHERE idArticulo = ? "
-        		+ "AND FechaPedida = ?";
+        		+ "WHERE idCompra = ? ";
         try {
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, idArticulo);
-			ps.setDate(2, (java.sql.Date) FechaPedida);
+			ps.setInt(1, idCompra);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -747,14 +749,12 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtRegistroCompra(String UsuarioNuevo, String UsuarioAntiguo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaPedidaAntigua,  Date FechaRecibo, int idArticuloNuevo, int idArticuloAntiguo) {
+    public boolean updtRegistroCompra(String UsuarioNuevo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaRecibo, int idArticuloNuevo, int idCompraAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE RegistroCompra "
         		+ "SET idArticulo = ?, Usuario = ?, idProv= ?, UnidadesAdquiridas = ?, CostoUnitario= ?, FechaPedida = ?, FechaRecibo =? "
-        		+ "WHERE idArticulo = ? "
-        		+ "AND Usuario = ? "
-        		+ "AND FechaPedida = ?";
+        		+ "WHERE idCompra = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idArticuloNuevo);
@@ -764,9 +764,7 @@ public class Consulta extends Conexion{
             ps.setInt(5, CostoUnitario);
             ps.setDate(6, (java.sql.Date) FechaPedidaNueva);
             ps.setDate(7, (java.sql.Date) FechaRecibo);
-            ps.setInt(8, idArticuloAntiguo);
-            ps.setString(9, UsuarioAntiguo);
-            ps.setDate(10, (java.sql.Date) FechaPedidaAntigua);
+            ps.setInt(8, idCompraAntiguo);
             ps.execute();
             ps.close();
             return true;
@@ -782,23 +780,19 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtRegistroVenta(int CantidadVendida, Date FechaVentaNueva, Date FechaVentaAntigua, int idArticuloNuevo, int idArticuloAntiguo, String rutNuevo, String rutAntiguo) {
+    public boolean updtRegistroVenta(int CantidadVendida, Date FechaVentaNueva, int idArticuloNuevo, String rutNuevo,int idVentaAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE RegistroCompra "
         		+ "SET idArticulo = ?, Rut = ?, FechaVenta = ?, CantidadVendida = ? "
-        		+"WHERE idArticulo = ? "
-        		+ "AND Rut = ? "
-        		+ "AND FechaVenta = ?";
+        		+"WHERE idVenta = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idArticuloNuevo);
             ps.setString(2, rutNuevo);
             ps.setDate(3, (java.sql.Date) FechaVentaNueva);
             ps.setInt(4, CantidadVendida);
-            ps.setInt(5, idArticuloAntiguo);
-            ps.setString(6,rutAntiguo);
-            ps.setDate(7, (java.sql.Date) FechaVentaAntigua);
+            ps.setInt(5, idVentaAntiguo);
             ps.execute();
             ps.close();
             return true;
@@ -819,16 +813,14 @@ public class Consulta extends Conexion{
      * @param idArticulo Este parametro sirve para identificar la fila que se quiere borrar.
      * @param FechaVenta Este parametro sirve para identificar la fila que se quiere borrar.
      */
-    public void delRegistroVenta(int idArticulo, Date FechaVenta){
+    public void delRegistroVenta(int idVenta){
     	PreparedStatement ps;
         Connection con = conectar();
     	String sql = "DELETE FROM RegistroVenta "
-    			+ "WHERE idArticulo = ? "
-    			+ "AND FechaVenta = ?";
+    			+ "WHERE idVenta = ? ";
     	try {
 			ps = con.prepareStatement(sql);
-			ps.setInt(1, idArticulo);
-			ps.setDate(2, (java.sql.Date) FechaVenta);
+			ps.setInt(1, idVenta);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {

@@ -9,10 +9,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Roberto
- */
+
 public class Conexion {
 	
     private final String base ="iloveny";
