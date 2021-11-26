@@ -34,6 +34,8 @@ import javax.swing.ImageIcon;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.Cursor;
+import java.awt.Dimension;
+
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -54,13 +56,39 @@ public class Administracion extends JFrame {
 	public ArrayList<ArrayList<String>> articulos; 
 	public JButton btnActualizarUsuarios;
 	public JPanel panelArticulos;
-	private JTextField buscadorUsuariosTextField;
-	private JTextField textField;
 	
 	private int xMouse;
 	private int yMouse;
 	private JPanel botonX;
 	private JPanel header;
+	private JPanel IconoIlovenyPanel;
+	private JLabel lblIcono;
+	private JPanel MenuConBotonesPanel;
+	private JButton btnUsuarios;
+	private JButton btnArticulos;
+	private JButton btnNewButton;
+	private JLabel lblX;
+	private JPanel panel_1;
+	private JPanel panelUsuarios;
+	private JButton btnModificarUsuarios;
+	private JButton btnAgregarUsuarios;
+	private JButton btnEliminarUsuarios;
+	private JScrollPane scrollPaneUsuarios;
+	private JLabel lblTituloUsuarios;
+	private JComboBox comboBoxUsuarios;
+	private JTextField buscadorUsuariosTextField;
+	private JLabel lblIconoLupa;
+	private JLabel lblComboBox;
+	private JButton btnModificarArticulos;
+	private JButton btnAgregarArticulos;
+	private JButton btnEliminarArticulos;
+	private JScrollPane scrollPaneArticulos;
+	private JButton btnActualizarArticulos;
+	private JLabel lblTituloArticulos;
+	private JLabel lblIconoLupa_1;
+	private JTextField textField;
+	private JComboBox comboBoxArticulos;
+	private JLabel lblComboBox_1;
 
 	public Administracion() {
 		setUndecorated(true);
@@ -71,13 +99,46 @@ public class Administracion extends JFrame {
 		//new JFrame();
 		getContentPane().setBackground(new Color(51, 51, 51));
 		getContentPane().setLayout(null);
+		setBounds(100, 100, 929, 598);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(34, 34, 34));
-		panel.setBounds(0, 0, 197, 598);
-		getContentPane().add(panel);
-		panel.setLayout(null);
+		layeredPane_1 = new JLayeredPane();
+		layeredPane_1.setBounds(196, 39, 731, 559);
+		getContentPane().add(layeredPane_1);
+		layeredPane_1.setLayout(new CardLayout(0, 0));
 		
+		panel_1 = new JPanel();
+		panel_1.setBackground(new Color(51, 51, 51));
+		layeredPane_1.add(panel_1, "name_54251509904100");
+		panel_1.setLayout(null);
+		
+		this.construirPanelIloveny();
+		this.construirPanelMenu();
+		this.construirHeader();
+		this.construirPanelUsuarios();
+		this.construirPanelArticulos();
+		
+		btnNewButton = new JButton("New button");
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNewButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchPanels(panelUsuarios);
+			}
+		});
+		btnNewButton.setFocusPainted(false);
+		this.addEventoBotonEnteredAndExitedMenu(btnNewButton);
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(new Color(34,34,34));
+		btnNewButton.setBorder(null);
+		btnNewButton.setBounds(0, 108, 197, 43);
+		MenuConBotonesPanel.add(btnNewButton);
+		
+		addUsuarios();
+		addArticulos();
+	}
+	
+	private void construirHeader() {
 		header = new JPanel();
 		header.setLayout(null);
 		this.eventoHeader();
@@ -94,29 +155,80 @@ public class Administracion extends JFrame {
 		botonX.setBounds(902, 0, 27, 27);
 		header.add(botonX);
 		
-		JLabel lblX = new JLabel("X");
+		lblX = new JLabel("X");
 		lblX.setHorizontalAlignment(SwingConstants.CENTER);
 		lblX.setForeground(Color.WHITE);
 		lblX.setFont(new Font("Roboto", Font.BOLD, 15));
 		lblX.setBounds(0, 0, 27, 27);
 		botonX.add(lblX);
+	}
+
+	public void construirPanelMenu() {
+		MenuConBotonesPanel = new JPanel();
+		MenuConBotonesPanel.setBackground(new Color(34, 34, 34));
+		MenuConBotonesPanel.setPreferredSize(new Dimension(400,400));
+		MenuConBotonesPanel.setBounds(0, 198, 197, 400);
+		getContentPane().add(MenuConBotonesPanel);
+		MenuConBotonesPanel.setLayout(null);
 		
-		layeredPane_1 = new JLayeredPane();
-		layeredPane_1.setBounds(196, 39, 731, 559);
-		getContentPane().add(layeredPane_1);
-		layeredPane_1.setLayout(new CardLayout(0, 0));
+		btnUsuarios = new JButton("USUARIOS");
+		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/user-icon-white.png")));
+		btnUsuarios.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchPanels(panelUsuarios);
+				//consulta.getUsuarios(orden)
+			}
+		});
+		btnUsuarios.setFocusPainted(false);
+		this.addEventoBotonEnteredAndExitedMenu(btnUsuarios);
+		btnUsuarios.setForeground(Color.WHITE);
+		btnUsuarios.setBackground(new Color(34,34,34));
+		btnUsuarios.setBorder(null);
+		btnUsuarios.setBounds(0, 0, 197, 43);
+		MenuConBotonesPanel.add(btnUsuarios);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(51, 51, 51));
-		layeredPane_1.add(panel_1, "name_54251509904100");
-		panel_1.setLayout(null);
+		btnArticulos = new JButton("ART\u00CDCULOS");
+		btnArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Box-White.png")));
+		btnArticulos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnArticulos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchPanels(panelArticulos);
+			}
+		});
+		btnArticulos.setFocusPainted(false);
+		this.addEventoBotonEnteredAndExitedMenu(btnArticulos);
+		btnArticulos.setForeground(Color.WHITE);
+		btnArticulos.setBackground(new Color(34,34,34));
+		btnArticulos.setBorder(null);
+		btnArticulos.setBounds(0, 54, 197, 43);
+		MenuConBotonesPanel.add(btnArticulos);
+	}
+	
+	public void construirPanelIloveny() {
+		IconoIlovenyPanel = new JPanel();
+		IconoIlovenyPanel.setBounds(new Rectangle(0, 0, 197, 197));
+		IconoIlovenyPanel.setBounds(0, 0, 197, 197);
+		IconoIlovenyPanel.setBackground(new Color(34,34,34));
+		getContentPane().add(IconoIlovenyPanel);
 		
-		JPanel panelUsuarios = new JPanel();
+		lblIcono = new JLabel("");
+		lblIcono.setBounds(new Rectangle(4, 2, 187, 186));
+		ImageIcon iloveny_icon = new ImageIcon(Administracion.class.getResource("/imagenes/iloveny-icon.png"));
+		IconoIlovenyPanel.setLayout(null);
+		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
+		IconoIlovenyPanel.add(lblIcono);
+	}
+	
+	public void construirPanelUsuarios() {
+		panelUsuarios = new JPanel();
 		panelUsuarios.setBackground(new Color(51, 51, 51));
 		layeredPane_1.add(panelUsuarios, "name_54331093143100");
 		panelUsuarios.setLayout(null);
 		
-		JButton btnModificarUsuarios = new JButton("");
+		btnModificarUsuarios = new JButton("");
 		this.addEventoBotonEnteredAndExited(btnModificarUsuarios);
 		btnModificarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnModificarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
@@ -136,7 +248,7 @@ public class Administracion extends JFrame {
 		btnModificarUsuarios.setBounds(526, 67, 45, 45);
 		panelUsuarios.add(btnModificarUsuarios);
 		
-		JButton btnAgregarUsuarios = new JButton("");
+		btnAgregarUsuarios = new JButton("");
 		btnAgregarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAgregarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
 		btnAgregarUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Add-icon-blanco.png")));
@@ -151,7 +263,7 @@ public class Administracion extends JFrame {
 		btnAgregarUsuarios.setBounds(576, 67,  45, 45);
 		panelUsuarios.add(btnAgregarUsuarios);
 		
-		JButton btnEliminarUsuarios = new JButton("");
+		btnEliminarUsuarios = new JButton("");
 		btnEliminarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnEliminarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
 		btnEliminarUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Trash-icon-white.png")));
@@ -184,7 +296,7 @@ public class Administracion extends JFrame {
 		tableUsuarios.getColumnModel().getColumn(4).setPreferredWidth(150);
 		tableUsuarios.getTableHeader().setOpaque(false);
 		tableUsuarios.getTableHeader().setForeground(new Color(255, 255, 255));
-		JScrollPane scrollPaneUsuarios = new JScrollPane(tableUsuarios);
+		scrollPaneUsuarios = new JScrollPane(tableUsuarios);
 		scrollPaneUsuarios.getViewport().setOpaque(false);
 		scrollPaneUsuarios.setOpaque(false);
 		//table.setBackground(SystemColor.menu);
@@ -197,70 +309,13 @@ public class Administracion extends JFrame {
 		
 		tableUsuarios.getTableHeader().setBackground(new Color(51,51,51));
 		
-		panelUsuarios.add(scrollPaneUsuarios);
-		
-		JButton btnUsuarios = new JButton("USUARIOS");
-		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/user-icon-white.png")));
-		btnUsuarios.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panelUsuarios);
-				//consulta.getUsuarios(orden)
-			}
-		});
-		btnUsuarios.setFocusPainted(false);
-		this.addEventoBotonEnteredAndExitedMenu(btnUsuarios);
-		btnUsuarios.setForeground(Color.WHITE);
-		btnUsuarios.setBackground(new Color(34,34,34));
-		btnUsuarios.setBorder(null);
-		btnUsuarios.setBounds(0, 195, 197, 43);
-		panel.add(btnUsuarios);
-		
-		JButton btnArticulos = new JButton("ART\u00CDCULOS");
-		btnArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Box-White.png")));
-		btnArticulos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnArticulos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panelArticulos);
-			}
-		});
-		btnArticulos.setFocusPainted(false);
-		this.addEventoBotonEnteredAndExitedMenu(btnArticulos);
-		btnArticulos.setForeground(Color.WHITE);
-		btnArticulos.setBackground(new Color(34,34,34));
-		btnArticulos.setBorder(null);
-		btnArticulos.setBounds(0, 249, 197, 43);
-		panel.add(btnArticulos);
-		
-		JButton btnNewButton_2 = new JButton("New button");
-		btnNewButton_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panelUsuarios);
-			}
-		});
-		btnNewButton_2.setFocusPainted(false);
-		this.addEventoBotonEnteredAndExitedMenu(btnNewButton_2);
-		btnNewButton_2.setForeground(Color.WHITE);
-		btnNewButton_2.setBackground(new Color(34,34,34));
-		btnNewButton_2.setBorder(null);
-		btnNewButton_2.setBounds(0, 303, 197, 43);
-		panel.add(btnNewButton_2);
-		
-		ImageIcon iloveny_icon = new ImageIcon(Administracion.class.getResource("/imagenes/iloveny-icon.png"));
-		JLabel lblIcono = new JLabel("");
-		lblIcono.setBounds(26, 11, 140, 140);
-		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
-		panel.add(lblIcono);
-		
-		setBounds(100, 100, 929, 598);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableUsuarios.getModel());
 		tableUsuarios.setRowSorter(sorter);
+		
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
+		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
 		
 		btnActualizarUsuarios = new JButton("");
 		btnActualizarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -277,13 +332,13 @@ public class Administracion extends JFrame {
 		btnActualizarUsuarios.setBounds(676, 67, 45, 45);
 		panelUsuarios.add(btnActualizarUsuarios);
 		
-		JLabel lblTituloUsuarios = new JLabel("Usuarios");
+		lblTituloUsuarios = new JLabel("Usuarios");
 		lblTituloUsuarios.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
 		lblTituloUsuarios.setForeground(Color.WHITE);
 		lblTituloUsuarios.setBounds(10, 0, 194, 55);
 		panelUsuarios.add(lblTituloUsuarios);
 		
-		JComboBox comboBoxUsuarios = new JComboBox(new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
+		comboBoxUsuarios = new JComboBox(new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
 		comboBoxUsuarios.setFont(new Font("Roboto Light", Font.PLAIN, 15));
 		comboBoxUsuarios.setName("");
 		comboBoxUsuarios.setForeground(Color.BLACK);
@@ -301,24 +356,28 @@ public class Administracion extends JFrame {
 		panelUsuarios.add(buscadorUsuariosTextField);
 		buscadorUsuariosTextField.setColumns(10);
 		
-		JLabel lblIconoLupa = new JLabel("");
+		lblIconoLupa = new JLabel("");
 		lblIconoLupa.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIconoLupa.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/lupa-white.png")));
 		lblIconoLupa.setBounds(10, 67, 45, 45);
 		panelUsuarios.add(lblIconoLupa);
 		
-		JLabel lblComboBox = new JLabel("Buscar por:");
+		lblComboBox = new JLabel("Buscar por:");
 		lblComboBox.setFont(new Font("Roboto Light", Font.PLAIN, 11));
 		lblComboBox.setForeground(Color.WHITE);
 		lblComboBox.setBounds(316, 52, 69, 14);
 		panelUsuarios.add(lblComboBox);
 		
+		panelUsuarios.add(scrollPaneUsuarios);
+	}
+	
+	public void construirPanelArticulos() {
 		panelArticulos = new JPanel();
 		panelArticulos.setLayout(null);
 		panelArticulos.setBackground(new Color(51, 51, 51));
 		layeredPane_1.add(panelArticulos, "name_47993813931900");
 		
-		JButton btnModificarArticulos = new JButton("");
+		btnModificarArticulos = new JButton("");
 		btnModificarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Edit-icon-white.png")));
 		btnModificarArticulos.setBorder(null);
 		btnModificarArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -341,7 +400,7 @@ public class Administracion extends JFrame {
 		btnModificarArticulos.setBounds(526, 67, 45, 45);
 		panelArticulos.add(btnModificarArticulos);
 		
-		JButton btnAgregarArticulos = new JButton("");
+		btnAgregarArticulos = new JButton("");
 		btnAgregarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Add-icon-blanco.png")));
 		btnAgregarArticulos.setBorder(null);
 		btnAgregarArticulos.setBackground(new Color(51,51,51));
@@ -355,7 +414,7 @@ public class Administracion extends JFrame {
 		btnAgregarArticulos.setBounds(576, 67,  45, 45);
 		panelArticulos.add(btnAgregarArticulos);
 		
-		JButton btnEliminarArticulos = new JButton("");
+		btnEliminarArticulos = new JButton("");
 		btnEliminarArticulos.setBackground(new Color(51,51,51));
 		this.addEventoBotonEnteredAndExited(btnEliminarArticulos);
 		btnEliminarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Trash-icon-white.png")));
@@ -384,7 +443,7 @@ public class Administracion extends JFrame {
 		tableArticulos.getColumnModel().getColumn(6).setPreferredWidth(150);
 		tableArticulos.getTableHeader().setOpaque(false);
 		tableArticulos.getTableHeader().setForeground(new Color(255, 255, 255));
-		JScrollPane scrollPaneArticulos = new JScrollPane(tableArticulos);
+		scrollPaneArticulos = new JScrollPane(tableArticulos);
 		scrollPaneArticulos.getViewport().setOpaque(false);
 		scrollPaneArticulos.setOpaque(false);
 		//table.setBackground(SystemColor.menu);
@@ -402,7 +461,7 @@ public class Administracion extends JFrame {
 		TableRowSorter<TableModel> sorter2 = new TableRowSorter<TableModel>(tableArticulos.getModel());
 		tableArticulos.setRowSorter(sorter2);
 		
-		JButton btnActualizarArticulos = new JButton("");
+		btnActualizarArticulos = new JButton("");
 		btnActualizarArticulos.setBackground(new Color(51,51,51));
 		this.addEventoBotonEnteredAndExited(btnActualizarArticulos);
 		btnActualizarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Reload-white.png")));
@@ -411,13 +470,13 @@ public class Administracion extends JFrame {
 		btnActualizarArticulos.setBounds(676, 67, 45, 45);
 		panelArticulos.add(btnActualizarArticulos);
 		
-		JLabel lblTituloArticulos = new JLabel("Articulos");
+		lblTituloArticulos = new JLabel("Articulos");
 		lblTituloArticulos.setForeground(Color.WHITE);
 		lblTituloArticulos.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
 		lblTituloArticulos.setBounds(10, 0, 194, 55);
 		panelArticulos.add(lblTituloArticulos);
 		
-		JLabel lblIconoLupa_1 = new JLabel("");
+		lblIconoLupa_1 = new JLabel("");
 		lblIconoLupa_1.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/lupa-white.png")));
 		lblIconoLupa_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblIconoLupa_1.setBounds(10, 67, 45, 45);
@@ -433,26 +492,18 @@ public class Administracion extends JFrame {
 		textField.setBounds(65, 67, 251, 41);
 		panelArticulos.add(textField);
 		
-		JComboBox comboBoxArticulos = new JComboBox(new String[] {"Seleccione...","idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"});
+		comboBoxArticulos = new JComboBox(new String[] {"Seleccione...","idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"});
 		comboBoxArticulos.setFont(new Font("Roboto Light", Font.PLAIN, 15));
 		comboBoxArticulos.setForeground(Color.BLACK);
 		comboBoxArticulos.setBorder(null);
 		comboBoxArticulos.setBounds(315, 67, 115, 41);
 		panelArticulos.add(comboBoxArticulos);
 		
-		JLabel lblComboBox_1 = new JLabel("Buscar por:");
+		lblComboBox_1 = new JLabel("Buscar por:");
 		lblComboBox_1.setForeground(Color.WHITE);
 		lblComboBox_1.setFont(new Font("Roboto Light", Font.PLAIN, 11));
 		lblComboBox_1.setBounds(316, 52, 69, 14);
 		panelArticulos.add(lblComboBox_1);
-		
-		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
-		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-		sorter.setSortKeys(sortKeys);
-		
-		addUsuarios();
-		addArticulos();
 	}
 	
 	private void eliminarUsuario() {
