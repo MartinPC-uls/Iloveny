@@ -90,7 +90,7 @@ public class AgregarArticuloPanel extends JPanel {
 		JLabel lblStock = new JLabel("Stock");
 		lblStock.setForeground(Color.WHITE);
 		lblStock.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblStock.setBounds(383, 283, 106, 14);
+		lblStock.setBounds(383, 260, 106, 14);
 		add(lblStock);
 		
 		stockTextField = new JTextField();
@@ -107,14 +107,14 @@ public class AgregarArticuloPanel extends JPanel {
 		stockTextField.setCaretColor(Color.WHITE);
 		stockTextField.setBorder(null);
 		stockTextField.setBackground(new Color(51, 51, 51));
-		stockTextField.setBounds(383, 308, 47, 21);
+		stockTextField.setBounds(383, 270, 47, 21);
 		eventoCambiarJTextField(stockTextField, stockTextField.getText(), 50);
 		add(stockTextField);
 		
 		lineaStock = new JPanel();
 		lineaStock.setPreferredSize(new Dimension(0, 3));
 		lineaStock.setBackground(Color.WHITE);
-		lineaStock.setBounds(383, 332, 47, 3);
+		lineaStock.setBounds(383, 294, 47, 3);
 		add(lineaStock);
 		GroupLayout gl_lineaStock = new GroupLayout(lineaStock);
 		gl_lineaStock.setHorizontalGroup(
@@ -151,7 +151,7 @@ public class AgregarArticuloPanel extends JPanel {
 		descripcionTextField.setBorder(null);
 		descripcionTextField.setBackground(new Color(51, 51, 51));
 		descripcionTextField.setBounds(138, 225, 214, 21);
-		eventoCambiarJTextField(descripcionTextField, descripcionTextField.getText(), 30);
+		eventoCambiarJTextField(descripcionTextField, descripcionTextField.getText(), 50);
 		add(descripcionTextField);
 		
 		lineaDescripcion = new JPanel();
@@ -247,7 +247,7 @@ public class AgregarArticuloPanel extends JPanel {
 		lblAlertaStock.setToolTipText("Hay un error de formato");
 		lblAlertaStock.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaStock.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaStock.setBounds(431, 308, 30, 27);
+		lblAlertaStock.setBounds(431, 270, 30, 27);
 		add(lblAlertaStock);
 		
 		lblAlertaPrecioUnitario = new JLabel("");
@@ -296,11 +296,10 @@ public class AgregarArticuloPanel extends JPanel {
 		JLabel lblRutaImagen = new JLabel("Ruta imagen");
 		lblRutaImagen.setForeground(Color.WHITE);
 		lblRutaImagen.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRutaImagen.setBounds(138, 283, 106, 14);
+		lblRutaImagen.setBounds(138, 260, 106, 14);
 		add(lblRutaImagen);
 		
 		txtRutaImg = new JTextField();
-		txtRutaImg.setToolTipText("a");
 		txtRutaImg.setText("EJ: https://imgur.com/test");
 		txtRutaImg.setOpaque(false);
 		txtRutaImg.setForeground(new Color(170, 170, 170));
@@ -308,13 +307,14 @@ public class AgregarArticuloPanel extends JPanel {
 		txtRutaImg.setCaretColor(Color.WHITE);
 		txtRutaImg.setBorder(null);
 		txtRutaImg.setBackground(new Color(51, 51, 51));
-		txtRutaImg.setBounds(138, 311, 214, 21);
+		txtRutaImg.setBounds(138, 273, 214, 21);
+		
 		add(txtRutaImg);
 		
 		JPanel lineaRutaImg = new JPanel();
 		lineaRutaImg.setPreferredSize(new Dimension(0, 3));
 		lineaRutaImg.setBackground(Color.WHITE);
-		lineaRutaImg.setBounds(138, 332, 214, 3);
+		lineaRutaImg.setBounds(138, 294, 214, 3);
 		add(lineaRutaImg);
 		GroupLayout gl_lineaRutaImg = new GroupLayout(lineaRutaImg);
 		gl_lineaRutaImg.setHorizontalGroup(
@@ -393,44 +393,6 @@ public class AgregarArticuloPanel extends JPanel {
 		} else if(modo == 2) {
 			System.out.println("modo 2?");
 		}
-	}
-	
-	private int getTipoObjetoID(String tipoObjeto) {
-		switch (tipoObjeto) {
-			case "Cinturon":
-				return 1;
-			case "Cartera":
-				return 2;
-			case "Mochila":
-				return 3;
-			case "Tote":
-				return 4;
-			case "Lentes":
-				return 5;
-			case "Aretes":
-				return 6;
-			case "Anillo":
-				return 7;
-			case "Pulsera":
-				return 8;
-			case "Collar":
-				return 9;
-			case "Poleron":
-				return 10;
-			case "Corbatin":
-				return 11;
-			case "Riñonera":
-				return 12;
-			case "Calzado":
-				return 13;
-			case "Billetera":
-				return 14;
-			case "Reloj":
-				return 15;
-			case "Cosmetiquero":
-				return 16;
-		}
-		return 0;
 	}
 
 	private boolean isTodoCorrecto() {
@@ -533,5 +495,28 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
+		txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		if (text.length() == 0 || text.length() >maxCaracteres) {
+        			if(text.length() == 0) {
+        				txtUser.setText(relleno);
+        				txtUser.setForeground(new Color(170, 170, 170));
+        			}
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
 	}
 }
