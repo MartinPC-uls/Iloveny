@@ -84,6 +84,7 @@ public class Administracion extends JFrame {
 	private JPanel panelPrincipal;
 
 	public Administracion() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Administracion.class.getResource("/imagenes/iloveny-icon.png")));
 		setUndecorated(true);
 		initialize();
 	}
@@ -107,6 +108,9 @@ public class Administracion extends JFrame {
 		panelPrincipal.setBounds(197, 39, 732, 558);
 		panelPrincipal.setBackground(new Color(51,51,51));
 		getContentPane().add(panelPrincipal);
+		
+		
+		
 		
 		btnModificar = new JButton("");
 		this.addEventoBotonEnteredAndExited(btnModificar);

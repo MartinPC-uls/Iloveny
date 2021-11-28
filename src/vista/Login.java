@@ -42,6 +42,7 @@ public class Login extends JFrame {
 	public JPanel header;
 	
     public Login() {
+    	setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/imagenes/iloveny-icon.png")));
     	setUndecorated(true);
     	getContentPane().setBackground(new Color(51,51,51));
         try {
