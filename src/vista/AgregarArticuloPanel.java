@@ -81,10 +81,9 @@ public class AgregarArticuloPanel extends JPanel {
 		add(lblMarca);
 		
 		//TODO
-		MarcaCB = new JComboBox(new String[] {"Seleccione...", "Michael Kors", "Kipling", "Gucci", "Louis Vuitton", "Guess", "Steve Madden",
-				"Marc Jacobs", "Tous Kaos", "Ugg", "Tous", "Bimba y Lola", "Koolaburra", "Pamir", "Tommy Hilfiger", "Festina", "Jessica Simpson",
-				"Hugo Boss", "Skeckers", "Nine West", "Mulco Couture", "Burberry", "Armitron", "Bulova", "Diesel", "Nautica", "Orient", "Ellen Tracy", "Betsey Johnson",
-				"Fossil", "Bebe", "U.S. Polo Assn.", "Victoria's Secret", "Anne Klein", "Juicy Couture", "Rampage", "Steve Madden", "Kensie"});
+		DefaultComboBoxModel modeloMarca = crearModeloComboBoxMarca();
+		MarcaCB = new JComboBox(new Object[]{});
+		MarcaCB.setModel(modeloMarca);
 		MarcaCB.setBounds(138, 180, 214, 21);
 		add(MarcaCB);
 		
@@ -152,7 +151,7 @@ public class AgregarArticuloPanel extends JPanel {
 		descripcionTextField.setBorder(null);
 		descripcionTextField.setBackground(new Color(51, 51, 51));
 		descripcionTextField.setBounds(138, 225, 214, 21);
-		eventoCambiarJTextField(descripcionTextField, descripcionTextField.getText(), 20);
+		eventoCambiarJTextField(descripcionTextField, descripcionTextField.getText(), 30);
 		add(descripcionTextField);
 		
 		lineaDescripcion = new JPanel();
@@ -273,10 +272,9 @@ public class AgregarArticuloPanel extends JPanel {
 		lblTipoObjeto.setBounds(383, 155, 134, 14);
 		add(lblTipoObjeto);
 		
-		//DefaultComboBoxModel modelo = crearModeloComboBox();
-		tipoObjetoCB = new JComboBox(new Object[]{"Seleccione...", "Cinturon", "Cartera", "Mochila", "Tote", "Lentes", "Aretes", "Anillo", "Pulsera", "Collar", "Poleron",
-				"Corbatin", "Riñonera", "Calzado", "Billetera", "Reloj", "Cosmetiquero"});
-		//tipoObjetoCB.setModel(modelo);
+		DefaultComboBoxModel modeloTipo = crearModeloComboBoxTipos();
+		tipoObjetoCB = new JComboBox(new Object[]{});
+		tipoObjetoCB.setModel(modeloTipo);
 		tipoObjetoCB.setBounds(383, 180, 214, 21);
 		add(tipoObjetoCB);
 		
@@ -352,6 +350,38 @@ public class AgregarArticuloPanel extends JPanel {
 
 	private void agregarDatos() {
 		agregarDatosTablaArticulo();
+	}
+	
+	private DefaultComboBoxModel crearModeloComboBoxTipos() {
+		ArrayList elementosObtenidos = consulta.getNombresTipoObjeto();
+		if(elementosObtenidos.size()>0) {
+			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
+			System.out.println(elementosObtenidos.size());
+			listaStringElementosAdquiridos[0] = "Seleccione...";
+			for(int i=1; i<=elementosObtenidos.size();i++) {
+				listaStringElementosAdquiridos[i] = elementosObtenidos.get(i-1).toString();
+			}
+			return new DefaultComboBoxModel(listaStringElementosAdquiridos);
+		}else {
+			lblAlertaTipoObjeto.setVisible(true);
+			return new DefaultComboBoxModel(new String[] {"No existen tipos"});
+		}
+	}
+	
+	private DefaultComboBoxModel crearModeloComboBoxMarca() {
+		ArrayList elementosObtenidos = consulta.getNombresTipoObjeto();
+		if(elementosObtenidos.size()>0) {
+			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
+			System.out.println(elementosObtenidos.size());
+			listaStringElementosAdquiridos[0] = "Seleccione...";
+			for(int i=1; i<=elementosObtenidos.size();i++) {
+				listaStringElementosAdquiridos[i] = elementosObtenidos.get(i-1).toString();
+			}
+			return new DefaultComboBoxModel(listaStringElementosAdquiridos);
+		}else {
+			lblAlertaTipoObjeto.setVisible(true);
+			return new DefaultComboBoxModel(new String[] {"No existen tipos"});
+		}
 	}
 	
 	private void agregarDatosTablaArticulo() {

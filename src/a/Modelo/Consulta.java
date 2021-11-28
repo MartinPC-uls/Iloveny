@@ -380,6 +380,56 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getNombresTipoObjeto(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT tipoobj.nombretipo FROM tipoobj";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("nombretipo"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList getNombresMarca(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT marca.nombremarca FROM marca";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("nombremarca"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public ArrayList getIdArticuloSinMedidaEspecifica(){
         PreparedStatement ps;
         ResultSet rs;
