@@ -46,6 +46,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Administracion extends JFrame {
 
@@ -266,6 +268,12 @@ public class Administracion extends JFrame {
 		panelPrincipal.add(filtroCB);
 		
 		buscadorTextField = new JTextField();
+		buscadorTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+			}
+		});
 		buscadorTextField.setCaretColor(Color.WHITE);
 		buscadorTextField.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		buscadorTextField.setForeground(Color.WHITE);

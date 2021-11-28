@@ -380,6 +380,64 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getIdArticuloSinMedidaEspecifica(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT articulo.idarticulo "
+        		+ "FROM articulo "
+        		+ "LEFT JOIN medidaespecifica ON medidaespecifica.idarticulo = articulo.idarticulo "
+        		+ "WHERE medidaespecifica.idarticulo IS NULL "
+        		+ "ORDER BY idarticulo";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("idArticulo"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList getIdArticuloSinMedidaGeneral(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "FROM articulo "
+        		+ "LEFT JOIN medidageneral "
+        		+ "ON medidageneral.idarticulo = articulo.idarticulo "
+        		+ "WHERE medidageneral.idarticulo IS NULL ORDER "
+        		+ "BY idarticulo";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("idArticulo"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     /**
      * Devuelve en orden idArticulo, Tipo, Marca, Stock, PrecioUnitario y descripcion
      * @param orden : String que indica el orden de la tabla. 
