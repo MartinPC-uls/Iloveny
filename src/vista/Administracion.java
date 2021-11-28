@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -30,13 +31,16 @@ import javax.swing.table.TableRowSorter;
 
 import a.Modelo.Consulta;
 import javax.swing.JLabel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.Cursor;
 import java.awt.Dimension;
 
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
@@ -47,18 +51,14 @@ public class Administracion extends JFrame {
 
 	//public JFrame frame;
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
-	Consulta consulta = new Consulta();
-	public JTable tableUsuarios;
-	public JTable tableArticulos;
-	public DefaultTableModel model2;
-	public DefaultTableModel model;
-	public ArrayList<ArrayList<String>> usuarios; 
-	public ArrayList<ArrayList<String>> articulos; 
-	public JButton btnActualizarUsuarios;
-	public JPanel panelArticulos;
+	public Consulta consulta = new Consulta();
+	public DefaultTableModel modeloTabla;
+	public ArrayList<ArrayList<String>> elementosTabla; 
 	
 	private int xMouse;
 	private int yMouse;
+	public int modo = 1;
+	public int columnaPK = 2;
 	private JPanel botonX;
 	private JPanel header;
 	private JPanel IconoIlovenyPanel;
@@ -68,27 +68,20 @@ public class Administracion extends JFrame {
 	private JButton btnArticulos;
 	private JButton btnNewButton;
 	private JLabel lblX;
-	private JPanel panel_1;
-	private JPanel panelUsuarios;
-	private JButton btnModificarUsuarios;
-	private JButton btnAgregarUsuarios;
-	private JButton btnEliminarUsuarios;
-	private JScrollPane scrollPaneUsuarios;
-	private JLabel lblTituloUsuarios;
-	private JComboBox comboBoxUsuarios;
-	private JTextField buscadorUsuariosTextField;
-	private JLabel lblIconoLupa;
-	private JLabel lblComboBox;
-	private JButton btnModificarArticulos;
-	private JButton btnAgregarArticulos;
-	private JButton btnEliminarArticulos;
-	private JScrollPane scrollPaneArticulos;
-	private JButton btnActualizarArticulos;
-	private JLabel lblTituloArticulos;
-	private JLabel lblIconoLupa_1;
-	private JTextField textField;
-	private JComboBox comboBoxArticulos;
-	private JLabel lblComboBox_1;
+	private JLabel lblTitulo;
+	private JTextField buscadorTextField;
+	@SuppressWarnings("rawtypes")
+	private JComboBox filtroCB;
+	private JScrollPane tablaScrollPane;
+	private JTable tabla;
+	private JButton btnModificar;
+	private JButton btnAgregar;
+	private JButton btnEliminar;
+	private JButton btnActualizar;
+	private JLayeredPane funcionesLayeredPane;
+	public AgregarUsuarioPanel agregarUsuarioPanel;
+	public AgregarDireccionPanel agregarDireccionPanel;
+	private JPanel panelPrincipal;
 
 	public Administracion() {
 		setUndecorated(true);
@@ -96,48 +89,240 @@ public class Administracion extends JFrame {
 	}
 
 	private void initialize() {
-		//new JFrame();
 		getContentPane().setBackground(new Color(51, 51, 51));
 		getContentPane().setLayout(null);
 		setBounds(100, 100, 929, 598);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		layeredPane_1 = new JLayeredPane();
-		layeredPane_1.setBounds(196, 39, 731, 559);
-		getContentPane().add(layeredPane_1);
-		layeredPane_1.setLayout(new CardLayout(0, 0));
-		
-		panel_1 = new JPanel();
-		panel_1.setBackground(new Color(51, 51, 51));
-		layeredPane_1.add(panel_1, "name_54251509904100");
-		panel_1.setLayout(null);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		
 		this.construirPanelIloveny();
 		this.construirPanelMenu();
 		this.construirHeader();
-		this.construirPanelUsuarios();
-		this.construirPanelArticulos();
-		
-		btnNewButton = new JButton("New button");
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panelUsuarios);
-			}
-		});
-		btnNewButton.setFocusPainted(false);
-		this.addEventoBotonEnteredAndExitedMenu(btnNewButton);
-		btnNewButton.setForeground(Color.WHITE);
-		btnNewButton.setBackground(new Color(34,34,34));
-		btnNewButton.setBorder(null);
-		btnNewButton.setBounds(0, 108, 197, 43);
-		MenuConBotonesPanel.add(btnNewButton);
-		
-		addUsuarios();
-		addArticulos();
+		this.iniciarPanelPrincipal();		
 	}
 	
+	private void iniciarPanelPrincipal() {
+		panelPrincipal = new JPanel();
+		panelPrincipal.setBounds(197, 39, 732, 558);
+		panelPrincipal.setBackground(new Color(51,51,51));
+		getContentPane().add(panelPrincipal);
+		
+		btnModificar = new JButton("");
+		this.addEventoBotonEnteredAndExited(btnModificar);
+		btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnModificar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Edit-icon-white.png")));
+		btnModificar.setBorder(null);
+		btnModificar.setBackground(new Color(51,51,51));
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				/*int row = tableUsuarios.getSelectedRow();
+				if(row<0) {
+					mostrarAlertaFilaNoSeleccionada();
+				} else {
+					abrirVentanaAgregarUsuario(row);
+				}*/
+			}
+		});
+		panelPrincipal.setLayout(null);
+		btnModificar.setBounds(526, 67, 45, 45);
+		panelPrincipal.add(btnModificar);
+		
+		btnAgregar = new JButton("");
+		btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAgregar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Add-icon-blanco.png")));
+		btnAgregar.setBackground(new Color(51, 51, 51));
+		btnAgregar.setBorder(null);
+		this.addEventoBotonEnteredAndExited(btnAgregar);
+		btnAgregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switch(modo) {
+				
+				case 1:
+					agregarUsuarioPanel = new AgregarUsuarioPanel(1,new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarUsuarioPanel);
+					break;
+				case 2:
+					agregarDireccionPanel = new AgregarDireccionPanel(1,new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarDireccionPanel);
+					break;
+					
+				default:
+				
+				}
+				moverLayeredPanel();
+				panelPrincipal.setVisible(false);
+			}
+
+			private void moverLayeredPanel() {
+				funcionesLayeredPane.setBounds(197, 39, 732, 558);
+			}
+
+			private void cambiarPanel(JPanel panel) {
+				funcionesLayeredPane.removeAll();
+				funcionesLayeredPane.add(panel);
+				funcionesLayeredPane.repaint();
+				funcionesLayeredPane.revalidate();
+			}
+
+		});
+		btnAgregar.setBounds(576, 67,  45, 45);
+		panelPrincipal.add(btnAgregar);
+		
+		btnEliminar = new JButton("");
+		btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnEliminar.setBounds(new Rectangle(0, 0, 45, 45));
+		btnEliminar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Trash-icon-white.png")));
+		btnEliminar.setBackground(new Color(51, 51, 51));
+		btnEliminar.setBorder(null);
+		this.addEventoBotonEnteredAndExited(btnEliminar);
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				eliminarFilaTabla();
+			}
+			private void eliminarFilaTabla() {
+				int row = tabla.getSelectedRow();
+				String value = tabla.getValueAt(row, columnaPK).toString();
+				System.out.println(value);
+				int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
+				if (JOptionPane.YES_OPTION == confirm) {
+					switch(modo) {
+						case 1:							
+							consulta.delDireccion(value);
+							consulta.delRegistroVentaRut(value);
+							consulta.delUsuario(value);
+							break;
+							
+						case 2:
+							consulta.delDireccion(value);
+							break;
+							
+						case 3:
+							consulta.delMedidaE(Integer.parseInt(value));
+							consulta.delMedidaG(Integer.parseInt(value));
+							consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
+							consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
+							consulta.delArticulo(Integer.parseInt(value));
+							break;
+							
+						default:
+					}
+					eliminarDatosTabla();
+					repintarTabla();
+					rellenarTabla();
+				}
+			}
+		});
+		btnEliminar.setBounds(626, 67, 45, 45);
+		panelPrincipal.add(btnEliminar);
+		
+		tabla = new JTable();
+		tabla.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
+				}
+		));
+		iniciarTabla();
+		rellenarTabla();
+		btnActualizar = new JButton("");
+		btnActualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnActualizar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Reload-white.png")));
+		btnActualizar.setBackground(new Color(51, 51, 51));
+		btnActualizar.setBorder(null);
+		this.addEventoBotonEnteredAndExited(btnActualizar);
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				eliminarDatosTabla();
+				repintarTabla();
+				rellenarTabla();
+			}
+		});
+		btnActualizar.setBounds(676, 67, 45, 45);
+		panelPrincipal.add(btnActualizar);
+		
+		lblTitulo = new JLabel("Usuarios");
+		lblTitulo.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
+		lblTitulo.setForeground(Color.WHITE);
+		lblTitulo.setBounds(10, 0, 194, 55);
+		panelPrincipal.add(lblTitulo);
+		
+		filtroCB = new JComboBox(new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
+		filtroCB.setFont(new Font("Roboto Light", Font.PLAIN, 15));
+		filtroCB.setName("");
+		filtroCB.setForeground(Color.BLACK);
+		filtroCB.setBorder(null);
+		filtroCB.setBounds(315, 67, 115, 41);
+		panelPrincipal.add(filtroCB);
+		
+		buscadorTextField = new JTextField();
+		buscadorTextField.setCaretColor(Color.WHITE);
+		buscadorTextField.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+		buscadorTextField.setForeground(Color.WHITE);
+		buscadorTextField.setBackground(new Color(51,51,51));
+		buscadorTextField.setBorder(new MatteBorder(2, 2, 2, 2, (Color) Color.WHITE));
+		buscadorTextField.setBounds(65, 67, 251, 41);
+		panelPrincipal.add(buscadorTextField);
+		buscadorTextField.setColumns(10);
+		
+		JLabel lblIconoLupa = new JLabel("");
+		lblIconoLupa.setHorizontalAlignment(SwingConstants.CENTER);
+		lblIconoLupa.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/lupa-white.png")));
+		lblIconoLupa.setBounds(10, 67, 45, 45);
+		panelPrincipal.add(lblIconoLupa);
+		
+		JLabel lblComboBox = new JLabel("Buscar por:");
+		lblComboBox.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblComboBox.setForeground(Color.WHITE);
+		lblComboBox.setBounds(316, 52, 69, 14);
+		panelPrincipal.add(lblComboBox);
+		
+		panelPrincipal.add(tablaScrollPane);
+	}
+
+	private void repintarTabla() {
+		modeloTabla = (DefaultTableModel)tabla.getModel();
+		for(int i = 0; i<tabla.getColumnCount(); i++) {
+			tabla.getColumnModel().getColumn(i).setPreferredWidth(150);
+			System.out.println("Va en la columna numero: "+i+" "+tabla.getColumnModel().getColumn(i));
+			tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
+			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla.getModel());
+			tabla.setRowSorter(sorter);
+			List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
+			sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+			sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+			sorter.setSortKeys(sortKeys);
+		}
+	}
+	
+	private void iniciarTabla() {
+		modeloTabla = (DefaultTableModel)tabla.getModel();
+		tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		tabla.setPreferredScrollableViewportSize(tabla.getPreferredSize());
+		for(int i = 0; i<tabla.getColumnCount(); i++) {
+			tabla.getColumnModel().getColumn(i).setPreferredWidth(150);
+			System.out.println("Va en la columna numero: "+i+" "+tabla.getColumnModel().getColumn(i));
+		}
+		tabla.getTableHeader().setOpaque(false);
+		tabla.getTableHeader().setForeground(new Color(255, 255, 255));
+		tablaScrollPane = new JScrollPane(tabla);
+		tablaScrollPane.getViewport().setOpaque(false);
+		tablaScrollPane.setOpaque(false);
+		tablaScrollPane.setBounds(10, 114, 711, 434);
+		
+		tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
+		tabla.getTableHeader().setBackground(new Color(51,51,51));
+		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla.getModel());
+		tabla.setRowSorter(sorter);
+		
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
+		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
+	}
+
 	private void construirHeader() {
 		header = new JPanel();
 		header.setLayout(null);
@@ -167,7 +352,7 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel = new JPanel();
 		MenuConBotonesPanel.setBackground(new Color(34, 34, 34));
 		MenuConBotonesPanel.setPreferredSize(new Dimension(400,400));
-		MenuConBotonesPanel.setBounds(0, 198, 197, 400);
+		MenuConBotonesPanel.setBounds(0, 191, 197, 407);
 		getContentPane().add(MenuConBotonesPanel);
 		MenuConBotonesPanel.setLayout(null);
 		
@@ -177,9 +362,29 @@ public class Administracion extends JFrame {
 		btnUsuarios.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panelUsuarios);
-				//consulta.getUsuarios(orden)
-			}
+				if(modo != 1) {
+					modo = 1;
+					columnaPK = 2;
+					eliminarDatosTabla();
+					lblTitulo.setText("Usuarios");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
+							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}	
 		});
 		btnUsuarios.setFocusPainted(false);
 		this.addEventoBotonEnteredAndExitedMenu(btnUsuarios);
@@ -195,7 +400,28 @@ public class Administracion extends JFrame {
 		btnArticulos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnArticulos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				switchPanels(panelArticulos);
+				if(modo != 3) {
+					modo = 3;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Articulos");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Tipo de articulo", "Marca", "Stock", "Precio unitario", "Descripcion", "rutaImagen"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"ID Articulo", "Tipo de articulo", "Marca", "Stock", "Precio unitario", "Descripcion", "rutaImagen"
+							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
 			}
 		});
 		btnArticulos.setFocusPainted(false);
@@ -203,11 +429,93 @@ public class Administracion extends JFrame {
 		btnArticulos.setForeground(Color.WHITE);
 		btnArticulos.setBackground(new Color(34,34,34));
 		btnArticulos.setBorder(null);
-		btnArticulos.setBounds(0, 54, 197, 43);
+		btnArticulos.setBounds(0, 108, 197, 43);
 		MenuConBotonesPanel.add(btnArticulos);
+		
+		JButton btnDireccion = new JButton("DIRECCI\u00D3N");
+		btnDireccion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		addEventoBotonEnteredAndExitedMenu(btnDireccion);
+		btnDireccion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 2) {
+					modo = 2;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Direccion");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","Rut", "Region", "Numero Domicilio", "Nombre Calle", "Ciudad","Comuna"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"Rut", "Region", "Numero Domicilio", "Nombre Calle", "Ciudad","Comuna"
+							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}	
+		});
+		btnDireccion.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/location-icon-white.png")));
+		btnDireccion.setForeground(Color.WHITE);
+		btnDireccion.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnDireccion.setFocusPainted(false);
+		btnDireccion.setBorder(null);
+		btnDireccion.setBackground(new Color(34, 34, 34));
+		btnDireccion.setBounds(0, 54, 197, 43);
+		MenuConBotonesPanel.add(btnDireccion);
+	}
+	
+	private void reacomodarPaneles() {
+		panelPrincipal.setVisible(true);
+		funcionesLayeredPane.setBounds(929,39,732,558);
+	}	
+	
+	public void eliminarDatosTabla() {
+		int rowCount = modeloTabla.getRowCount();
+		System.out.println(rowCount);
+		for (int i = rowCount - 1; i >= 0; i--) {
+			modeloTabla.removeRow(i);
+		}
+	}
+	
+	public void rellenarTabla() {
+		elementosTabla = new ArrayList<ArrayList<String>>();
+		switch(modo) {
+		case 1:
+			elementosTabla = consulta.getUsuarios("nombreusuario");
+			break;
+		case 2:
+			elementosTabla = consulta.getDirecciones();
+			break;
+		case 3:
+			elementosTabla = consulta.getListaArticulo("idarticulo");
+			break;
+			
+		default:
+			
+		}
+		Vector elementos = new Vector();
+		for (int i = 0; i < elementosTabla.size(); i++) {
+			elementos = new Vector();
+			for (int j = 0; j < elementosTabla.get(i).size(); j++) {
+				elementos.add(elementosTabla.get(i).get(j));
+			}
+			modeloTabla.addRow(elementos);
+		}
 	}
 	
 	public void construirPanelIloveny() {
+		
+		funcionesLayeredPane = new JLayeredPane();
+		funcionesLayeredPane.setLayout(null);
+		funcionesLayeredPane.setBounds(929, 39, 732, 558);
+		getContentPane().add(funcionesLayeredPane);
 		IconoIlovenyPanel = new JPanel();
 		IconoIlovenyPanel.setBounds(new Rectangle(0, 0, 197, 197));
 		IconoIlovenyPanel.setBounds(0, 0, 197, 197);
@@ -220,352 +528,6 @@ public class Administracion extends JFrame {
 		IconoIlovenyPanel.setLayout(null);
 		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
 		IconoIlovenyPanel.add(lblIcono);
-	}
-	
-	public void construirPanelUsuarios() {
-		panelUsuarios = new JPanel();
-		panelUsuarios.setBackground(new Color(51, 51, 51));
-		layeredPane_1.add(panelUsuarios, "name_54331093143100");
-		panelUsuarios.setLayout(null);
-		
-		btnModificarUsuarios = new JButton("");
-		this.addEventoBotonEnteredAndExited(btnModificarUsuarios);
-		btnModificarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnModificarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
-		btnModificarUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Edit-icon-white.png")));
-		btnModificarUsuarios.setBorder(null);
-		btnModificarUsuarios.setBackground(new Color(51,51,51));
-		btnModificarUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int row = tableUsuarios.getSelectedRow();
-				if(row<0) {
-					mostrarAlertaFilaNoSeleccionada();
-				} else {
-					abrirVentanaAgregarUsuario(row);
-				}
-			}
-		});
-		btnModificarUsuarios.setBounds(526, 67, 45, 45);
-		panelUsuarios.add(btnModificarUsuarios);
-		
-		btnAgregarUsuarios = new JButton("");
-		btnAgregarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAgregarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
-		btnAgregarUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Add-icon-blanco.png")));
-		btnAgregarUsuarios.setBackground(new Color(51, 51, 51));
-		btnAgregarUsuarios.setBorder(null);
-		this.addEventoBotonEnteredAndExited(btnAgregarUsuarios);
-		btnAgregarUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				AgregarUsuario agregarUsuario = new AgregarUsuario(btnActualizarUsuarios);
-			}
-		});
-		btnAgregarUsuarios.setBounds(576, 67,  45, 45);
-		panelUsuarios.add(btnAgregarUsuarios);
-		
-		btnEliminarUsuarios = new JButton("");
-		btnEliminarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnEliminarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
-		btnEliminarUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Trash-icon-white.png")));
-		btnEliminarUsuarios.setBackground(new Color(51, 51, 51));
-		btnEliminarUsuarios.setBorder(null);
-		this.addEventoBotonEnteredAndExited(btnEliminarUsuarios);
-		btnEliminarUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				eliminarUsuario();
-			}
-		});
-		btnEliminarUsuarios.setBounds(626, 67, 45, 45);
-		panelUsuarios.add(btnEliminarUsuarios);
-		
-		tableUsuarios = new JTable();
-		tableUsuarios.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
-				}
-		));
-		model = (DefaultTableModel)tableUsuarios.getModel();
-		tableUsuarios.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tableUsuarios.setPreferredScrollableViewportSize(tableUsuarios.getPreferredSize());
-		tableUsuarios.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tableUsuarios.getColumnModel().getColumn(1).setPreferredWidth(150);
-		tableUsuarios.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tableUsuarios.getColumnModel().getColumn(3).setPreferredWidth(150);
-		tableUsuarios.getColumnModel().getColumn(4).setPreferredWidth(150);
-		tableUsuarios.getTableHeader().setOpaque(false);
-		tableUsuarios.getTableHeader().setForeground(new Color(255, 255, 255));
-		scrollPaneUsuarios = new JScrollPane(tableUsuarios);
-		scrollPaneUsuarios.getViewport().setOpaque(false);
-		scrollPaneUsuarios.setOpaque(false);
-		//table.setBackground(SystemColor.menu);
-		//scrollPane.getViewport().setBackground(SystemColor.menu);
-		//scrollPane.setBackground(SystemColor.menu);
-		//scrollPane.getViewport().setBackground(SystemColor.menu);
-		//scrollPane.getViewport().setBackground(new Color(51,51,51));
-		scrollPaneUsuarios.setBounds(10, 114, 711, 434);
-		tableUsuarios.setBounds(0, 0, scrollPaneUsuarios.getWidth(), scrollPaneUsuarios.getHeight());
-		
-		tableUsuarios.getTableHeader().setBackground(new Color(51,51,51));
-		
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableUsuarios.getModel());
-		tableUsuarios.setRowSorter(sorter);
-		
-		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
-		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
-		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
-		sorter.setSortKeys(sortKeys);
-		
-		btnActualizarUsuarios = new JButton("");
-		btnActualizarUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnActualizarUsuarios.setBounds(new Rectangle(0, 0, 45, 45));
-		btnActualizarUsuarios.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Reload-white.png")));
-		btnActualizarUsuarios.setBackground(new Color(51, 51, 51));
-		btnActualizarUsuarios.setBorder(null);
-		this.addEventoBotonEnteredAndExited(btnActualizarUsuarios);
-		btnActualizarUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				refresh_usuarios();
-			}
-		});
-		btnActualizarUsuarios.setBounds(676, 67, 45, 45);
-		panelUsuarios.add(btnActualizarUsuarios);
-		
-		lblTituloUsuarios = new JLabel("Usuarios");
-		lblTituloUsuarios.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
-		lblTituloUsuarios.setForeground(Color.WHITE);
-		lblTituloUsuarios.setBounds(10, 0, 194, 55);
-		panelUsuarios.add(lblTituloUsuarios);
-		
-		comboBoxUsuarios = new JComboBox(new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
-		comboBoxUsuarios.setFont(new Font("Roboto Light", Font.PLAIN, 15));
-		comboBoxUsuarios.setName("");
-		comboBoxUsuarios.setForeground(Color.BLACK);
-		comboBoxUsuarios.setBorder(null);
-		comboBoxUsuarios.setBounds(315, 67, 115, 41);
-		panelUsuarios.add(comboBoxUsuarios);
-		
-		buscadorUsuariosTextField = new JTextField();
-		buscadorUsuariosTextField.setCaretColor(Color.WHITE);
-		buscadorUsuariosTextField.setFont(new Font("Roboto Light", Font.PLAIN, 25));
-		buscadorUsuariosTextField.setForeground(Color.WHITE);
-		buscadorUsuariosTextField.setBackground(new Color(51,51,51));
-		buscadorUsuariosTextField.setBorder(new MatteBorder(2, 2, 2, 2, (Color) Color.WHITE));
-		buscadorUsuariosTextField.setBounds(65, 67, 251, 41);
-		panelUsuarios.add(buscadorUsuariosTextField);
-		buscadorUsuariosTextField.setColumns(10);
-		
-		lblIconoLupa = new JLabel("");
-		lblIconoLupa.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIconoLupa.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/lupa-white.png")));
-		lblIconoLupa.setBounds(10, 67, 45, 45);
-		panelUsuarios.add(lblIconoLupa);
-		
-		lblComboBox = new JLabel("Buscar por:");
-		lblComboBox.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblComboBox.setForeground(Color.WHITE);
-		lblComboBox.setBounds(316, 52, 69, 14);
-		panelUsuarios.add(lblComboBox);
-		
-		panelUsuarios.add(scrollPaneUsuarios);
-	}
-	
-	public void construirPanelArticulos() {
-		panelArticulos = new JPanel();
-		panelArticulos.setLayout(null);
-		panelArticulos.setBackground(new Color(51, 51, 51));
-		layeredPane_1.add(panelArticulos, "name_47993813931900");
-		
-		btnModificarArticulos = new JButton("");
-		btnModificarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Edit-icon-white.png")));
-		btnModificarArticulos.setBorder(null);
-		btnModificarArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnModificarArticulos.setBackground(new Color(51,51,51));
-		this.addEventoBotonEnteredAndExited(btnModificarArticulos);
-		btnModificarArticulos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int row = tableArticulos.getSelectedRow();
-				String idArticulo = tableUsuarios.getValueAt(row, 0).toString();
-				String IDMarca = tableUsuarios.getValueAt(row, 1).toString();
-				String IDTipo = tableUsuarios.getValueAt(row, 2).toString();
-				String stock = tableUsuarios.getValueAt(row, 3).toString();
-				String precioUnitario = tableUsuarios.getValueAt(row, 4).toString();
-				String descripcion = tableUsuarios.getValueAt(row, 5).toString();
-				String imagen = tableUsuarios.getValueAt(row, 6).toString();
-				AgregarArticulo agregarArticulo = new AgregarArticulo(btnActualizarUsuarios);
-				agregarArticulo.setElements(idArticulo, IDMarca, IDTipo, stock, precioUnitario, descripcion, imagen);
-			}
-		});
-		btnModificarArticulos.setBounds(526, 67, 45, 45);
-		panelArticulos.add(btnModificarArticulos);
-		
-		btnAgregarArticulos = new JButton("");
-		btnAgregarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Add-icon-blanco.png")));
-		btnAgregarArticulos.setBorder(null);
-		btnAgregarArticulos.setBackground(new Color(51,51,51));
-		this.addEventoBotonEnteredAndExited(btnAgregarArticulos);
-		btnAgregarArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAgregarArticulos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO
-			}
-		});
-		btnAgregarArticulos.setBounds(576, 67,  45, 45);
-		panelArticulos.add(btnAgregarArticulos);
-		
-		btnEliminarArticulos = new JButton("");
-		btnEliminarArticulos.setBackground(new Color(51,51,51));
-		this.addEventoBotonEnteredAndExited(btnEliminarArticulos);
-		btnEliminarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Trash-icon-white.png")));
-		btnEliminarArticulos.setBorder(null);
-		btnEliminarArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnEliminarArticulos.setBounds(626, 67, 45, 45);
-		panelArticulos.add(btnEliminarArticulos);
-		
-		tableArticulos = new JTable();
-		tableArticulos.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"
-				}
-		));
-		model2 = (DefaultTableModel)tableArticulos.getModel();
-		tableArticulos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		tableArticulos.setPreferredScrollableViewportSize(tableArticulos.getPreferredSize());
-		tableArticulos.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tableArticulos.getColumnModel().getColumn(1).setPreferredWidth(150);
-		tableArticulos.getColumnModel().getColumn(2).setPreferredWidth(150);
-		tableArticulos.getColumnModel().getColumn(3).setPreferredWidth(150);
-		tableArticulos.getColumnModel().getColumn(4).setPreferredWidth(150);
-		tableArticulos.getColumnModel().getColumn(5).setPreferredWidth(150);
-		tableArticulos.getColumnModel().getColumn(6).setPreferredWidth(150);
-		tableArticulos.getTableHeader().setOpaque(false);
-		tableArticulos.getTableHeader().setForeground(new Color(255, 255, 255));
-		scrollPaneArticulos = new JScrollPane(tableArticulos);
-		scrollPaneArticulos.getViewport().setOpaque(false);
-		scrollPaneArticulos.setOpaque(false);
-		//table.setBackground(SystemColor.menu);
-		//scrollPane.getViewport().setBackground(SystemColor.menu);
-		//scrollPane.setBackground(SystemColor.menu);
-		//scrollPane.getViewport().setBackground(SystemColor.menu);
-		//scrollPane.getViewport().setBackground(new Color(51,51,51));
-		scrollPaneArticulos.setBounds(10, 114, 711, 434);
-		tableArticulos.setBounds(0, 0, scrollPaneArticulos.getWidth(), scrollPaneArticulos.getHeight());
-		
-		tableArticulos.getTableHeader().setBackground(new Color(51,51,51));
-		
-		panelArticulos.add(scrollPaneArticulos);
-		
-		TableRowSorter<TableModel> sorter2 = new TableRowSorter<TableModel>(tableArticulos.getModel());
-		tableArticulos.setRowSorter(sorter2);
-		
-		btnActualizarArticulos = new JButton("");
-		btnActualizarArticulos.setBackground(new Color(51,51,51));
-		this.addEventoBotonEnteredAndExited(btnActualizarArticulos);
-		btnActualizarArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Reload-white.png")));
-		btnActualizarArticulos.setBorder(null);
-		btnActualizarArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnActualizarArticulos.setBounds(676, 67, 45, 45);
-		panelArticulos.add(btnActualizarArticulos);
-		
-		lblTituloArticulos = new JLabel("Articulos");
-		lblTituloArticulos.setForeground(Color.WHITE);
-		lblTituloArticulos.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
-		lblTituloArticulos.setBounds(10, 0, 194, 55);
-		panelArticulos.add(lblTituloArticulos);
-		
-		lblIconoLupa_1 = new JLabel("");
-		lblIconoLupa_1.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/lupa-white.png")));
-		lblIconoLupa_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblIconoLupa_1.setBounds(10, 67, 45, 45);
-		panelArticulos.add(lblIconoLupa_1);
-		
-		textField = new JTextField();
-		textField.setForeground(Color.WHITE);
-		textField.setFont(new Font("Roboto Light", Font.PLAIN, 25));
-		textField.setColumns(10);
-		textField.setCaretColor(Color.WHITE);
-		textField.setBorder(new MatteBorder(2, 2, 2, 2, (Color) Color.WHITE));
-		textField.setBackground(new Color(51, 51, 51));
-		textField.setBounds(65, 67, 251, 41);
-		panelArticulos.add(textField);
-		
-		comboBoxArticulos = new JComboBox(new String[] {"Seleccione...","idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"});
-		comboBoxArticulos.setFont(new Font("Roboto Light", Font.PLAIN, 15));
-		comboBoxArticulos.setForeground(Color.BLACK);
-		comboBoxArticulos.setBorder(null);
-		comboBoxArticulos.setBounds(315, 67, 115, 41);
-		panelArticulos.add(comboBoxArticulos);
-		
-		lblComboBox_1 = new JLabel("Buscar por:");
-		lblComboBox_1.setForeground(Color.WHITE);
-		lblComboBox_1.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblComboBox_1.setBounds(316, 52, 69, 14);
-		panelArticulos.add(lblComboBox_1);
-	}
-	
-	private void eliminarUsuario() {
-		int row = tableUsuarios.getSelectedRow();
-		String value = tableUsuarios.getValueAt(row, 2).toString(); // RUT
-		System.out.println(value);
-		int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
-		if (JOptionPane.YES_OPTION == confirm) {
-			consulta.delUsuario(value);
-			refresh_usuarios();
-		}
-	}
-
-	public void refresh_usuarios() {
-		int rowCount = model.getRowCount();
-		System.out.println(rowCount);
-		for (int i = rowCount - 1; i >= 0; i--) {
-			model.removeRow(i);
-		}
-		addUsuarios();
-	}
-	public void refresh_articulos() {
-		int rowCount = model2.getRowCount();
-		System.out.println(rowCount);
-		for (int i = rowCount - 1; i >= 0; i--) {
-			model2.removeRow(i);
-		}
-		addArticulos();
-	}
-	
-	public void addUsuarios() {
-		usuarios = new ArrayList<ArrayList<String>>();
-		usuarios = consulta.getUsuarios("nombreusuario");
-		ArrayList<String> elementos;
-		for (int i = 0; i < usuarios.size(); i++) {
-			elementos = new ArrayList<String>();
-			for (int j = 0; j < usuarios.get(i).size(); j++) {
-				elementos.add(usuarios.get(i).get(j));
-			}
-			model.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4)});
-		}
-	}
-	
-	public void addArticulos() {
-		// "idArticulo", "idMarca", "idTipo", "stock", "precioUnitario", "descripcion", "rutaImagen"
-		articulos = new ArrayList<ArrayList<String>>();
-		articulos = consulta.getListaArticulo("idarticulo");
-		ArrayList<String> elementos;
-		for (int i = 0; i < articulos.size(); i++) {
-			elementos = new ArrayList<String>();
-			for (int j = 0; j < articulos.get(i).size(); j++) {
-				elementos.add(articulos.get(i).get(j));
-			}
-			model2.addRow(new Object[] {elementos.get(0), elementos.get(1), elementos.get(2), elementos.get(3), elementos.get(4), elementos.get(5), elementos.get(6)});
-		}
-	}
-	
-	public void switchPanels(JPanel panel) {
-		layeredPane_1.removeAll();
-		layeredPane_1.add(panel);
-		layeredPane_1.repaint();
-		layeredPane_1.revalidate();
 	}
 	
 	public void addEventoBotonEnteredAndExitedMenu(JButton boton) {
@@ -582,31 +544,21 @@ public class Administracion extends JFrame {
 	}
 	
 	public void addEventoBotonEnteredAndExited(JButton boton){
-			boton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				boton.setBackground(new Color(31,31,31));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				boton.setBackground(new Color(51,51,51));
-			}
-		});
+		boton.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			boton.setBackground(new Color(31,31,31));
+		}
+		@Override
+		public void mouseExited(MouseEvent e) {
+			boton.setBackground(new Color(51,51,51));
+		}
+	});
 	}
 	
 	private void mostrarAlertaFilaNoSeleccionada() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	private void abrirVentanaAgregarUsuario(int row) {
-		String nombre = tableUsuarios.getValueAt(row, 0).toString();
-		String apellidos = tableUsuarios.getValueAt(row, 1).toString();
-		String rut = tableUsuarios.getValueAt(row, 2).toString();
-		String telefonos = tableUsuarios.getValueAt(row, 3).toString();
-		String email = tableUsuarios.getValueAt(row, 4).toString();
-		AgregarUsuario agregarUsuario = new AgregarUsuario(btnActualizarUsuarios);
-		agregarUsuario.setElements(nombre, apellidos, rut, telefonos, email);
 	}
 	
 	private void eventoHeader() {

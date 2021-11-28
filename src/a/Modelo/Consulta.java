@@ -502,6 +502,50 @@ public class Consulta extends Conexion{
         }
     }
     
+    public boolean delRegistroVentaIdArticulo(int idArticulo){
+        PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM registroventa WHERE idarticulo = ?";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idArticulo);
+            ps.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public boolean delRegistroVentaRut(String rut){
+        PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM registroventa WHERE rut = ?";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, rut);
+            ps.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public boolean delArticulo(int idArticulo){
         PreparedStatement ps;
         Connection con = conectar();
@@ -749,6 +793,28 @@ public class Consulta extends Conexion{
         }
     }
     
+    public void delRegistroCompraIdArticulo(int idArticulo) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM RegistroCompra "
+        		+ "WHERE idArticulo = ? ";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, idArticulo);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public boolean updtRegistroCompra(String UsuarioNuevo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaRecibo, int idArticuloNuevo, int idCompraAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
@@ -886,29 +952,25 @@ public class Consulta extends Conexion{
         }
     }
     
-    public ArrayList getTodoUsuarios(String orden) {
+    public ArrayList getDirecciones() {
     	PreparedStatement ps;
     	ResultSet rs;
         Connection con = conectar();
-    	String sql = "SELECT NombreUsuario, Rut, NombreRegion, Comuna, Ciudad, Calle, NumeroDomicilio "
-    			+ "FROM Usuario, Direccion, Region "
-    			+ "WHERE Usuario.Rut = Direccion.Rut "
-    			+ "AND Direccion.idRegion = Region.idRegion "
-    			+ "ORDER BY ?";
+    	String sql = "SELECT rut, nombreregion, numerodomicilio, calle, ciudad, comuna " 
+    			+"FROM Direccion, Region " 
+    			+"WHERE direccion.idRegion = region.idRegion";
     	try {
         	ps = con.prepareStatement(sql);
-        	ps.setString(1, orden);
             rs = ps.executeQuery();
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                columna.add(rs.getString("NombreUsuario"));
-                columna.add(rs.getString("Rut"));
-                columna.add(rs.getString("NombreRegion"));
-                columna.add(rs.getString("Comuna"));
-                columna.add(rs.getString("Ciudad"));
-                columna.add(rs.getString("Calle"));
-                columna.add(rs.getString("NumeroDomicilio"));
+                columna.add(rs.getString("rut"));
+                columna.add(rs.getString("Nombreregion"));
+                columna.add(rs.getString("numerodomicilio"));
+                columna.add(rs.getString("calle"));
+                columna.add(rs.getString("ciudad"));
+                columna.add(rs.getString("comuna"));
                 fila.add(columna);
             }
             ps.close();
@@ -1096,4 +1158,33 @@ public class Consulta extends Conexion{
             }
         }
     }
+    
+    public ArrayList getRutsSinDireccion(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT usuario.rut " +
+        		"FROM usuario " + 
+        		"LEFT JOIN direccion ON direccion.rut = usuario.rut " +
+        		"WHERE direccion.rut IS NULL";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("rut"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
 }

@@ -57,7 +57,9 @@ public class Login extends JFrame {
         setVisible(true);
         setBounds(100, 100, 473, 652);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         getContentPane().setLayout(null);
@@ -211,7 +213,5 @@ public class Login extends JFrame {
         lblX.setFont(new Font("Roboto", Font.BOLD, 15));
         lblX.setBounds(0, 0, 27, 27);
         botonX.add(lblX);
-        
-
     }
 }
