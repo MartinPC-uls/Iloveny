@@ -81,6 +81,7 @@ public class Administracion extends JFrame {
 	private JLayeredPane funcionesLayeredPane;
 	public AgregarUsuarioPanel agregarUsuarioPanel;
 	public AgregarDireccionPanel agregarDireccionPanel;
+	public AgregarArticuloPanel agregarArticuloPanel;
 	private JPanel panelPrincipal;
 
 	public Administracion() {
@@ -143,12 +144,16 @@ public class Administracion extends JFrame {
 				switch(modo) {
 				
 				case 1:
-					agregarUsuarioPanel = new AgregarUsuarioPanel(1,new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarUsuarioPanel = new AgregarUsuarioPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarUsuarioPanel);
 					break;
 				case 2:
-					agregarDireccionPanel = new AgregarDireccionPanel(1,new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarDireccionPanel = new AgregarDireccionPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarDireccionPanel);
+					break;
+				case 3:
+					agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarArticuloPanel);
 					break;
 					
 				default:
@@ -408,7 +413,7 @@ public class Administracion extends JFrame {
 					modo = 3;
 					columnaPK = 0;
 					eliminarDatosTabla();
-					lblTitulo.setText("Articulos");
+					lblTitulo.setText("Artículos");
 					buscadorTextField.setText("");
 					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Tipo de articulo", "Marca", "Stock", "Precio unitario", "Descripcion", "rutaImagen"});
 					filtroCB.setModel(model);
