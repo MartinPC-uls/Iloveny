@@ -84,6 +84,7 @@ public class Administracion extends JFrame {
 	public AgregarUsuarioPanel agregarUsuarioPanel;
 	public AgregarDireccionPanel agregarDireccionPanel;
 	public AgregarArticuloPanel agregarArticuloPanel;
+	public AgregarMedidaGeneralPanel agregarMedidaGeneralPanel;
 	private JPanel panelPrincipal;
 
 	public Administracion() {
@@ -156,6 +157,10 @@ public class Administracion extends JFrame {
 				case 3:
 					agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarArticuloPanel);
+					break;
+				case 4:
+					agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarMedidaGeneralPanel);
 					break;
 					
 				default:
@@ -256,7 +261,7 @@ public class Administracion extends JFrame {
 		lblTitulo = new JLabel("Usuarios");
 		lblTitulo.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
 		lblTitulo.setForeground(Color.WHITE);
-		lblTitulo.setBounds(10, 0, 194, 55);
+		lblTitulo.setBounds(10, 0, 711, 55);
 		panelPrincipal.add(lblTitulo);
 		
 		filtroCB = new JComboBox(new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
@@ -486,6 +491,41 @@ public class Administracion extends JFrame {
 		btnDireccion.setBackground(new Color(34, 34, 34));
 		btnDireccion.setBounds(0, 54, 197, 43);
 		MenuConBotonesPanel.add(btnDireccion);
+		
+		JButton btnMedidaGeneral = new JButton("MEDIDA GENERAL");
+		btnMedidaGeneral.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 4) {
+					modo = 4;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Medida General");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Alto", "Ancho", "Largo"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"ID Articulo", "Alto", "Ancho", "Largo"
+							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}
+		});
+		btnMedidaGeneral.setForeground(Color.WHITE);
+		btnMedidaGeneral.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnMedidaGeneral.setFocusPainted(false);
+		btnMedidaGeneral.setBorder(null);
+		btnMedidaGeneral.setBackground(new Color(34, 34, 34));
+		btnMedidaGeneral.setBounds(0, 162, 197, 43);
+		MenuConBotonesPanel.add(btnMedidaGeneral);
 	}
 	
 	private void reacomodarPaneles() {
@@ -512,6 +552,9 @@ public class Administracion extends JFrame {
 			break;
 		case 3:
 			elementosTabla = consulta.getListaArticulo("idarticulo");
+			break;
+		case 4:
+			elementosTabla = consulta.getListaMedidaG("idarticulo");
 			break;
 			
 		default:
