@@ -36,23 +36,9 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
-	
-	private JLabel lblAlertaRegion;
-	private JComboBox RegionCB;
-	private JTextField comunaTextField;
-	private JLabel lblAlertaComuna;
-	private JLabel lblAlertaNombreCalle;
-	private JTextField calleTextField;
-	private JTextField numCalleTextField;
-	private JTextField ciudadTextField;
-	private JLabel lblAlertaCiudad;
-	private JLabel lblAlertaNumCalle;
-	private JComboBox rutCB;
-	private JLabel lblAlertaRut;
-	private JPanel lineaComuna;
-	private JPanel lineaNombreCalle;
-	private JPanel lineaNumeroCalle;
-	private JPanel lineaCiudad;
+	private JTextField objetoTextField;
+	private JLabel lblAlertaMarca;
+	private JPanel lineaObjeto;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	
@@ -63,203 +49,58 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		setBackground(new Color(51,51,51));
 		setLayout(null);
 		
-		lblAlertaRut = new JLabel("");
-		lblAlertaRut.setVisible(false);
-		lblAlertaRut.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaRut.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaRut.setBounds(604, 177, 30, 27);
-		add(lblAlertaRut);
+		JLabel lblTipoObjeto = new JLabel("Tipo Objeto");
+		lblTipoObjeto.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTipoObjeto.setForeground(Color.WHITE);
+		lblTipoObjeto.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
+		lblTipoObjeto.setBounds(199, 11, 302, 55);
+		add(lblTipoObjeto);
 		
-		JLabel lblAgregarUsuario = new JLabel("Direccion\r\n");
-		lblAgregarUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAgregarUsuario.setForeground(Color.WHITE);
-		lblAgregarUsuario.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
-		lblAgregarUsuario.setBounds(215, 11, 302, 55);
-		add(lblAgregarUsuario);
+		JLabel lblObjeto = new JLabel("Objeto");
+		lblObjeto.setForeground(Color.WHITE);
+		lblObjeto.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblObjeto.setBounds(250, 211, 106, 14);
+		add(lblObjeto);
 		
-		JLabel lblRegion = new JLabel("Region");
-		lblRegion.setForeground(Color.WHITE);
-		lblRegion.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRegion.setBounds(138, 155, 62, 14);
-		add(lblRegion);
-		
-		JLabel lblCalle = new JLabel("Nombre calle");
-		lblCalle.setForeground(Color.WHITE);
-		lblCalle.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblCalle.setBounds(138, 267, 106, 14);
-		add(lblCalle);
-		
-		lineaNombreCalle = new JPanel();
-		lineaNombreCalle.setPreferredSize(new Dimension(0, 3));
-		lineaNombreCalle.setBackground(Color.WHITE);
-		lineaNombreCalle.setBounds(138, 304, 214, 3);
-		add(lineaNombreCalle);
-		GroupLayout gl_lineaNombreCalle = new GroupLayout(lineaNombreCalle);
-		gl_lineaNombreCalle.setHorizontalGroup(
-			gl_lineaNombreCalle.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 214, Short.MAX_VALUE)
-				.addGap(0, 214, Short.MAX_VALUE)
-		);
-		gl_lineaNombreCalle.setVerticalGroup(
-			gl_lineaNombreCalle.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 3, Short.MAX_VALUE)
-				.addGap(0, 3, Short.MAX_VALUE)
-		);
-		lineaNombreCalle.setLayout(gl_lineaNombreCalle);
-		
-		calleTextField = new JTextField();
-		calleTextField.addKeyListener(new KeyAdapter() {
+		objetoTextField = new JTextField();
+		objetoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarCalle();
+				verificarMarca();
 			}
 		});
-		calleTextField.setText("EJ: Los Arrayanes ");
-		calleTextField.setOpaque(false);
-		calleTextField.setForeground(new Color(170, 170, 170));
-		calleTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		calleTextField.setCaretColor(Color.WHITE);
-		calleTextField.setBorder(null);
-		calleTextField.setBackground(new Color(51, 51, 51));
-		calleTextField.setBounds(138, 280, 214, 21);
-		eventoCambiarJTextField(calleTextField, calleTextField.getText(), 50);
-		add(calleTextField);
+		objetoTextField.setToolTipText("a");
+		objetoTextField.setText("EJ: Cinturon");
+		objetoTextField.setOpaque(false);
+		objetoTextField.setForeground(new Color(170, 170, 170));
+		objetoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		objetoTextField.setCaretColor(Color.WHITE);
+		objetoTextField.setBorder(null);
+		objetoTextField.setBackground(new Color(51, 51, 51));
+		objetoTextField.setBounds(250, 222, 214, 21);
+		eventoCambiarJTextField(objetoTextField, objetoTextField.getText(), 20);
+		add(objetoTextField);
 		
-		RegionCB = new JComboBox(new String[] {"Seleccione...","Tarapaca", "Antofagasta", "Atacama", "Coquimbo", "Valparaiso",
-														"Ohiggins","Maule","Biobio","La Araucania","Los Lagos","Aysen","Magallanes",
-														"Metropolitana","Los Rios","Arica y P.","Ñuble"});
-		RegionCB.setBounds(138, 180, 214, 21);
-		add(RegionCB);
-		
-		JLabel lblNumeroCalle = new JLabel("Numero calle");
-		lblNumeroCalle.setForeground(Color.WHITE);
-		lblNumeroCalle.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblNumeroCalle.setBounds(383, 267, 106, 14);
-		add(lblNumeroCalle);
-		
-		numCalleTextField = new JTextField();
-		numCalleTextField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				verificarNumCalle();
-			}
-		});
-		numCalleTextField.setText("EJ: 1234 ");
-		numCalleTextField.setOpaque(false);
-		numCalleTextField.setForeground(new Color(170, 170, 170));
-		numCalleTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		numCalleTextField.setCaretColor(Color.WHITE);
-		numCalleTextField.setBorder(null);
-		numCalleTextField.setBackground(new Color(51, 51, 51));
-		numCalleTextField.setBounds(383, 280, 214, 21);
-		eventoCambiarJTextField(numCalleTextField, numCalleTextField.getText(), 50);
-		add(numCalleTextField);
-		
-		lineaNumeroCalle = new JPanel();
-		lineaNumeroCalle.setPreferredSize(new Dimension(0, 3));
-		lineaNumeroCalle.setBackground(Color.WHITE);
-		lineaNumeroCalle.setBounds(383, 304, 214, 3);
-		add(lineaNumeroCalle);
-		GroupLayout gl_lineaNumeroCalle = new GroupLayout(lineaNumeroCalle);
-		gl_lineaNumeroCalle.setHorizontalGroup(
-			gl_lineaNumeroCalle.createParallelGroup(Alignment.LEADING)
+		lineaObjeto = new JPanel();
+		lineaObjeto.setPreferredSize(new Dimension(0, 3));
+		lineaObjeto.setBackground(Color.WHITE);
+		lineaObjeto.setBounds(248, 248, 214, 3);
+		add(lineaObjeto);
+		GroupLayout gl_lineaObjeto = new GroupLayout(lineaObjeto);
+		gl_lineaObjeto.setHorizontalGroup(
+			gl_lineaObjeto.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaNumeroCalle.setVerticalGroup(
-			gl_lineaNumeroCalle.createParallelGroup(Alignment.LEADING)
+		gl_lineaObjeto.setVerticalGroup(
+			gl_lineaObjeto.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaNumeroCalle.setLayout(gl_lineaNumeroCalle);
+		lineaObjeto.setLayout(gl_lineaObjeto);
 		
-		JLabel lblComuna = new JLabel("Comuna");
-		lblComuna.setForeground(Color.WHITE);
-		lblComuna.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblComuna.setBounds(138, 212, 106, 14);
-		add(lblComuna);
-		
-		comunaTextField = new JTextField();
-		comunaTextField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				verificarComuna();
-			}
-		});
-		comunaTextField.setToolTipText("a");
-		comunaTextField.setText("EJ: Coquimbo ");
-		comunaTextField.setOpaque(false);
-		comunaTextField.setForeground(new Color(170, 170, 170));
-		comunaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		comunaTextField.setCaretColor(Color.WHITE);
-		comunaTextField.setBorder(null);
-		comunaTextField.setBackground(new Color(51, 51, 51));
-		comunaTextField.setBounds(138, 225, 214, 21);
-		eventoCambiarJTextField(comunaTextField, comunaTextField.getText(), 20);
-		add(comunaTextField);
-		
-		lineaComuna = new JPanel();
-		lineaComuna.setPreferredSize(new Dimension(0, 3));
-		lineaComuna.setBackground(Color.WHITE);
-		lineaComuna.setBounds(138, 249, 214, 3);
-		add(lineaComuna);
-		GroupLayout gl_lineaComuna = new GroupLayout(lineaComuna);
-		gl_lineaComuna.setHorizontalGroup(
-			gl_lineaComuna.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 214, Short.MAX_VALUE)
-				.addGap(0, 214, Short.MAX_VALUE)
-		);
-		gl_lineaComuna.setVerticalGroup(
-			gl_lineaComuna.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 3, Short.MAX_VALUE)
-				.addGap(0, 3, Short.MAX_VALUE)
-		);
-		lineaComuna.setLayout(gl_lineaComuna);
-		
-		JLabel lblCiudad = new JLabel("Ciudad");
-		lblCiudad.setForeground(Color.WHITE);
-		lblCiudad.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblCiudad.setBounds(383, 212, 106, 14);
-		add(lblCiudad);
-		
-		ciudadTextField = new JTextField();
-		ciudadTextField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				verificarCiudad();
-			}
-		});
-		ciudadTextField.setText("EJ: Ovalle ");
-		ciudadTextField.setOpaque(false);
-		ciudadTextField.setForeground(new Color(170, 170, 170));
-		ciudadTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		ciudadTextField.setCaretColor(Color.WHITE);
-		ciudadTextField.setBorder(null);
-		ciudadTextField.setBackground(new Color(51, 51, 51));
-		ciudadTextField.setBounds(383, 225, 214, 21);
-		eventoCambiarJTextField(ciudadTextField, ciudadTextField.getText(), 20);
-		add(ciudadTextField);
-		
-		lineaCiudad = new JPanel();
-		lineaCiudad.setPreferredSize(new Dimension(0, 3));
-		lineaCiudad.setBackground(Color.WHITE);
-		lineaCiudad.setBounds(383, 249, 214, 3);
-		add(lineaCiudad);
-		GroupLayout gl_lineaCiudad = new GroupLayout(lineaCiudad);
-		gl_lineaCiudad.setHorizontalGroup(
-			gl_lineaCiudad.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 214, Short.MAX_VALUE)
-				.addGap(0, 214, Short.MAX_VALUE)
-		);
-		gl_lineaCiudad.setVerticalGroup(
-			gl_lineaCiudad.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 3, Short.MAX_VALUE)
-				.addGap(0, 3, Short.MAX_VALUE)
-		);
-		lineaCiudad.setLayout(gl_lineaCiudad);
-		
-		JButton btnAgregarDireccion = new JButton("AGREGAR DIRECCION");
-		btnAgregarDireccion.addActionListener(new ActionListener() {
+		JButton btnAgregarMarca = new JButton("AGREGAR MARCA");
+		btnAgregarMarca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(isTodoCorrecto()) {
 					agregarDatos();
@@ -269,64 +110,22 @@ public class AgregarTipoObjetoPanel extends JPanel {
 				}
 			}
 		});
-		btnAgregarDireccion.setBorder(null);
-		btnAgregarDireccion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAgregarDireccion.setBackground(Color.WHITE);
-		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
-		btnAgregarDireccion.setBounds(215, 458, 302, 64);
-		add(btnAgregarDireccion);
+		btnAgregarMarca.setBorder(null);
+		btnAgregarMarca.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAgregarMarca.setBackground(Color.WHITE);
+		btnAgregarMarca.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+		btnAgregarMarca.setBounds(199, 455, 302, 64);
+		add(btnAgregarMarca);
 		
-		lblAlertaComuna = new JLabel("");
-		lblAlertaComuna.setVisible(false);
-		lblAlertaComuna.setToolTipText("Hay un error de formato");
-		lblAlertaComuna.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaComuna.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaComuna.setBounds(99, 222, 30, 27);
-		add(lblAlertaComuna);
+		lblAlertaMarca = new JLabel("");
+		lblAlertaMarca.setVisible(false);
+		lblAlertaMarca.setToolTipText("Hay un error de formato");
+		lblAlertaMarca.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaMarca.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaMarca.setBounds(215, 224, 30, 27);
+		add(lblAlertaMarca);
 		
-		lblAlertaNombreCalle = new JLabel("");
-		lblAlertaNombreCalle.setVisible(false);
-		lblAlertaNombreCalle.setToolTipText("Hay un error de formato");
-		lblAlertaNombreCalle.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaNombreCalle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaNombreCalle.setBounds(98, 280, 30, 27);
-		add(lblAlertaNombreCalle);
-		
-		lblAlertaNumCalle = new JLabel("");
-		lblAlertaNumCalle.setVisible(false);
-		lblAlertaNumCalle.setToolTipText("Hay un error de formato");
-		lblAlertaNumCalle.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaNumCalle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaNumCalle.setBounds(604, 280, 30, 27);
-		add(lblAlertaNumCalle);
-		
-		lblAlertaCiudad = new JLabel("");
-		lblAlertaCiudad.setVisible(false);
-		lblAlertaCiudad.setToolTipText("Hay un error de formato");
-		lblAlertaCiudad.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaCiudad.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaCiudad.setBounds(604, 225, 30, 27);
-		add(lblAlertaCiudad);
-		
-		lblAlertaRegion = new JLabel("");
-		lblAlertaRegion.setVisible(false);
-		lblAlertaRegion.setToolTipText("Hay un error de formato");
-		lblAlertaRegion.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaRegion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaRegion.setBounds(98, 174, 30, 27);
-		add(lblAlertaRegion);
-		
-		JLabel lblRut = new JLabel("RUT");
-		lblRut.setForeground(Color.WHITE);
-		lblRut.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRut.setBounds(383, 155, 62, 14);
-		add(lblRut);
-		
-		DefaultComboBoxModel modelo = crearModeloComboBox();
-		rutCB = new JComboBox(new Object[]{});
-		rutCB.setModel(modelo);
-		rutCB.setBounds(383, 180, 214, 21);
-		add(rutCB);
+		//DefaultComboBoxModel modelo = crearModeloComboBox();
 		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -344,7 +143,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		add(btnVolver);
 	}
 	
-	private DefaultComboBoxModel crearModeloComboBox() {
+	/*private DefaultComboBoxModel crearModeloComboBox() {
 		ArrayList ruts = consulta.getRutsSinDireccion();
 		if(ruts.size()>0) {
 			existenRutsSinDireccion = true;
@@ -360,94 +159,36 @@ public class AgregarTipoObjetoPanel extends JPanel {
 			existenRutsSinDireccion = false;
 			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
 		}
-	}
+	}*/
 
 	private void agregarDatos() {
-		agregarDatosTablaDireccion();
+		agregarDatosTablaMarca();
 	}
 	
-	private void agregarDatosTablaDireccion() {
+	private void agregarDatosTablaMarca() {
 		if (modo == 1) {
-			consulta.addDireccion((String)rutCB.getSelectedItem(), RegionCB.getSelectedIndex(), Integer.parseInt(numCalleTextField.getText()),calleTextField.getText() , ciudadTextField.getText(), comunaTextField.getText()); 
+			consulta.addMarca(objetoTextField.getText());
 		} else if(modo == 2) {
 			
 		}
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarCalle() && verificarNumCalle() && verificarRegion() && verificarComuna() && verificarCiudad() && existenRutsSinDireccion && rutCB.getSelectedIndex()!=0) {
+		if(verificarMarca()) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean verificarCiudad() {
-		if(ciudadTextField.equals("") || ciudadTextField.getText().length()>20 || !isOnlyAlpha(ciudadTextField.getText())) {
-			lblAlertaCiudad.setVisible(true);
-			setErroneo(lineaCiudad, lblAlertaCiudad);
+	private boolean verificarMarca() {
+		if(objetoTextField.getText().equals("")) {
+			lblAlertaMarca.setVisible(true);
+			setErroneo(lineaObjeto, lblAlertaMarca);
 			return false;
 		}
-		setAcertado(lineaCiudad, lblAlertaCiudad);
-		lblAlertaCiudad.setVisible(false);
+		setAcertado(lineaObjeto, lblAlertaMarca);
+		lblAlertaMarca.setVisible(false);
 		return true;
-	}
-	
-	private boolean verificarComuna() {
-		if(comunaTextField.equals("") || comunaTextField.getText().length()>20 || !isOnlyAlpha(comunaTextField.getText())) {
-			setErroneo(lineaComuna, lblAlertaComuna);
-			return false;
-		}
-		setAcertado(lineaComuna, lblAlertaComuna);
-		return true;
-	}
-
-	private boolean verificarRegion() {
-		if(RegionCB.getSelectedIndex() == 0) {
-			lblAlertaRegion.setVisible(true);
-			return false;
-		}
-		lblAlertaRegion.setVisible(false);
-		return true;
-	}
-
-	private boolean verificarNumCalle() {
-		if(numCalleTextField.getText().equals("") || numCalleTextField.getText().contains(" ") || numCalleTextField.getText().length()>10 || !numCalleTextField.getText().matches("[0-9]+") ) {
-			setErroneo(lineaNumeroCalle, lblAlertaNumCalle);
-			return false;
-		}
-		setAcertado(lineaNumeroCalle, lblAlertaNumCalle);
-		return true;
-	}
-
-	private boolean verificarCalle() {
-		if(calleTextField.equals("") || calleTextField.getText().length()>50 || !isOnlyAlpha(calleTextField.getText())) {
-			setErroneo(lineaNombreCalle, lblAlertaNombreCalle);
-			return false;
-		}
-		setAcertado(lineaNombreCalle, lblAlertaNombreCalle);
-		return true;
-	}
-	
-	public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}
-	
-	public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 	
 	public void setAcertado(JPanel panel, JLabel label){
@@ -474,29 +215,6 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
-		txtUser.addFocusListener(new FocusAdapter() {
-        	@Override
-        	public void focusLost(FocusEvent e) {
-        		String text = txtUser.getText();
-        		if (text.length() == 0 || text.length() >maxCaracteres) {
-        			if(text.length() == 0) {
-        				txtUser.setText(relleno);
-        				txtUser.setForeground(new Color(170, 170, 170));
-        			}
-        		} else {
-        			txtUser.setForeground(new Color(255, 255, 255));
-        		}
-        	}
-        	@Override
-        	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
-        		Color color = new Color(170, 170, 170);
-        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
-        			txtUser.setText("");
-        			txtUser.setForeground(new Color(255, 255, 255));
-        		}
-        	}
-        });
 	}
 
 }
