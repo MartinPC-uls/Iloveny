@@ -1456,7 +1456,7 @@ public class Consulta extends Conexion{
                 Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
+    }//XD
     
     public void delUsuario(String Rut) {
     	PreparedStatement ps;
