@@ -114,6 +114,31 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public int getArticuloStock(int idArticulo) {
+	    PreparedStatement ps;
+	    ResultSet rs;
+	    Connection con = conectar();
+	    String sql = "SELECT * FROM Articulo WHERE idarticulo = " + idArticulo + ";";
+	    try {
+		    ps = con.prepareStatement(sql);
+		    rs = ps.executeQuery();
+		    int value = -1;
+		    if (rs.next()) {
+			    value = rs.getInt("stock");
+		    }
+		    return value;
+	    } catch (SQLException ex) {
+		    Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+	    } finally {
+		    try {
+	                con.close();
+	            } catch (SQLException ex) {
+	                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+	            }
+	    }
+	    return -1;
+    }
+    
     public ArrayList getMarca(){
         PreparedStatement ps;
         ResultSet rs;

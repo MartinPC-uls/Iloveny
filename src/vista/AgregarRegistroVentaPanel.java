@@ -299,8 +299,12 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		if (verificarCantidadVendida() && verificarRegion() && verificarFecha() && articuloCB.getSelectedIndex()!=0) {
+		if (verificarCantidadVendida() && verificarRegion() && verificarFecha() && articuloCB.getSelectedIndex()!=0 &&
+				consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString()))) > 0) {
 			return true;
+		} else if (consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString()))) == 0) {
+			System.out.println("no hay stock");
+			return false;
 		}
 		return false;
 	}
