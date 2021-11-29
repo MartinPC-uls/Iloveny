@@ -500,6 +500,34 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getDescripcionArticulosConStock(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT articulo.idarticulo, articulo.descripcion "
+        		+ "FROM articulo "
+        		+ "WHERE stock>0;";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("idarticulo") + " ("+rs.getString("descripcion")+")");
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public ArrayList getIdArticuloSinMedidaGeneral(){
         PreparedStatement ps;
         ResultSet rs;
@@ -918,6 +946,76 @@ public class Consulta extends Conexion{
         }
 		return null;
     }
+    
+    /*public ArrayList getBusquedaGeneral(String nombreTabla, String columnaString, String aBuscarEnColumna, String[] nombresColumnas) {
+    	PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * "
+        		+ "FROM ? "
+        		+ "WHERE ? = ?";
+        try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, nombreTabla);
+        	ps.setString(2, columnaString);
+        	ps.setString(3, aBuscarEnColumna);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                for(int i = 0; i<nombresColumnas.length;i++) {
+                	columna.add(rs.getString(nombresColumnas[i]));
+                }
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }*/
+    /*
+    public ArrayList getBusquedaDinamica(String[] nombresTablas, String columnaString, String aBuscarEnColumna, String[] nombresColumnas) {
+    	PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * "
+        		+ "FROM ? "
+        		+ "WHERE ? = ?";
+        try {
+        	ps = con.prepareStatement(sql);
+        	ps.setString(1, nombreTabla);
+        	ps.setString(2, columnaString);
+        	ps.setString(3, aBuscarEnColumna);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                for(int i = 0; i<nombresColumnas.length;i++) {
+                	columna.add(rs.getString(nombresColumnas[i]));
+                }
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }*/
     
     /**
      * Borra una fila de la tabla RegistroCompra.
