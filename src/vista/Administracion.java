@@ -46,6 +46,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Administracion extends JFrame {
 
@@ -206,54 +208,7 @@ public class Administracion extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				eliminarFilaTabla();
 			}
-			private void eliminarFilaTabla() {
-				int row = tabla.getSelectedRow();
-				String value = tabla.getValueAt(row, columnaPK).toString();
-				System.out.println(value);
-				int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
-				if (JOptionPane.YES_OPTION == confirm) {
-					switch(modo) {
-						case 1:						
-							consulta.delDireccion(value);
-							consulta.delRegistroVentaRut(value);
-							consulta.delUsuario(value);
-							break;
-						case 2:
-							consulta.delDireccion(value);
-							break;
-						case 3:
-							consulta.delMedidaE(Integer.parseInt(value));
-							consulta.delMedidaG(Integer.parseInt(value));
-							consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
-							consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
-							consulta.delArticulo(Integer.parseInt(value));
-							break;
-						case 4:
-							consulta.delMedidaG(Integer.parseInt(value));
-							break;
-						case 5:
-							consulta.delMedidaE(Integer.parseInt(value));
-							break;
-						case 6:
-							consulta.delRegistroVenta(Integer.parseInt(value));
-							break;
-						case 8:
-							ArrayList idsArticulos = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
-							for (int i = 0; i < idsArticulos.size(); i++) {
-								consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
-								consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
-							}
-							consulta.delArticuloSegunMarca(Integer.parseInt(value));
-							consulta.delMarca(Integer.parseInt(value));
-							break;
-							
-						default:
-					}
-					eliminarDatosTabla();
-					repintarTabla();
-					rellenarTabla();
-				}
-			}
+			
 		});
 		btnEliminar.setBounds(626, 67, 45, 45);
 		panelPrincipal.add(btnEliminar);
@@ -299,6 +254,12 @@ public class Administracion extends JFrame {
 		panelPrincipal.add(filtroCB);
 		
 		buscadorTextField = new JTextField();
+		buscadorTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				realizarBusqueda();
+			}
+		});
 		buscadorTextField.setCaretColor(Color.WHITE);
 		buscadorTextField.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		buscadorTextField.setForeground(Color.WHITE);
@@ -321,6 +282,96 @@ public class Administracion extends JFrame {
 		panelPrincipal.add(lblComboBox);
 		
 		panelPrincipal.add(tablaScrollPane);
+	}
+
+	private void eliminarFilaTabla() {
+		int row = tabla.getSelectedRow();
+		String value = tabla.getValueAt(row, columnaPK).toString();
+		System.out.println(value);
+		int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
+		if (JOptionPane.YES_OPTION == confirm) {
+			switch(modo) {
+				case 1:						
+					consulta.delDireccion(value);
+					consulta.delRegistroVentaRut(value);
+					consulta.delUsuario(value);
+					break;
+				case 2:
+					consulta.delDireccion(value);
+					break;
+				case 3:
+					consulta.delMedidaE(Integer.parseInt(value));
+					consulta.delMedidaG(Integer.parseInt(value));
+					consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
+					consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
+					consulta.delArticulo(Integer.parseInt(value));
+					break;
+				case 4:
+					consulta.delMedidaG(Integer.parseInt(value));
+					break;
+				case 5:
+					consulta.delMedidaE(Integer.parseInt(value));
+					break;
+				case 6:
+					consulta.delRegistroVenta(Integer.parseInt(value));
+					break;
+				case 8:
+					ArrayList idsArticulos = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
+					for (int i = 0; i < idsArticulos.size(); i++) {
+						consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
+						consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
+					}
+					consulta.delArticuloSegunMarca(Integer.parseInt(value));
+					consulta.delMarca(Integer.parseInt(value));
+					break;
+					
+				default:
+			}
+			eliminarDatosTabla();
+			repintarTabla();
+			rellenarTabla();
+		}
+	}
+
+	private void realizarBusqueda() {
+		eliminarDatosTabla();
+		elementosTabla = new ArrayList<ArrayList<String>>();
+		switch(modo) {
+		case 1:
+			elementosTabla = consulta.getListaArticuloBusqueda(filtroCB.getSelectedItem().toString(), buscadorTextField.getText());
+			break;
+		case 2:
+			elementosTabla = consulta.getDirecciones();
+			break;
+		case 3:
+			elementosTabla = consulta.getListaArticulo("idarticulo");
+			break;
+		case 4:
+			elementosTabla = consulta.getListaMedidaG("idarticulo");
+			break;
+		case 5:
+			elementosTabla = consulta.getListaMedidaE("idarticulo");
+			break;
+			
+		case 6:
+			elementosTabla = consulta.getRegistrosVenta("idventa");
+			break;
+		case 8:
+			System.out.println("ESTAMOS AQUI EN CASE 8 XD");
+			elementosTabla = consulta.getMarca();
+			System.out.println("SALIENDO DE CASE 8 DX - " + elementosTabla.get(1).get(1));
+			break;
+		default:
+			
+		}
+		Vector elementos = new Vector();
+		for (int i = 0; i < elementosTabla.size(); i++) {
+			elementos = new Vector();
+			for (int j = 0; j < elementosTabla.get(i).size(); j++) {
+				elementos.add(elementosTabla.get(i).get(j));
+			}
+			modeloTabla.addRow(elementos);
+		}
 	}
 
 	private void repintarTabla() {

@@ -632,6 +632,45 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getListaArticuloBusqueda(String nombreColumna, String aBuscar){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion, rutaimg "
+                    + "FROM Articulo, Marca, TipoObj "
+                    + "WHERE Articulo.idMarca = Marca.idMarca "
+                    + "AND Articulo.idTipoObj = TipoObj.idTipoObj "
+                    + "AND ? = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombreColumna);
+            ps.setString(2, aBuscar);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("NombreTipo"));
+                columna.add(rs.getString("NombreMarca"));
+                columna.add(rs.getString("Stock"));
+                columna.add(rs.getString("PrecioUnitario"));
+                columna.add(rs.getString("descripcion"));
+                columna.add(rs.getString("rutaimg"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public boolean updtMedidaG(int Largo, int Alto, int Ancho, int idArticuloNuevo, int idArticuloAntiguo){
         PreparedStatement ps;
         Connection con = conectar();
@@ -972,7 +1011,7 @@ public class Consulta extends Conexion{
 		return null;
     }
     
-    /*public ArrayList getBusquedaGeneral(String nombreTabla, String columnaString, String aBuscarEnColumna, String[] nombresColumnas) {
+    public ArrayList getBusquedaGeneral(String nombreTabla, String columnaString, String aBuscarEnColumna, String[] nombresColumnas) {
     	PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
@@ -1005,7 +1044,7 @@ public class Consulta extends Conexion{
             }
         }
 		return null;
-    }*/
+    }
     /*
     public ArrayList getBusquedaDinamica(String[] nombresTablas, String columnaString, String aBuscarEnColumna, String[] nombresColumnas) {
     	PreparedStatement ps;
@@ -1228,6 +1267,8 @@ public class Consulta extends Conexion{
         }
     }
     
+    
+    
     public ArrayList getDirecciones() {
     	PreparedStatement ps;
     	ResultSet rs;
@@ -1377,6 +1418,31 @@ public class Consulta extends Conexion{
             ps.setString(5, Ciudad);
             ps.setString(6, Comuna);
             ps.setString(7, rutAntiguo);
+            ps.execute();
+            ps.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public boolean updtStockArticulo(int idArticulo, int stockNuevo) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+    	String sql = "UPDATE articulo "
+    			+ "SET stock = ? "
+    			+ "WHERE idarticulo = ?";
+    	try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, stockNuevo);
+            ps.setInt(2, idArticulo);
             ps.execute();
             ps.close();
             return true;
