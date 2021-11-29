@@ -85,6 +85,9 @@ public class Administracion extends JFrame {
 	public AgregarMedidaGeneralPanel agregarMedidaGeneralPanel;
 	public AgregarMedidaEspecificaPanel agregarMedidaEspecificaPanel;
 	private JPanel panelPrincipal;
+	private JButton btnRegistroCompra;
+	private JButton btnMarcas;
+	private JButton btnTiposObjeto;
 
 	public Administracion() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Administracion.class.getResource("/imagenes/iloveny-icon.png")));
@@ -224,6 +227,9 @@ public class Administracion extends JFrame {
 							break;
 						case 5:
 							consulta.delMedidaE(Integer.parseInt(value));
+							break;
+						case 6:
+							consulta.delRegistroVenta(Integer.parseInt(value));
 							break;
 							
 						default:
@@ -380,11 +386,15 @@ public class Administracion extends JFrame {
 	}
 
 	public void construirPanelMenu() {
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportBorder(null);
+		scrollPane.setBounds(0, 191, 197, 406);
+		getContentPane().add(scrollPane);
 		MenuConBotonesPanel = new JPanel();
+		scrollPane.setViewportView(MenuConBotonesPanel);
 		MenuConBotonesPanel.setBackground(new Color(34, 34, 34));
-		MenuConBotonesPanel.setPreferredSize(new Dimension(400,400));
-		MenuConBotonesPanel.setBounds(0, 191, 197, 407);
-		getContentPane().add(MenuConBotonesPanel);
+		MenuConBotonesPanel.setPreferredSize(new Dimension(170, 600));
 		MenuConBotonesPanel.setLayout(null);
 		
 		btnUsuarios = new JButton("USUARIOS");
@@ -576,6 +586,72 @@ public class Administracion extends JFrame {
 		btnMedidaEspecifica.setBackground(new Color(34, 34, 34));
 		btnMedidaEspecifica.setBounds(0, 216, 197, 43);
 		MenuConBotonesPanel.add(btnMedidaEspecifica);
+		
+		JButton btnRegistroVenta = new JButton("REGISTRO VENTA");
+		btnRegistroVenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 6) {
+					modo = 6;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Registro venta");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo","RUT","Fecha venta","Cantidad vendida","ID venta"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+									"ID Articulo","RUT","Fecha venta","Cantidad vendida","ID venta"
+							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}
+		});
+		btnRegistroVenta.setForeground(Color.WHITE);
+		btnRegistroVenta.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnRegistroVenta.setFocusPainted(false);
+		btnRegistroVenta.setBorder(null);
+		btnRegistroVenta.setBackground(new Color(34, 34, 34));
+		btnRegistroVenta.setBounds(0, 270, 197, 43);
+		MenuConBotonesPanel.add(btnRegistroVenta);
+		
+		btnRegistroCompra = new JButton("REGISTRO COMPRA");
+		btnRegistroCompra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnRegistroCompra.setForeground(Color.WHITE);
+		btnRegistroCompra.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnRegistroCompra.setFocusPainted(false);
+		btnRegistroCompra.setBorder(null);
+		btnRegistroCompra.setBackground(new Color(34, 34, 34));
+		btnRegistroCompra.setBounds(0, 324, 197, 43);
+		MenuConBotonesPanel.add(btnRegistroCompra);
+		
+		btnMarcas = new JButton("MARCAS");
+		btnMarcas.setForeground(Color.WHITE);
+		btnMarcas.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnMarcas.setFocusPainted(false);
+		btnMarcas.setBorder(null);
+		btnMarcas.setBackground(new Color(34, 34, 34));
+		btnMarcas.setBounds(0, 378, 197, 43);
+		MenuConBotonesPanel.add(btnMarcas);
+		
+		btnTiposObjeto = new JButton("TIPOS DE OBJETO");
+		btnTiposObjeto.setForeground(Color.WHITE);
+		btnTiposObjeto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnTiposObjeto.setFocusPainted(false);
+		btnTiposObjeto.setBorder(null);
+		btnTiposObjeto.setBackground(new Color(34, 34, 34));
+		btnTiposObjeto.setBounds(0, 432, 197, 43);
+		MenuConBotonesPanel.add(btnTiposObjeto);
 	}
 	
 	private void reacomodarPaneles() {
@@ -608,6 +684,10 @@ public class Administracion extends JFrame {
 			break;
 		case 5:
 			elementosTabla = consulta.getListaMedidaE("idarticulo");
+			break;
+			
+		case 6:
+			elementosTabla = consulta.getRegistrosVenta("idventa");
 			break;
 		default:
 			
