@@ -338,13 +338,13 @@ public class Administracion extends JFrame {
 		elementosTabla = new ArrayList<ArrayList<String>>();
 		switch(modo) {
 		case 1:
-			elementosTabla = consulta.getListaArticuloBusqueda(filtroCB.getSelectedItem().toString(), buscadorTextField.getText());
+			//elementosTabla = 
 			break;
 		case 2:
 			elementosTabla = consulta.getDirecciones();
 			break;
 		case 3:
-			elementosTabla = consulta.getListaArticulo("idarticulo");
+			elementosTabla = consulta.getListaArticuloBusqueda(filtroCB.getSelectedItem().toString(), buscadorTextField.getText());
 			break;
 		case 4:
 			elementosTabla = consulta.getListaMedidaG("idarticulo");
