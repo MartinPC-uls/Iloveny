@@ -240,9 +240,8 @@ public class Administracion extends JFrame {
 						case 8:
 							ArrayList idsArticulos = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
 							for (int i = 0; i < idsArticulos.size(); i++) {
-								// TODO
-								consulta.delRegistroCompraIdArticulo((int) idsArticulos.get(i));
-								consulta.delRegistroVentaIdArticulo((int) idsArticulos.get(i));
+								consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
+								consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
 							}
 							consulta.delArticuloSegunMarca(Integer.parseInt(value));
 							consulta.delMarca(Integer.parseInt(value));
