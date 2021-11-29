@@ -838,7 +838,7 @@ public class Consulta extends Conexion{
      * @param CantidadVendida Corresponde al dato que se va a agregar en la columna CantidadVendida.
      * @param FechaVenta Corresponde al dato que se va a agregar en la columna FechaVenta.
      */
-    public void addRegistroVenta(int idArticulo, String Rut, int CantidadVendida, Date FechaVenta) {
+    public void addRegistroVenta(int idArticulo, String Rut, int CantidadVendida, String FechaVenta) {
     	PreparedStatement ps;
     	Connection con = conectar();
     	String sql = "INSERT INTO RegistroVenta (idArticulo, Rut, CantidadVendida, FechaVenta) "
@@ -848,7 +848,7 @@ public class Consulta extends Conexion{
 			ps.setInt(1, idArticulo);
 			ps.setString(2, Rut);
 			ps.setInt(3, CantidadVendida);
-			ps.setDate(4, (java.sql.Date) FechaVenta);
+			ps.setDate(4, java.sql.Date.valueOf(FechaVenta));
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {

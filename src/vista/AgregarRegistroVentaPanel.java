@@ -26,6 +26,7 @@ import javax.swing.SwingConstants;
 import a.Modelo.Consulta;
 
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -219,7 +220,9 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		lblArticulo.setBounds(383, 155, 62, 14);
 		add(lblArticulo);
 		
-		articuloCB = new JComboBox(new Object[]{});
+		DefaultComboBoxModel modelo2 = crearModeloComboBoxArticulo();
+		articuloCB =  new JComboBox(new Object[]{});
+		articuloCB.setModel(modelo2);
 		articuloCB.setBounds(383, 180, 214, 21);
 		add(articuloCB);
 		
@@ -254,14 +257,42 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
 		}
 	}
+	
+	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
+		ArrayList articulo = consulta.getDescripcionArticulosConStock();
+		if(articulo.size()>0) {
+			String[] listaArticulos = new String[articulo.size()+1];
+			System.out.println(articulo.size());
+			listaArticulos[0] = "Seleccione...";
+			for(int i=1; i<=articulo.size();i++) {
+				listaArticulos[i] = articulo.get(i-1).toString();
+			}
+			return new DefaultComboBoxModel(listaArticulos);
+		}else {
+			lblAlertaRut.setVisible(true);
+			return new DefaultComboBoxModel(new String[] {"No existen articulos"});
+		}
+	}
 
 	private void agregarDatos() {
 		agregarDatosTablaRegistroVenta();
 	}
 	
+	private String obtenerIdEnString(String opcionSeleccionada) {
+		char[] caracteres = opcionSeleccionada.toCharArray();
+		String id = "";
+		for(char c : caracteres) {
+			if(c == ' ') {
+				break;
+			}
+			id+= c;
+		}
+		return id;
+	}
+	
 	private void agregarDatosTablaRegistroVenta() {
 		if (modo == 1) {
-			consulta.addRegistroVenta(articuloCB.getSelectedIndex(), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), convertirFecha(fechaTextField.getText()));
+			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
 		} else if(modo == 2) {
 			
 		}
@@ -275,7 +306,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private Date convertirFecha(String string) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/dd/MM");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-sMM");
 		try {
 			Date date = format.parse(string);
 			return date;
@@ -286,7 +317,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private boolean verificarCantidadVendida() {
-		if(cantidadVendidaTextField.equals("") || cantidadVendidaTextField.getText().length()>20 || !isOnlyAlpha(cantidadVendidaTextField.getText())) {
+		if(cantidadVendidaTextField.getText().equals("")) {
 			lblAlertaCantidadVendida.setVisible(true);
 			setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
 			return false;
@@ -296,8 +327,17 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		return true;
 	}
 	
+	private boolean isNumero(String string) {
+		try {
+			Integer.parseInt(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
 	private boolean verificarFecha() {
-		if(fechaTextField.equals("") || fechaTextField.getText().length()>20 || !isOnlyAlpha(fechaTextField.getText())) {
+		if(fechaTextField.getText().equals("") || fechaTextField.getText().length()>20) {
 			setErroneo(lineaFecha, lblAlertaFecha);
 			return false;
 		}

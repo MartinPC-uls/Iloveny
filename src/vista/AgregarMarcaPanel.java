@@ -162,10 +162,10 @@ public class AgregarMarcaPanel extends JPanel {
 	}*/
 
 	private void agregarDatos() {
-		agregarDatosTablaDireccion();
+		agregarDatosTablaMarca();
 	}
 	
-	private void agregarDatosTablaDireccion() {
+	private void agregarDatosTablaMarca() {
 		if (modo == 1) {
 			consulta.addMarca(marcaTextField.getText());
 		} else if(modo == 2) {

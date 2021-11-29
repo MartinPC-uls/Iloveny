@@ -84,6 +84,7 @@ public class Administracion extends JFrame {
 	public AgregarArticuloPanel agregarArticuloPanel;
 	public AgregarMedidaGeneralPanel agregarMedidaGeneralPanel;
 	public AgregarMedidaEspecificaPanel agregarMedidaEspecificaPanel;
+	public AgregarRegistroVentaPanel agregarRegistroVentaPanel;
 	private JPanel panelPrincipal;
 	private JButton btnRegistroCompra;
 	private JButton btnMarcas;
@@ -167,6 +168,11 @@ public class Administracion extends JFrame {
 				case 5:
 					agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarMedidaEspecificaPanel);
+					break;
+				case 6:
+					agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarRegistroVentaPanel);
+					break;
 				default:
 				
 				}
@@ -230,6 +236,8 @@ public class Administracion extends JFrame {
 							break;
 						case 6:
 							consulta.delRegistroVenta(Integer.parseInt(value));
+							break;
+						case 8:
 							break;
 							
 						default:
@@ -636,6 +644,33 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnRegistroCompra);
 		
 		btnMarcas = new JButton("MARCAS");
+		btnMarcas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if(modo != 8) {
+					modo = 8;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Marca");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Marca","Nombre Marca"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+									"ID Marca","Nombre Marca"							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			
+			}
+		});
 		btnMarcas.setForeground(Color.WHITE);
 		btnMarcas.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnMarcas.setFocusPainted(false);
@@ -688,6 +723,9 @@ public class Administracion extends JFrame {
 			
 		case 6:
 			elementosTabla = consulta.getRegistrosVenta("idventa");
+			break;
+		case 8:
+			elementosTabla = consulta.getMarca();
 			break;
 		default:
 			
