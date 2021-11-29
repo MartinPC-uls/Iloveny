@@ -349,7 +349,8 @@ public class Administracion extends JFrame {
 			elementosTabla = consulta.getDirecciones();
 			break;
 		case 3:
-			elementosTabla = consulta.getListaArticuloBusqueda(filtroCB.getSelectedItem().toString(), buscadorTextField.getText());
+			String[] columnas = {"nada","idarticulo","nombretipo","nombremarca","stock","preciounitario","descripcion","rutaimg"};
+			elementosTabla = consulta.getListaArticuloBusqueda(columnas[filtroCB.getSelectedIndex()], buscadorTextField.getText());
 			break;
 		case 4:
 			elementosTabla = consulta.getListaMedidaG("idarticulo");
