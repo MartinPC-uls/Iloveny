@@ -440,6 +440,31 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getRuts(){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT rut FROM usuario";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("rut"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public ArrayList getIdArticuloSinMedidaEspecifica(){
         PreparedStatement ps;
         ResultSet rs;
