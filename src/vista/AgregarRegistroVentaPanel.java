@@ -53,6 +53,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private JPanel lineaCantidadVendida;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
+	private static int stock;
 	
 	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
 		this.modo = modo;
@@ -293,14 +294,16 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private void agregarDatosTablaRegistroVenta() {
 		if (modo == 1) {
 			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
+			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
 		} else if(modo == 2) {
 			
 		}
 	}
 
 	private boolean isTodoCorrecto() {
+		stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 		if (verificarCantidadVendida() && verificarRegion() && verificarFecha() && articuloCB.getSelectedIndex()!=0 &&
-				consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString()))) > 0) {
+				stock > 0) {
 			return true;
 		} else if (consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString()))) == 0) {
 			System.out.println("no hay stock");

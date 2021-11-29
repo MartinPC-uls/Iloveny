@@ -87,6 +87,7 @@ public class Administracion extends JFrame {
 	public AgregarMedidaGeneralPanel agregarMedidaGeneralPanel;
 	public AgregarMedidaEspecificaPanel agregarMedidaEspecificaPanel;
 	public AgregarRegistroVentaPanel agregarRegistroVentaPanel;
+	public AgregarMarcaPanel agregarMarcaPanel;
 	private JPanel panelPrincipal;
 	private JButton btnRegistroCompra;
 	private JButton btnMarcas;
@@ -174,6 +175,10 @@ public class Administracion extends JFrame {
 				case 6:
 					agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarRegistroVentaPanel);
+					break;
+				case 8:
+					agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarMarcaPanel);
 					break;
 				default:
 				
