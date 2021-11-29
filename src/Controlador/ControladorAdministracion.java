@@ -4,8 +4,8 @@ import vista.Administracion;
 
 public class ControladorAdministracion {
 
-	public ControladorAdministracion() {
-		Administracion administracion = new Administracion();
+	public ControladorAdministracion(String nombreAdmin) {
+		Administracion administracion = new Administracion(nombreAdmin);
 		administracion.setVisible(true);
 	}
 	

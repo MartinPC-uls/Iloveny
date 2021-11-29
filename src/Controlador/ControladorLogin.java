@@ -165,7 +165,7 @@ public class ControladorLogin {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-        			ControladorAdministracion administracion = new ControladorAdministracion();
+        			ControladorAdministracion administracion = new ControladorAdministracion(login.txtUser.getText());
         			login.setVisible(false);
         		} else {
         			System.out.println("No existe / mala contrasena");

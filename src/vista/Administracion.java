@@ -55,7 +55,8 @@ public class Administracion extends JFrame {
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
 	public Consulta consulta = new Consulta();
 	public DefaultTableModel modeloTabla;
-	public ArrayList<ArrayList<String>> elementosTabla; 
+	public ArrayList<ArrayList<String>> elementosTabla;
+	public String nombreAdmin;
 	
 	private int xMouse;
 	private int yMouse;
@@ -93,7 +94,8 @@ public class Administracion extends JFrame {
 	private JButton btnMarcas;
 	private JButton btnTiposObjeto;
 
-	public Administracion() {
+	public Administracion(String nombreAdmin) {
+		this.nombreAdmin = nombreAdmin;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Administracion.class.getResource("/imagenes/iloveny-icon.png")));
 		setUndecorated(true);
 		initialize();
@@ -350,7 +352,8 @@ public class Administracion extends JFrame {
 			break;
 		case 3:
 			String[] columnas = {"nada","idarticulo","nombretipo","nombremarca","stock","preciounitario","descripcion","rutaimg"};
-			elementosTabla = consulta.getListaArticuloBusqueda(columnas[filtroCB.getSelectedIndex()], buscadorTextField.getText());
+ 			boolean[] isInteger = {false,true,false,false,true,true,true,false,false};
+			elementosTabla = consulta.getListaArticuloBusqueda(columnas[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger[filtroCB.getSelectedIndex()]);
 			break;
 		case 4:
 			elementosTabla = consulta.getListaMedidaG("idarticulo");

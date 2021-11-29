@@ -632,19 +632,22 @@ public class Consulta extends Conexion{
         return null;
     }
     
-    public ArrayList getListaArticuloBusqueda(String nombreColumna, String aBuscar){
+    public ArrayList getListaArticuloBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
         String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion, rutaimg "
-                    + "FROM Articulo, Marca, TipoObj "
-                    + "WHERE Articulo.idMarca = Marca.idMarca "
-                    + "AND Articulo.idTipoObj = TipoObj.idTipoObj "
-                    + "AND ? = ?";
+        		+ "FROM Articulo, Marca, TipoObj WHERE Articulo.idMarca = Marca.idMarca "
+        		+ "AND Articulo.idTipoObj = TipoObj.idTipoObj ";
+        if(isInteger) {
+        	sql+= "AND CAST(? as CHAR) LIKE '%"+aBuscar+"%'";
+        }else {
+        	sql+= "AND ? LIKE '%"+aBuscar+"%'";
+        }
+        		
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, nombreColumna);
-            ps.setString(2, aBuscar);
             rs = ps.executeQuery();
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
