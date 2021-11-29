@@ -83,6 +83,7 @@ public class Administracion extends JFrame {
 	public AgregarDireccionPanel agregarDireccionPanel;
 	public AgregarArticuloPanel agregarArticuloPanel;
 	public AgregarMedidaGeneralPanel agregarMedidaGeneralPanel;
+	public AgregarMedidaEspecificaPanel agregarMedidaEspecificaPanel;
 	private JPanel panelPrincipal;
 
 	public Administracion() {
@@ -160,7 +161,9 @@ public class Administracion extends JFrame {
 					agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarMedidaGeneralPanel);
 					break;
-					
+				case 5:
+					agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarMedidaEspecificaPanel);
 				default:
 				
 				}
@@ -201,22 +204,26 @@ public class Administracion extends JFrame {
 				int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
 				if (JOptionPane.YES_OPTION == confirm) {
 					switch(modo) {
-						case 1:							
+						case 1:						
 							consulta.delDireccion(value);
 							consulta.delRegistroVentaRut(value);
 							consulta.delUsuario(value);
 							break;
-							
 						case 2:
 							consulta.delDireccion(value);
 							break;
-							
 						case 3:
 							consulta.delMedidaE(Integer.parseInt(value));
 							consulta.delMedidaG(Integer.parseInt(value));
 							consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
 							consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
 							consulta.delArticulo(Integer.parseInt(value));
+							break;
+						case 4:
+							consulta.delMedidaG(Integer.parseInt(value));
+							break;
+						case 5:
+							consulta.delMedidaE(Integer.parseInt(value));
 							break;
 							
 						default:
@@ -297,8 +304,18 @@ public class Administracion extends JFrame {
 
 	private void repintarTabla() {
 		modeloTabla = (DefaultTableModel)tabla.getModel();
+		int espacioParaColumna = 0;
+		if(150*tabla.getColumnCount() <= 711) {
+			espacioParaColumna = 711/tabla.getColumnCount();
+			if(espacioParaColumna*tabla.getColumnCount()<711) {
+				espacioParaColumna+=(711-espacioParaColumna*tabla.getColumnCount());
+			}
+		}else {
+			espacioParaColumna = 150;
+		}
+		
 		for(int i = 0; i<tabla.getColumnCount(); i++) {
-			tabla.getColumnModel().getColumn(i).setPreferredWidth(150);
+			tabla.getColumnModel().getColumn(i).setPreferredWidth(espacioParaColumna);
 			System.out.println("Va en la columna numero: "+i+" "+tabla.getColumnModel().getColumn(i));
 			tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla.getModel());
@@ -485,6 +502,9 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnDireccion);
 		
 		JButton btnMedidaGeneral = new JButton("MEDIDA GENERAL");
+		btnMedidaGeneral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnMedidaGeneral.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/ruler-white.png")));
+		addEventoBotonEnteredAndExitedMenu(btnMedidaGeneral);
 		btnMedidaGeneral.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(modo != 4) {
@@ -518,6 +538,44 @@ public class Administracion extends JFrame {
 		btnMedidaGeneral.setBackground(new Color(34, 34, 34));
 		btnMedidaGeneral.setBounds(0, 162, 197, 43);
 		MenuConBotonesPanel.add(btnMedidaGeneral);
+		
+		JButton btnMedidaEspecifica = new JButton("MEDIDA ESPECIFICA");
+		btnMedidaEspecifica.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnMedidaEspecifica.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 5) {
+					modo = 5;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Medida Especifica");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Medida Especifica"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+								"ID Articulo", "Medida Especifica"
+							}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}
+		});
+		addEventoBotonEnteredAndExitedMenu(btnMedidaEspecifica);
+		btnMedidaEspecifica.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Measure-tape-white.png")));
+		btnMedidaEspecifica.setForeground(Color.WHITE);
+		btnMedidaEspecifica.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnMedidaEspecifica.setFocusPainted(false);
+		btnMedidaEspecifica.setBorder(null);
+		btnMedidaEspecifica.setBackground(new Color(34, 34, 34));
+		btnMedidaEspecifica.setBounds(0, 216, 197, 43);
+		MenuConBotonesPanel.add(btnMedidaEspecifica);
 	}
 	
 	private void reacomodarPaneles() {
@@ -548,7 +606,9 @@ public class Administracion extends JFrame {
 		case 4:
 			elementosTabla = consulta.getListaMedidaG("idarticulo");
 			break;
-			
+		case 5:
+			elementosTabla = consulta.getListaMedidaE("idarticulo");
+			break;
 		default:
 			
 		}
