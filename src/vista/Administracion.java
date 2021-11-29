@@ -513,13 +513,13 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Medida General");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Alto", "Ancho", "Largo"});
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Tipo de articulo","Alto", "Ancho", "Largo"});
 					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
 							new String[] {
-								"ID Articulo", "Alto", "Ancho", "Largo"
+								"ID Articulo","Tipo de articulo", "Alto", "Ancho", "Largo"
 							}
 					));
 					repintarTabla();
@@ -549,13 +549,13 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Medida Especifica");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Medida Especifica"});
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo","Tipo de articulo","Medida Especifica"});
 					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
 							new String[] {
-								"ID Articulo", "Medida Especifica"
+								"ID Articulo","Tipo de articulo", "Medida Especifica"
 							}
 					));
 					repintarTabla();

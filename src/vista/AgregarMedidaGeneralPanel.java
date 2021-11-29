@@ -34,7 +34,7 @@ import java.awt.event.KeyEvent;
 public class AgregarMedidaGeneralPanel extends JPanel {
 	private static final Object[] String = null;
 	public int modo;
-	public boolean existenRutsSinDireccion;
+	public boolean existenArticulosConMedida;
 	public Consulta consulta = new Consulta();
 	
 	private JLabel lblAlertaArticulo;
@@ -99,7 +99,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		largoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarLargo();
+				verificarTextFieldSoloNumeros(largoTextField,lblAlertaLargo,lineaLargo);
 			}
 		});
 		largoTextField.setText("EJ: 15");
@@ -113,7 +113,8 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		eventoCambiarJTextField(largoTextField, largoTextField.getText(), 50);
 		add(largoTextField);
 		
-		ArticuloCB = new JComboBox(new String[] {"Seleccione...", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16"});
+		ArticuloCB = new JComboBox();
+		ArticuloCB.setModel(crearModeloComboBoxId());
 		ArticuloCB.setBounds(240, 180, 214, 21);
 		add(ArticuloCB);
 		
@@ -127,7 +128,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		altoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarAlto();
+				verificarTextFieldSoloNumeros(altoTextField,lblAlertaAlto,lineaAlto);
 			}
 		});
 		altoTextField.setToolTipText("a");
@@ -170,7 +171,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		anchoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarAncho();
+				verificarTextFieldSoloNumeros(anchoTextField,lblAlertaAncho,lineaAncho);
 			}
 		});
 		anchoTextField.setText("EJ: 10");
@@ -270,23 +271,23 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		add(btnVolver);
 	}
 	
-	/*private DefaultComboBoxModel crearModeloComboBox() {
-		ArrayList ruts = consulta.getRutsSinDireccion();
-		if(ruts.size()>0) {
-			existenRutsSinDireccion = true;
-			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
-			listaRuts[0] = "Seleccione...";
-			for(int i=1; i<=ruts.size();i++) {
-				listaRuts[i] = ruts.get(i-1).toString();
+	private DefaultComboBoxModel crearModeloComboBoxId() {
+		ArrayList elementosObetenidos = consulta.getIdArticuloSinMedidaGeneral();
+		if(elementosObetenidos.size()>0) {
+			existenArticulosConMedida = true;
+			String[] listasMedidas = new String[elementosObetenidos.size()+1];
+			System.out.println(elementosObetenidos.size());
+			listasMedidas[0] = "Seleccione...";
+			for(int i=1; i<=elementosObetenidos.size();i++) {
+				listasMedidas[i] = elementosObetenidos.get(i-1).toString();
 			}
-			return new DefaultComboBoxModel(listaRuts);
+			return new DefaultComboBoxModel(listasMedidas);
 		}else {
-			lblAlertaRut.setVisible(true);
-			existenRutsSinDireccion = false;
-			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
+			lblAlertaArticulo.setVisible(true);
+			existenArticulosConMedida = false;
+			return new DefaultComboBoxModel(new String[] {"No existen articulos sin medida especifica"});
 		}
-	}*/
+	}
 
 	private void agregarDatos() {
 		agregarDatosTablaMedidaGeneral();
@@ -296,14 +297,34 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		if (modo == 1) {
 			System.out.println("ALLALALAALALLA");
 			consulta.addMedidaG(Integer.parseInt(largoTextField.getText()), Integer.parseInt(altoTextField.getText()), 
-					Integer.parseInt(anchoTextField.getText()), ArticuloCB.getSelectedIndex());
+					Integer.parseInt(anchoTextField.getText()), obtenerIdSeleccionado());
 		} else if(modo == 2) {
 			
 		}
 	}
 
+	private int obtenerIdSeleccionado() {
+		String opcionSeleccionada = (String)ArticuloCB.getSelectedItem();
+		String idString = obtenerIdEnString(opcionSeleccionada);
+		int id = Integer.parseInt(idString);
+		System.out.println(id);
+		return id;
+	}
+
+	private String obtenerIdEnString(String opcionSeleccionada) {
+		char[] caracteres = opcionSeleccionada.toCharArray();
+		String id = "";
+		for(char c : caracteres) {
+			if(c == ' ') {
+				break;
+			}
+			id+= c;
+		}
+		return id;
+	}
+
 	private boolean isTodoCorrecto() {
-		if(verificarLargo() && verificarArticulo() && verificarAlto() && verificarAncho() && ArticuloCB.getSelectedIndex()!=0) {
+		if(verificarTextFieldSoloNumeros(altoTextField,lblAlertaAlto,lineaAlto) && verificarCB(ArticuloCB, lblAlertaArticulo) && verificarTextFieldSoloNumeros(anchoTextField,lblAlertaAncho,lineaAncho) && verificarTextFieldSoloNumeros(largoTextField,lblAlertaLargo,lineaLargo)) {
 			return true;
 		}
 		return false;
@@ -328,68 +349,25 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		}
 		return true;
 	}
-	
-	private boolean verificarAlto() {
-		if(altoTextField.getText().equals("") || !isNumber(altoTextField.getText())) {
-			lblAlertaAlto.setVisible(true);
-			setErroneo(lineaAlto, lblAlertaAlto);
+
+	private boolean verificarCB(JComboBox comboBox, JLabel alerta) {
+		if(comboBox.getSelectedIndex() == 0) {
+			alerta.setVisible(true);
 			return false;
 		}
-		setAcertado(lineaAlto, lblAlertaAlto);
-		lblAlertaAlto.setVisible(false);
+		alerta.setVisible(false);
 		return true;
 	}
 
-	private boolean verificarArticulo() {
-		if(ArticuloCB.getSelectedIndex() == 0) {
-			lblAlertaArticulo.setVisible(true);
+	private boolean verificarTextFieldSoloNumeros(JTextField textfield,JLabel alerta, JPanel linea) {
+		if(textfield.getText().equals("") || !isNumber(textfield.getText())) {
+			setErroneo(linea, alerta);
 			return false;
 		}
-		lblAlertaArticulo.setVisible(false);
-		return true;
-	}
-
-	/*private boolean verificarNumCalle() {
-		if(numCalleTextField.getText().equals("") || numCalleTextField.getText().contains(" ") || numCalleTextField.getText().length()>10 || !numCalleTextField.getText().matches("[0-9]+") ) {
-			setErroneo(lineaNumeroCalle, lblAlertaNumCalle);
-			return false;
-		}
-		setAcertado(lineaNumeroCalle, lblAlertaNumCalle);
-		return true;
-	}*/
-
-	private boolean verificarLargo() {
-		if(largoTextField.getText().equals("") || !isNumber(largoTextField.getText())) {
-			lblAlertaLargo.setVisible(true);
-			setErroneo(lineaAncho, lblAlertaLargo);
-			return false;
-		}
-		setAcertado(lineaLargo, lblAlertaLargo);
+		setAcertado(linea, alerta);
 		lblAlertaLargo.setVisible(false);
 		return true;
 	}
-	
-	/*public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}*/
-	
-	/*public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}*/
 	
 	public void setAcertado(JPanel panel, JLabel label){
 		label.setVisible(false);

@@ -324,7 +324,11 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT * FROM MedidaGeneral ORDER BY ? ;";
+        String sql = "SELECT medidageneral.idarticulo, tipoobj.nombretipo, medidageneral.alto, medidageneral.ancho, medidageneral.largo "
+        		+ "FROM Medidageneral, articulo, tipoobj "
+        		+ "WHERE articulo.idarticulo = medidageneral.idarticulo "
+        		+ "AND tipoobj.idtipoobj = articulo.idtipoobj "
+        		+ "ORDER BY ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, orden);
@@ -333,6 +337,7 @@ public class Consulta extends Conexion{
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
                 columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("nombretipo"));
                 columna.add(rs.getString("Largo"));
                 columna.add(rs.getString("Alto"));
                 columna.add(rs.getString("Ancho"));
@@ -355,7 +360,11 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT * FROM MedidaEspecifica ORDER BY ?;";
+        String sql = "SELECT medidaespecifica.idarticulo, tipoobj.nombretipo, medidaespecifica.medida "
+        		+ "FROM MedidaEspecifica, articulo, tipoobj "
+        		+ "WHERE articulo.idarticulo = medidaespecifica.idarticulo "
+        		+ "AND tipoobj.idtipoobj = articulo.idtipoobj "
+        		+ "ORDER BY ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, orden);
@@ -364,6 +373,7 @@ public class Consulta extends Conexion{
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
                 columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("nombretipo"));
                 columna.add(rs.getString("Medida"));
                 fila.add(columna);
             }
@@ -434,17 +444,23 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT articulo.idarticulo "
-        		+ "FROM articulo "
-        		+ "LEFT JOIN medidaespecifica ON medidaespecifica.idarticulo = articulo.idarticulo "
-        		+ "WHERE medidaespecifica.idarticulo IS NULL "
-        		+ "ORDER BY idarticulo";
+        String sql = "SELECT articulo.idarticulo, tipoobj.nombretipo "
+        		+ "FROM (SELECT articulo.idarticulo as idart "
+        				+ "FROM articulo "
+        				+ "LEFT JOIN medidaespecifica "
+        				+ "ON medidaespecifica.idarticulo = articulo.idarticulo "
+        				+ "WHERE medidaespecifica.idarticulo IS NULL) as idSinMedida, "
+				+ "articulo, tipoobj "
+				+ "WHERE idSinMedida.idart = articulo.idarticulo "
+				+ "AND articulo.idtipoobj = tipoobj.idtipoobj "
+				+ "ORDER BY idarticulo";
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
+            
             ArrayList<String> fila = new ArrayList<>();
             while(rs.next()){
-                fila.add(rs.getString("idArticulo"));
+                fila.add(rs.getString("idarticulo") + " ("+rs.getString("nombretipo")+")");
             }
             return fila;
         } catch (SQLException ex) {
@@ -463,17 +479,22 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "FROM articulo "
-        		+ "LEFT JOIN medidageneral "
-        		+ "ON medidageneral.idarticulo = articulo.idarticulo "
-        		+ "WHERE medidageneral.idarticulo IS NULL ORDER "
-        		+ "BY idarticulo";
+        String sql = "SELECT articulo.idarticulo, tipoobj.nombretipo "
+        		+ "FROM (SELECT articulo.idarticulo as idart "
+				+ "FROM articulo "
+				+ "LEFT JOIN medidageneral "
+				+ "ON medidageneral.idarticulo = articulo.idarticulo "
+				+ "WHERE medidageneral.idarticulo IS NULL) as idSinMedida, "
+		+ "articulo, tipoobj "
+		+ "WHERE idSinMedida.idart = articulo.idarticulo "
+		+ "AND articulo.idtipoobj = tipoobj.idtipoobj "
+		+ "ORDER BY idarticulo";
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             ArrayList<String> fila = new ArrayList<>();
             while(rs.next()){
-                fila.add(rs.getString("idArticulo"));
+            	fila.add(rs.getString("idarticulo") + " ("+rs.getString("nombretipo")+")");
             }
             return fila;
         } catch (SQLException ex) {
