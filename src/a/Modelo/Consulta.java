@@ -125,8 +125,8 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                rs.getString("idMarca");
-                rs.getString("NombreMarca");
+                columna.add(rs.getString("idMarca"));
+                columna.add(rs.getString("NombreMarca"));
                 fila.add(columna);
             }
             return fila;
@@ -153,8 +153,8 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                rs.getString("idProv");
-                rs.getString("NombreProv");
+                columna.add(rs.getString("idProv"));
+                columna.add(rs.getString("NombreProv"));
                 fila.add(columna);
             }
             return fila;
@@ -181,8 +181,8 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                rs.getString("idRegion");
-                rs.getString("NombreRegion");
+                columna.add(rs.getString("idRegion"));
+                columna.add(rs.getString("NombreRegion"));
                 fila.add(columna);
             }
             return fila;
@@ -209,7 +209,7 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                rs.getString("Usuario");
+                columna.add(rs.getString("Usuario"));
                 fila.add(columna);
             }
             return fila;

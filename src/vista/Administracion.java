@@ -238,6 +238,14 @@ public class Administracion extends JFrame {
 							consulta.delRegistroVenta(Integer.parseInt(value));
 							break;
 						case 8:
+							ArrayList idsArticulos = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
+							for (int i = 0; i < idsArticulos.size(); i++) {
+								// TODO
+								consulta.delRegistroCompraIdArticulo((int) idsArticulos.get(i));
+								consulta.delRegistroVentaIdArticulo((int) idsArticulos.get(i));
+							}
+							consulta.delArticuloSegunMarca(Integer.parseInt(value));
+							consulta.delMarca(Integer.parseInt(value));
 							break;
 							
 						default:
@@ -646,7 +654,6 @@ public class Administracion extends JFrame {
 		btnMarcas = new JButton("MARCAS");
 		btnMarcas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
 				if(modo != 8) {
 					modo = 8;
 					columnaPK = 0;
@@ -725,7 +732,9 @@ public class Administracion extends JFrame {
 			elementosTabla = consulta.getRegistrosVenta("idventa");
 			break;
 		case 8:
+			System.out.println("ESTAMOS AQUI EN CASE 8 XD");
 			elementosTabla = consulta.getMarca();
+			System.out.println("SALIENDO DE CASE 8 DX - " + elementosTabla.get(1).get(1));
 			break;
 		default:
 			
