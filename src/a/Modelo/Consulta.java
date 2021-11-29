@@ -1387,6 +1387,76 @@ public class Consulta extends Conexion{
         }
     }
     
+    public void delMarca(int idMarca) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM marca WHERE idMarca = ?";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, idMarca);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public ArrayList getidArticulosSegunMarca(int idMarca){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT idarticulo " +
+        		"FROM articulo " + 
+        		"WHERE idMarca = ? ";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idMarca);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("idarticulo"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public boolean delArticuloSegunMarca(int idMarca){
+        PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM Articulo WHERE idMarca = ?";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idMarca);
+            ps.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public void delDireccion(String Rut) {
     	PreparedStatement ps;
         Connection con = conectar();
