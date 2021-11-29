@@ -108,7 +108,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		);
 		lineaMedida.setLayout(gl_lineaMedida);
 		
-		JButton btnAgregarDireccion = new JButton("AGREGAR MEDIDA");
+		JButton btnAgregarDireccion = new JButton("AGREGAR MEDIDA ESPECIFICA");
 		btnAgregarDireccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(isTodoCorrecto()) {
@@ -123,7 +123,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		btnAgregarDireccion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAgregarDireccion.setBackground(Color.WHITE);
 		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
-		btnAgregarDireccion.setBounds(215, 458, 302, 64);
+		btnAgregarDireccion.setBounds(154, 458, 424, 64);
 		add(btnAgregarDireccion);
 		
 		lblAlertaMedida = new JLabel("");
@@ -186,7 +186,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 	
 	private void agregarDatosTablaMedidaE() {
 		if (modo == 1) {
-			consulta.addMedidaE(medidaTextField.getText(), obtenerIdSeleccionado()); 
+			consulta.addMedidaE(medidaTextField.getText(), Integer.parseInt((String)ArticuloSinMedidaEspCB.getSelectedItem())); 
 		} else if(modo == 2) {
 			
 		}
@@ -262,50 +262,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		});
 	}
 	
-	private int obtenerIdSeleccionado() {
-		String opcionSeleccionada = (String)ArticuloSinMedidaEspCB.getSelectedItem();
-		String idString = obtenerIdEnString(opcionSeleccionada);
-		int id = Integer.parseInt(idString);
-		System.out.println(id);
-		return id;
-	}
-
-	private String obtenerIdEnString(String opcionSeleccionada) {
-		char[] caracteres = opcionSeleccionada.toCharArray();
-		String id = "";
-		for(char c : caracteres) {
-			if(c == ' ') {
-				break;
-			}
-			id+= c;
-		}
-		return id;
-	}
-	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
-		txtUser.addFocusListener(new FocusAdapter() {
-        	@Override
-        	public void focusLost(FocusEvent e) {
-        		String text = txtUser.getText();
-        		if (text.length() == 0 || text.length() >maxCaracteres) {
-        			if(text.length() == 0) {
-        				txtUser.setText(relleno);
-        				txtUser.setForeground(new Color(170, 170, 170));
-        			}
-        		} else {
-        			txtUser.setForeground(new Color(255, 255, 255));
-        		}
-        	}
-        	@Override
-        	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
-        		Color color = new Color(170, 170, 170);
-        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
-        			txtUser.setText("");
-        			txtUser.setForeground(new Color(255, 255, 255));
-        		}
-        	}
-        });
 	}
 
 }
