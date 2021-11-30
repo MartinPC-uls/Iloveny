@@ -89,6 +89,7 @@ public class Administracion extends JFrame {
 	public AgregarMedidaEspecificaPanel agregarMedidaEspecificaPanel;
 	public AgregarRegistroVentaPanel agregarRegistroVentaPanel;
 	public AgregarMarcaPanel agregarMarcaPanel;
+	public AgregarRegistroCompraPanel agregarRegistroCompraPanel;
 	private JPanel panelPrincipal;
 	private JButton btnRegistroCompra;
 	private JButton btnMarcas;
@@ -177,6 +178,10 @@ public class Administracion extends JFrame {
 				case 6:
 					agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarRegistroVentaPanel);
+					break;
+				case 7:
+					agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarRegistroCompraPanel);
 					break;
 				case 8:
 					agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
@@ -322,6 +327,9 @@ public class Administracion extends JFrame {
 				case 6:
 					consulta.delRegistroVenta(Integer.parseInt(value));
 					break;
+				case 7:
+					// delProveedor (soon...)
+					break;
 				case 8:
 					ArrayList idsArticulos = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
 					for (int i = 0; i < idsArticulos.size(); i++) {
@@ -361,14 +369,14 @@ public class Administracion extends JFrame {
 		case 5:
 			elementosTabla = consulta.getListaMedidaE("idarticulo");
 			break;
-			
 		case 6:
 			elementosTabla = consulta.getRegistrosVenta("idventa");
 			break;
+		case 7:
+			elementosTabla = consulta.getProveedor();
+			break;
 		case 8:
-			System.out.println("ESTAMOS AQUI EN CASE 8 XD");
 			elementosTabla = consulta.getMarca();
-			System.out.println("SALIENDO DE CASE 8 DX - " + elementosTabla.get(1).get(1));
 			break;
 		default:
 			
@@ -700,6 +708,30 @@ public class Administracion extends JFrame {
 		btnRegistroCompra = new JButton("REGISTRO COMPRA");
 		btnRegistroCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 7) {
+					modo = 7;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Registro compra");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo","Usuario","Nombre Proveedor",
+																		"Unidades Adquiridas", "Costo Unitario", "Fecha Pedida", "Fecha Recibo", "ID Compra"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {"ID Articulo","Usuario","Nombre Proveedor",
+									"Unidades Adquiridas", "Costo Unitario", "Fecha Pedida", "Fecha Recibo", "ID Compra"}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			
+			
 			}
 		});
 		btnRegistroCompra.setForeground(Color.WHITE);
@@ -786,14 +818,14 @@ public class Administracion extends JFrame {
 		case 5:
 			elementosTabla = consulta.getListaMedidaE("idarticulo");
 			break;
-			
 		case 6:
 			elementosTabla = consulta.getRegistrosVenta("idventa");
 			break;
+		case 7:
+			elementosTabla = consulta.getRegistrosCompra("idcompra");
+			break;
 		case 8:
-			System.out.println("ESTAMOS AQUI EN CASE 8 XD");
 			elementosTabla = consulta.getMarca();
-			System.out.println("SALIENDO DE CASE 8 DX - " + elementosTabla.get(1).get(1));
 			break;
 		default:
 			

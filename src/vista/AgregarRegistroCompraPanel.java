@@ -37,22 +37,22 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
 	
-	private JLabel lblAlertaRegion;
-	private JComboBox RegionCB;
-	private JTextField comunaTextField;
-	private JLabel lblAlertaComuna;
-	private JLabel lblAlertaNombreCalle;
-	private JTextField calleTextField;
-	private JTextField numCalleTextField;
-	private JTextField ciudadTextField;
-	private JLabel lblAlertaCiudad;
-	private JLabel lblAlertaNumCalle;
-	private JComboBox rutCB;
-	private JLabel lblAlertaRut;
-	private JPanel lineaComuna;
-	private JPanel lineaNombreCalle;
-	private JPanel lineaNumeroCalle;
-	private JPanel lineaCiudad;
+	private JLabel lblAlertaArticulo;
+	private JComboBox articuloCB;
+	private JTextField fechaPedidaTextField;
+	private JLabel lblAlertaFechaPedida;
+	private JLabel lblAlertaUnidadesAdquiridas;
+	private JTextField unidadesAdquiridasTextField;
+	private JTextField costoUnitarioTextField;
+	private JTextField fechaReciboTextField;
+	private JLabel lblAlertaFechaRecibo;
+	private JLabel lblAlertaCostoUnitario;
+	private JComboBox proveedorCB;
+	private JLabel lblAlertaProveedor;
+	private JPanel lineaFechaPedida;
+	private JPanel lineaUnidadesAdquiridas;
+	private JPanel lineaCostoUnitario;
+	private JPanel lineaFechaRecibo;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	
@@ -63,12 +63,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		setBackground(new Color(51,51,51));
 		setLayout(null);
 		
-		lblAlertaRut = new JLabel("");
-		lblAlertaRut.setVisible(false);
-		lblAlertaRut.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaRut.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaRut.setBounds(604, 177, 30, 27);
-		add(lblAlertaRut);
+		lblAlertaProveedor = new JLabel("");
+		lblAlertaProveedor.setVisible(false);
+		lblAlertaProveedor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaProveedor.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaProveedor.setBounds(604, 177, 30, 27);
+		add(lblAlertaProveedor);
 		
 		JLabel lblAgregarUsuario = new JLabel("Registro Compra");
 		lblAgregarUsuario.setHorizontalAlignment(SwingConstants.CENTER);
@@ -77,189 +77,189 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lblAgregarUsuario.setBounds(155, 11, 441, 55);
 		add(lblAgregarUsuario);
 		
-		JLabel lblRegion = new JLabel("Usuario");
-		lblRegion.setForeground(Color.WHITE);
-		lblRegion.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRegion.setBounds(138, 155, 62, 14);
-		add(lblRegion);
+		JLabel lblArticulo = new JLabel("Articulo");
+		lblArticulo.setForeground(Color.WHITE);
+		lblArticulo.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblArticulo.setBounds(138, 155, 62, 14);
+		add(lblArticulo);
 		
-		JLabel lblCalle = new JLabel("Nombre calle");
-		lblCalle.setForeground(Color.WHITE);
-		lblCalle.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblCalle.setBounds(138, 267, 106, 14);
-		add(lblCalle);
+		JLabel lblUnidadesAdquiridas = new JLabel("Unidades adquiridas");
+		lblUnidadesAdquiridas.setForeground(Color.WHITE);
+		lblUnidadesAdquiridas.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblUnidadesAdquiridas.setBounds(138, 267, 132, 14);
+		add(lblUnidadesAdquiridas);
 		
-		lineaNombreCalle = new JPanel();
-		lineaNombreCalle.setPreferredSize(new Dimension(0, 3));
-		lineaNombreCalle.setBackground(Color.WHITE);
-		lineaNombreCalle.setBounds(138, 304, 214, 3);
-		add(lineaNombreCalle);
-		GroupLayout gl_lineaNombreCalle = new GroupLayout(lineaNombreCalle);
-		gl_lineaNombreCalle.setHorizontalGroup(
-			gl_lineaNombreCalle.createParallelGroup(Alignment.LEADING)
+		lineaUnidadesAdquiridas = new JPanel();
+		lineaUnidadesAdquiridas.setPreferredSize(new Dimension(0, 3));
+		lineaUnidadesAdquiridas.setBackground(Color.WHITE);
+		lineaUnidadesAdquiridas.setBounds(138, 304, 49, 3);
+		add(lineaUnidadesAdquiridas);
+		GroupLayout gl_lineaUnidadesAdquiridas = new GroupLayout(lineaUnidadesAdquiridas);
+		gl_lineaUnidadesAdquiridas.setHorizontalGroup(
+			gl_lineaUnidadesAdquiridas.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaNombreCalle.setVerticalGroup(
-			gl_lineaNombreCalle.createParallelGroup(Alignment.LEADING)
+		gl_lineaUnidadesAdquiridas.setVerticalGroup(
+			gl_lineaUnidadesAdquiridas.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaNombreCalle.setLayout(gl_lineaNombreCalle);
+		lineaUnidadesAdquiridas.setLayout(gl_lineaUnidadesAdquiridas);
 		
-		calleTextField = new JTextField();
-		calleTextField.addKeyListener(new KeyAdapter() {
+		unidadesAdquiridasTextField = new JTextField();
+		unidadesAdquiridasTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarCalle();
 			}
 		});
-		calleTextField.setText("EJ: Los Arrayanes ");
-		calleTextField.setOpaque(false);
-		calleTextField.setForeground(new Color(170, 170, 170));
-		calleTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		calleTextField.setCaretColor(Color.WHITE);
-		calleTextField.setBorder(null);
-		calleTextField.setBackground(new Color(51, 51, 51));
-		calleTextField.setBounds(138, 280, 214, 21);
-		eventoCambiarJTextField(calleTextField, calleTextField.getText(), 50);
-		add(calleTextField);
+		unidadesAdquiridasTextField.setText("1");
+		unidadesAdquiridasTextField.setOpaque(false);
+		unidadesAdquiridasTextField.setForeground(new Color(170, 170, 170));
+		unidadesAdquiridasTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		unidadesAdquiridasTextField.setCaretColor(Color.WHITE);
+		unidadesAdquiridasTextField.setBorder(null);
+		unidadesAdquiridasTextField.setBackground(new Color(51, 51, 51));
+		unidadesAdquiridasTextField.setBounds(138, 280, 49, 21);
+		eventoCambiarJTextField(unidadesAdquiridasTextField, unidadesAdquiridasTextField.getText(), 50);
+		add(unidadesAdquiridasTextField);
 		
-		RegionCB = new JComboBox(new String[] {"Seleccione...","Tarapaca", "Antofagasta", "Atacama", "Coquimbo", "Valparaiso",
-														"Ohiggins","Maule","Biobio","La Araucania","Los Lagos","Aysen","Magallanes",
-														"Metropolitana","Los Rios","Arica y P.","Ñuble"});
-		RegionCB.setBounds(138, 180, 214, 21);
-		add(RegionCB);
+		DefaultComboBoxModel modelo = crearModeloComboBoxArticulo();
+		articuloCB = new JComboBox(new String[] {});
+		articuloCB.setModel(modelo);
+		articuloCB.setBounds(138, 180, 214, 21);
+		add(articuloCB);
 		
-		JLabel lblNumeroCalle = new JLabel("Numero calle");
-		lblNumeroCalle.setForeground(Color.WHITE);
-		lblNumeroCalle.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblNumeroCalle.setBounds(383, 267, 106, 14);
-		add(lblNumeroCalle);
+		JLabel lblCostoUnitario = new JLabel("Costo unitario (CLP)");
+		lblCostoUnitario.setForeground(Color.WHITE);
+		lblCostoUnitario.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblCostoUnitario.setBounds(383, 267, 106, 14);
+		add(lblCostoUnitario);
 		
-		numCalleTextField = new JTextField();
-		numCalleTextField.addKeyListener(new KeyAdapter() {
+		costoUnitarioTextField = new JTextField();
+		costoUnitarioTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarNumCalle();
 			}
 		});
-		numCalleTextField.setText("EJ: 1234 ");
-		numCalleTextField.setOpaque(false);
-		numCalleTextField.setForeground(new Color(170, 170, 170));
-		numCalleTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		numCalleTextField.setCaretColor(Color.WHITE);
-		numCalleTextField.setBorder(null);
-		numCalleTextField.setBackground(new Color(51, 51, 51));
-		numCalleTextField.setBounds(383, 280, 214, 21);
-		eventoCambiarJTextField(numCalleTextField, numCalleTextField.getText(), 50);
-		add(numCalleTextField);
+		costoUnitarioTextField.setText("1000");
+		costoUnitarioTextField.setOpaque(false);
+		costoUnitarioTextField.setForeground(new Color(170, 170, 170));
+		costoUnitarioTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		costoUnitarioTextField.setCaretColor(Color.WHITE);
+		costoUnitarioTextField.setBorder(null);
+		costoUnitarioTextField.setBackground(new Color(51, 51, 51));
+		costoUnitarioTextField.setBounds(383, 280, 96, 21);
+		eventoCambiarJTextField(costoUnitarioTextField, costoUnitarioTextField.getText(), 50);
+		add(costoUnitarioTextField);
 		
-		lineaNumeroCalle = new JPanel();
-		lineaNumeroCalle.setPreferredSize(new Dimension(0, 3));
-		lineaNumeroCalle.setBackground(Color.WHITE);
-		lineaNumeroCalle.setBounds(383, 304, 214, 3);
-		add(lineaNumeroCalle);
-		GroupLayout gl_lineaNumeroCalle = new GroupLayout(lineaNumeroCalle);
-		gl_lineaNumeroCalle.setHorizontalGroup(
-			gl_lineaNumeroCalle.createParallelGroup(Alignment.LEADING)
+		lineaCostoUnitario = new JPanel();
+		lineaCostoUnitario.setPreferredSize(new Dimension(0, 3));
+		lineaCostoUnitario.setBackground(Color.WHITE);
+		lineaCostoUnitario.setBounds(383, 304, 96, 3);
+		add(lineaCostoUnitario);
+		GroupLayout gl_lineaCostoUnitario = new GroupLayout(lineaCostoUnitario);
+		gl_lineaCostoUnitario.setHorizontalGroup(
+			gl_lineaCostoUnitario.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaNumeroCalle.setVerticalGroup(
-			gl_lineaNumeroCalle.createParallelGroup(Alignment.LEADING)
+		gl_lineaCostoUnitario.setVerticalGroup(
+			gl_lineaCostoUnitario.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaNumeroCalle.setLayout(gl_lineaNumeroCalle);
+		lineaCostoUnitario.setLayout(gl_lineaCostoUnitario);
 		
-		JLabel lblComuna = new JLabel("Comuna");
-		lblComuna.setForeground(Color.WHITE);
-		lblComuna.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblComuna.setBounds(138, 212, 106, 14);
-		add(lblComuna);
+		JLabel lblFechaPedida = new JLabel("Fecha pedida");
+		lblFechaPedida.setForeground(Color.WHITE);
+		lblFechaPedida.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblFechaPedida.setBounds(138, 212, 106, 14);
+		add(lblFechaPedida);
 		
-		comunaTextField = new JTextField();
-		comunaTextField.addKeyListener(new KeyAdapter() {
+		fechaPedidaTextField = new JTextField();
+		fechaPedidaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarComuna();
 			}
 		});
-		comunaTextField.setToolTipText("a");
-		comunaTextField.setText("EJ: Coquimbo ");
-		comunaTextField.setOpaque(false);
-		comunaTextField.setForeground(new Color(170, 170, 170));
-		comunaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		comunaTextField.setCaretColor(Color.WHITE);
-		comunaTextField.setBorder(null);
-		comunaTextField.setBackground(new Color(51, 51, 51));
-		comunaTextField.setBounds(138, 225, 214, 21);
-		eventoCambiarJTextField(comunaTextField, comunaTextField.getText(), 20);
-		add(comunaTextField);
+		fechaPedidaTextField.setToolTipText("a");
+		fechaPedidaTextField.setText("yyyy-mm-dd");
+		fechaPedidaTextField.setOpaque(false);
+		fechaPedidaTextField.setForeground(new Color(170, 170, 170));
+		fechaPedidaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		fechaPedidaTextField.setCaretColor(Color.WHITE);
+		fechaPedidaTextField.setBorder(null);
+		fechaPedidaTextField.setBackground(new Color(51, 51, 51));
+		fechaPedidaTextField.setBounds(138, 225, 214, 21);
+		eventoCambiarJTextField(fechaPedidaTextField, fechaPedidaTextField.getText(), 20);
+		add(fechaPedidaTextField);
 		
-		lineaComuna = new JPanel();
-		lineaComuna.setPreferredSize(new Dimension(0, 3));
-		lineaComuna.setBackground(Color.WHITE);
-		lineaComuna.setBounds(138, 249, 214, 3);
-		add(lineaComuna);
-		GroupLayout gl_lineaComuna = new GroupLayout(lineaComuna);
-		gl_lineaComuna.setHorizontalGroup(
-			gl_lineaComuna.createParallelGroup(Alignment.LEADING)
+		lineaFechaPedida = new JPanel();
+		lineaFechaPedida.setPreferredSize(new Dimension(0, 3));
+		lineaFechaPedida.setBackground(Color.WHITE);
+		lineaFechaPedida.setBounds(138, 249, 214, 3);
+		add(lineaFechaPedida);
+		GroupLayout gl_lineaFechaPedida = new GroupLayout(lineaFechaPedida);
+		gl_lineaFechaPedida.setHorizontalGroup(
+			gl_lineaFechaPedida.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaComuna.setVerticalGroup(
-			gl_lineaComuna.createParallelGroup(Alignment.LEADING)
+		gl_lineaFechaPedida.setVerticalGroup(
+			gl_lineaFechaPedida.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaComuna.setLayout(gl_lineaComuna);
+		lineaFechaPedida.setLayout(gl_lineaFechaPedida);
 		
-		JLabel lblCiudad = new JLabel("Ciudad");
-		lblCiudad.setForeground(Color.WHITE);
-		lblCiudad.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblCiudad.setBounds(383, 212, 106, 14);
-		add(lblCiudad);
+		JLabel lblFechaRecibo = new JLabel("Fecha recibo");
+		lblFechaRecibo.setForeground(Color.WHITE);
+		lblFechaRecibo.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblFechaRecibo.setBounds(383, 212, 106, 14);
+		add(lblFechaRecibo);
 		
-		ciudadTextField = new JTextField();
-		ciudadTextField.addKeyListener(new KeyAdapter() {
+		fechaReciboTextField = new JTextField();
+		fechaReciboTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarCiudad();
 			}
 		});
-		ciudadTextField.setText("EJ: Ovalle ");
-		ciudadTextField.setOpaque(false);
-		ciudadTextField.setForeground(new Color(170, 170, 170));
-		ciudadTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		ciudadTextField.setCaretColor(Color.WHITE);
-		ciudadTextField.setBorder(null);
-		ciudadTextField.setBackground(new Color(51, 51, 51));
-		ciudadTextField.setBounds(383, 225, 214, 21);
-		eventoCambiarJTextField(ciudadTextField, ciudadTextField.getText(), 20);
-		add(ciudadTextField);
+		fechaReciboTextField.setText("yyyy-mm-dd");
+		fechaReciboTextField.setOpaque(false);
+		fechaReciboTextField.setForeground(new Color(170, 170, 170));
+		fechaReciboTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		fechaReciboTextField.setCaretColor(Color.WHITE);
+		fechaReciboTextField.setBorder(null);
+		fechaReciboTextField.setBackground(new Color(51, 51, 51));
+		fechaReciboTextField.setBounds(383, 225, 214, 21);
+		eventoCambiarJTextField(fechaReciboTextField, fechaReciboTextField.getText(), 20);
+		add(fechaReciboTextField);
 		
-		lineaCiudad = new JPanel();
-		lineaCiudad.setPreferredSize(new Dimension(0, 3));
-		lineaCiudad.setBackground(Color.WHITE);
-		lineaCiudad.setBounds(383, 249, 214, 3);
-		add(lineaCiudad);
-		GroupLayout gl_lineaCiudad = new GroupLayout(lineaCiudad);
-		gl_lineaCiudad.setHorizontalGroup(
-			gl_lineaCiudad.createParallelGroup(Alignment.LEADING)
+		lineaFechaRecibo = new JPanel();
+		lineaFechaRecibo.setPreferredSize(new Dimension(0, 3));
+		lineaFechaRecibo.setBackground(Color.WHITE);
+		lineaFechaRecibo.setBounds(383, 249, 214, 3);
+		add(lineaFechaRecibo);
+		GroupLayout gl_lineaFechaRecibo = new GroupLayout(lineaFechaRecibo);
+		gl_lineaFechaRecibo.setHorizontalGroup(
+			gl_lineaFechaRecibo.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaCiudad.setVerticalGroup(
-			gl_lineaCiudad.createParallelGroup(Alignment.LEADING)
+		gl_lineaFechaRecibo.setVerticalGroup(
+			gl_lineaFechaRecibo.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaCiudad.setLayout(gl_lineaCiudad);
+		lineaFechaRecibo.setLayout(gl_lineaFechaRecibo);
 		
-		JButton btnAgregarDireccion = new JButton("AGREGAR REGISTRO COMPRA");
-		btnAgregarDireccion.addActionListener(new ActionListener() {
+		JButton btnAgregarRegistroCompra = new JButton("AGREGAR REGISTRO COMPRA");
+		btnAgregarRegistroCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(isTodoCorrecto()) {
 					agregarDatos();
@@ -269,64 +269,64 @@ public class AgregarRegistroCompraPanel extends JPanel {
 				}
 			}
 		});
-		btnAgregarDireccion.setBorder(null);
-		btnAgregarDireccion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAgregarDireccion.setBackground(Color.WHITE);
-		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
-		btnAgregarDireccion.setBounds(138, 458, 458, 64);
-		add(btnAgregarDireccion);
+		btnAgregarRegistroCompra.setBorder(null);
+		btnAgregarRegistroCompra.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAgregarRegistroCompra.setBackground(Color.WHITE);
+		btnAgregarRegistroCompra.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+		btnAgregarRegistroCompra.setBounds(138, 458, 458, 64);
+		add(btnAgregarRegistroCompra);
 		
-		lblAlertaComuna = new JLabel("");
-		lblAlertaComuna.setVisible(false);
-		lblAlertaComuna.setToolTipText("Hay un error de formato");
-		lblAlertaComuna.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaComuna.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaComuna.setBounds(99, 222, 30, 27);
-		add(lblAlertaComuna);
+		lblAlertaFechaPedida = new JLabel("");
+		lblAlertaFechaPedida.setVisible(false);
+		lblAlertaFechaPedida.setToolTipText("Hay un error de formato");
+		lblAlertaFechaPedida.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaFechaPedida.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaFechaPedida.setBounds(99, 222, 30, 27);
+		add(lblAlertaFechaPedida);
 		
-		lblAlertaNombreCalle = new JLabel("");
-		lblAlertaNombreCalle.setVisible(false);
-		lblAlertaNombreCalle.setToolTipText("Hay un error de formato");
-		lblAlertaNombreCalle.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaNombreCalle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaNombreCalle.setBounds(98, 280, 30, 27);
-		add(lblAlertaNombreCalle);
+		lblAlertaUnidadesAdquiridas = new JLabel("");
+		lblAlertaUnidadesAdquiridas.setVisible(false);
+		lblAlertaUnidadesAdquiridas.setToolTipText("Hay un error de formato");
+		lblAlertaUnidadesAdquiridas.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaUnidadesAdquiridas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaUnidadesAdquiridas.setBounds(98, 280, 30, 27);
+		add(lblAlertaUnidadesAdquiridas);
 		
-		lblAlertaNumCalle = new JLabel("");
-		lblAlertaNumCalle.setVisible(false);
-		lblAlertaNumCalle.setToolTipText("Hay un error de formato");
-		lblAlertaNumCalle.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaNumCalle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaNumCalle.setBounds(604, 280, 30, 27);
-		add(lblAlertaNumCalle);
+		lblAlertaCostoUnitario = new JLabel("");
+		lblAlertaCostoUnitario.setVisible(false);
+		lblAlertaCostoUnitario.setToolTipText("Hay un error de formato");
+		lblAlertaCostoUnitario.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaCostoUnitario.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaCostoUnitario.setBounds(489, 280, 30, 27);
+		add(lblAlertaCostoUnitario);
 		
-		lblAlertaCiudad = new JLabel("");
-		lblAlertaCiudad.setVisible(false);
-		lblAlertaCiudad.setToolTipText("Hay un error de formato");
-		lblAlertaCiudad.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaCiudad.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaCiudad.setBounds(604, 225, 30, 27);
-		add(lblAlertaCiudad);
+		lblAlertaFechaRecibo = new JLabel("");
+		lblAlertaFechaRecibo.setVisible(false);
+		lblAlertaFechaRecibo.setToolTipText("Hay un error de formato");
+		lblAlertaFechaRecibo.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaFechaRecibo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaFechaRecibo.setBounds(604, 225, 30, 27);
+		add(lblAlertaFechaRecibo);
 		
-		lblAlertaRegion = new JLabel("");
-		lblAlertaRegion.setVisible(false);
-		lblAlertaRegion.setToolTipText("Hay un error de formato");
-		lblAlertaRegion.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaRegion.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaRegion.setBounds(98, 174, 30, 27);
-		add(lblAlertaRegion);
+		lblAlertaArticulo = new JLabel("");
+		lblAlertaArticulo.setVisible(false);
+		lblAlertaArticulo.setToolTipText("Hay un error de formato");
+		lblAlertaArticulo.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaArticulo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaArticulo.setBounds(98, 174, 30, 27);
+		add(lblAlertaArticulo);
 		
-		JLabel lblRut = new JLabel("Proveedor");
-		lblRut.setForeground(Color.WHITE);
-		lblRut.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRut.setBounds(383, 155, 62, 14);
-		add(lblRut);
+		JLabel lblProveedor = new JLabel("Proveedor");
+		lblProveedor.setForeground(Color.WHITE);
+		lblProveedor.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblProveedor.setBounds(383, 155, 62, 14);
+		add(lblProveedor);
 		
-		DefaultComboBoxModel modelo = crearModeloComboBox();
-		rutCB = new JComboBox(new Object[]{});
-		rutCB.setModel(modelo);
-		rutCB.setBounds(383, 180, 214, 21);
-		add(rutCB);
+		DefaultComboBoxModel modelo2 = crearModeloComboBoxProveedor();
+		proveedorCB = new JComboBox(new Object[]{});
+		proveedorCB.setModel(modelo2);
+		proveedorCB.setBounds(383, 180, 214, 21);
+		add(proveedorCB);
 		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -344,21 +344,36 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		add(btnVolver);
 	}
 	
-	private DefaultComboBoxModel crearModeloComboBox() {
-		ArrayList ruts = consulta.getRutsSinDireccion();
-		if(ruts.size()>0) {
+	private DefaultComboBoxModel crearModeloComboBoxProveedor() {
+		ArrayList proveedores = consulta.getProveedor();
+		if(proveedores.size()>0) {
 			existenRutsSinDireccion = true;
-			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
-			listaRuts[0] = "Seleccione...";
-			for(int i=1; i<=ruts.size();i++) {
-				listaRuts[i] = ruts.get(i-1).toString();
+			String[] listaProveedores = new String[proveedores.size()+1];
+			System.out.println(proveedores.size());
+			listaProveedores[0] = "Seleccione...";
+			for(int i=1; i<=proveedores.size();i++) {
+				listaProveedores[i] = proveedores.get(i-1).toString();
 			}
-			return new DefaultComboBoxModel(listaRuts);
+			return new DefaultComboBoxModel(listaProveedores);
 		}else {
-			lblAlertaRut.setVisible(true);
-			existenRutsSinDireccion = false;
-			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
+			lblAlertaProveedor.setVisible(true);
+			return new DefaultComboBoxModel(new String[] {"No hay proveedores"});
+		}
+	}
+	
+	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
+		ArrayList articulo = consulta.getDescripcionArticulosConStock();
+		if(articulo.size()>0) {
+			String[] listaArticulos = new String[articulo.size()+1];
+			System.out.println(articulo.size());
+			listaArticulos[0] = "Seleccione...";
+			for(int i=1; i<=articulo.size();i++) {
+				listaArticulos[i] = articulo.get(i-1).toString();
+			}
+			return new DefaultComboBoxModel(listaArticulos);
+		}else {
+			lblAlertaArticulo.setVisible(true);
+			return new DefaultComboBoxModel(new String[] {"No existen articulos"});
 		}
 	}
 
@@ -368,63 +383,63 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	
 	private void agregarDatosTablaDireccion() {
 		if (modo == 1) {
-			consulta.addDireccion((String)rutCB.getSelectedItem(), RegionCB.getSelectedIndex(), Integer.parseInt(numCalleTextField.getText()),calleTextField.getText() , ciudadTextField.getText(), comunaTextField.getText()); 
+			consulta.addDireccion((String)proveedorCB.getSelectedItem(), articuloCB.getSelectedIndex(), Integer.parseInt(costoUnitarioTextField.getText()),unidadesAdquiridasTextField.getText() , fechaReciboTextField.getText(), fechaPedidaTextField.getText()); 
 		} else if(modo == 2) {
 			
 		}
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarCalle() && verificarNumCalle() && verificarRegion() && verificarComuna() && verificarCiudad() && existenRutsSinDireccion && rutCB.getSelectedIndex()!=0) {
+		if(verificarCalle() && verificarNumCalle() && verificarRegion() && verificarComuna() && verificarCiudad() && existenRutsSinDireccion && proveedorCB.getSelectedIndex()!=0) {
 			return true;
 		}
 		return false;
 	}
 	
 	private boolean verificarCiudad() {
-		if(ciudadTextField.equals("") || ciudadTextField.getText().length()>20 || !isOnlyAlpha(ciudadTextField.getText())) {
-			lblAlertaCiudad.setVisible(true);
-			setErroneo(lineaCiudad, lblAlertaCiudad);
+		if(fechaReciboTextField.equals("") || fechaReciboTextField.getText().length()>20 || !isOnlyAlpha(fechaReciboTextField.getText())) {
+			lblAlertaFechaRecibo.setVisible(true);
+			setErroneo(lineaFechaRecibo, lblAlertaFechaRecibo);
 			return false;
 		}
-		setAcertado(lineaCiudad, lblAlertaCiudad);
-		lblAlertaCiudad.setVisible(false);
+		setAcertado(lineaFechaRecibo, lblAlertaFechaRecibo);
+		lblAlertaFechaRecibo.setVisible(false);
 		return true;
 	}
 	
 	private boolean verificarComuna() {
-		if(comunaTextField.equals("") || comunaTextField.getText().length()>20 || !isOnlyAlpha(comunaTextField.getText())) {
-			setErroneo(lineaComuna, lblAlertaComuna);
+		if(fechaPedidaTextField.equals("") || fechaPedidaTextField.getText().length()>20 || !isOnlyAlpha(fechaPedidaTextField.getText())) {
+			setErroneo(lineaFechaPedida, lblAlertaFechaPedida);
 			return false;
 		}
-		setAcertado(lineaComuna, lblAlertaComuna);
+		setAcertado(lineaFechaPedida, lblAlertaFechaPedida);
 		return true;
 	}
 
 	private boolean verificarRegion() {
-		if(RegionCB.getSelectedIndex() == 0) {
-			lblAlertaRegion.setVisible(true);
+		if(articuloCB.getSelectedIndex() == 0) {
+			lblAlertaArticulo.setVisible(true);
 			return false;
 		}
-		lblAlertaRegion.setVisible(false);
+		lblAlertaArticulo.setVisible(false);
 		return true;
 	}
 
 	private boolean verificarNumCalle() {
-		if(numCalleTextField.getText().equals("") || numCalleTextField.getText().contains(" ") || numCalleTextField.getText().length()>10 || !numCalleTextField.getText().matches("[0-9]+") ) {
-			setErroneo(lineaNumeroCalle, lblAlertaNumCalle);
+		if(costoUnitarioTextField.getText().equals("") || costoUnitarioTextField.getText().contains(" ") || costoUnitarioTextField.getText().length()>10 || !costoUnitarioTextField.getText().matches("[0-9]+") ) {
+			setErroneo(lineaCostoUnitario, lblAlertaCostoUnitario);
 			return false;
 		}
-		setAcertado(lineaNumeroCalle, lblAlertaNumCalle);
+		setAcertado(lineaCostoUnitario, lblAlertaCostoUnitario);
 		return true;
 	}
 
 	private boolean verificarCalle() {
-		if(calleTextField.equals("") || calleTextField.getText().length()>50 || !isOnlyAlpha(calleTextField.getText())) {
-			setErroneo(lineaNombreCalle, lblAlertaNombreCalle);
+		if(unidadesAdquiridasTextField.equals("") || unidadesAdquiridasTextField.getText().length()>50 || !isOnlyAlpha(unidadesAdquiridasTextField.getText())) {
+			setErroneo(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquiridas);
 			return false;
 		}
-		setAcertado(lineaNombreCalle, lblAlertaNombreCalle);
+		setAcertado(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquiridas);
 		return true;
 	}
 	
