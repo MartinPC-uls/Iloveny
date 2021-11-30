@@ -15,6 +15,6 @@ public class Inicializador {
 			e.printStackTrace();
 		}
 		
-		ControladorLogin ventana = new ControladorLogin();
+		new ControladorLogin();
     }
 }

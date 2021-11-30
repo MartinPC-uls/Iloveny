@@ -140,41 +140,56 @@ public class ControladorLogin {
 	private void eventoClickBtnLogin(Login login, final Consulta consulta) {
 		login.btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
+        		login.lblConectando.setVisible(true);
+  			login.lblLoadingImage.setVisible(true);
+  			login.lblErrorConexion.setVisible(false);
+  			login.lblLoadingImage.setVisible(true);
+  			login.lblErrorMessage.setVisible(false);
         		Thread t1 = new Thread() {
         			@Override
         			public void run() {
-        				if(consulta.verificarAdmin(login.txtUser.getText(), String.valueOf(login.txtPassword.getPassword()))) {
-        	        			login.lblConectado.setVisible(true);
-        	        			login.lblLoadingImage.setVisible(true);
-        	        			System.out.println("Logeado dentro del sistema.");
-        	        			login.lblErrorImage.setVisible(false);
-        	        			login.lblErrorMessage.setVisible(false);
-        	        			login.downPanelUser.setBackground(Color.GREEN);
-        	        			login.downPanelPassword.setBackground(Color.GREEN);
-        	 				try {
-        						mostrarAlerta(true);
-        					} catch (HeadlessException e) {
-        						e.printStackTrace();
-        					} catch (IOException e) {
-        						e.printStackTrace();
-        					}
-        	        			new ControladorAdministracion(login.txtUser.getText());
-        	        			login.setVisible(false);
-        	        		} else {
-        	        			System.out.println("No existe / mala contrasena");
-        	        			login.lblErrorImage.setVisible(true);
-        	        			login.lblErrorMessage.setVisible(true);
-        	        			login.downPanelUser.setBackground(Color.RED);
-        	        			login.downPanelPassword.setBackground(Color.RED);
-        	 				try {
-        						mostrarAlerta(false);
-        					} catch (HeadlessException e) {
-        						e.printStackTrace();
-        					} catch (IOException e) {
-        						e.printStackTrace();
-        					}
-        	        		}
+        				try {
+	        				if(consulta.verificarAdmin(login.txtUser.getText(), String.valueOf(login.txtPassword.getPassword()))) {
+	        	        			System.out.println("Logeado dentro del sistema.");
+	        	        			login.lblErrorImage.setVisible(false);
+	        	        			login.lblErrorMessage.setVisible(false);
+	        	        			login.downPanelUser.setBackground(Color.GREEN);
+	        	        			login.downPanelPassword.setBackground(Color.GREEN);
+	        	 				try {
+	        	 					login.lblErrorConexion.setVisible(false);
+	               					login.lblConectando.setVisible(false);
+	               					login.lblLoadingImage.setVisible(false);
+	        						mostrarAlerta(true);
+	        					} catch (HeadlessException e) {
+	        						e.printStackTrace();
+	        					} catch (IOException e) {
+	        						e.printStackTrace();
+	        					}
+	        	        			new ControladorAdministracion(login.txtUser.getText());
+	        	        			login.setVisible(false);
+	        	        		} else {
+	        	        			System.out.println("No existe / mala contrasena");
+	        	        			login.lblConectando.setVisible(false);
+	               	  			login.lblLoadingImage.setVisible(false);
+	        	        			login.lblErrorImage.setVisible(true);
+	        	        			login.lblErrorMessage.setVisible(true);
+	        	        			login.downPanelUser.setBackground(Color.RED);
+	        	        			login.downPanelPassword.setBackground(Color.RED);
+	        	 				try {
+	        						mostrarAlerta(false);
+	        					} catch (HeadlessException e) {
+	        						e.printStackTrace();
+	        					} catch (IOException e) {
+	        						e.printStackTrace();
+	        					}
+	        	        		}
+        				} catch (Exception e) {
+        					login.lblErrorConexion.setVisible(true);
+        					login.lblConectando.setVisible(false);
+               	  			login.lblLoadingImage.setVisible(false);
+        				}
         			}
+        			
         		};
         		t1.start();
         	}

@@ -14,12 +14,13 @@ public class Login extends JFrame {
 	public JLabel lblErrorMessage;
 	public JLabel lblErrorImage;
 	public JLabel lblLoadingImage;
-	public JLabel lblConectado;
+	public JLabel lblConectando;
 	public JPanel downPanelUser;
 	public JPanel downPanelPassword;
 	public JPanel botonX;
 	public JLabel lblX;
 	public JPanel header;
+	public JLabel lblErrorConexion;
 	
     public Login() {
     	setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/imagenes/iloveny-icon.png")));
@@ -83,12 +84,7 @@ public class Login extends JFrame {
         lblErrorImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/error.png")));
         lblErrorImage.setBounds(0, 158, 24, 21);
         panel.add(lblErrorImage);
-        
-        lblLoadingImage = new JLabel();
-        lblLoadingImage.setHorizontalAlignment(SwingConstants.CENTER);
-        lblLoadingImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/loading.png")));
-        lblLoadingImage.setBounds(0, 158, 24, 21);
-        panel.add(lblLoadingImage);
+        //lblLoadingImage.setHorizontalAlignment(SwingConstants.CENTER);
         
         lblErrorMessage = new JLabel("Acceso denegado");
         lblErrorMessage.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -96,14 +92,14 @@ public class Login extends JFrame {
         lblErrorMessage.setBounds(34, 158, 280, 21);
         panel.add(lblErrorMessage);
         
-        lblConectado = new JLabel("Conectando...");
-        lblConectado.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        lblConectado.setForeground(Color.YELLOW);
-        lblConectado.setBounds(34, 158, 280, 21);
-        panel.add(lblConectado);
+        lblConectando = new JLabel("Conectando...");
+        lblConectando.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblConectando.setForeground(Color.LIGHT_GRAY);
+        lblConectando.setBounds(34, 158, 280, 21);
+        panel.add(lblConectando);
         
-        lblLoadingImage.setVisible(false);
-        lblConectado.setVisible(false);
+        //lblLoadingImage.setVisible(false);
+        lblConectando.setVisible(false);
         lblErrorImage.setVisible(false);
         lblErrorMessage.setVisible(false);
         
@@ -171,6 +167,26 @@ public class Login extends JFrame {
         btnLogin.setBorderPainted(false);
         btnLogin.setBorder(null);
         btnLogin.setBackground(new Color(0, 153, 153));
+        
+        lblErrorConexion = new JLabel();
+        lblErrorConexion.setVerticalAlignment(SwingConstants.CENTER);
+        lblErrorConexion.setText("Se ha detectado un error de conexion");
+        lblErrorConexion.setHorizontalAlignment(SwingConstants.CENTER);
+        lblErrorConexion.setForeground(Color.WHITE);
+        lblErrorConexion.setFont(new Font("Roboto Medium", Font.PLAIN, 14));
+        lblErrorConexion.setBounds(0, 225, 314, 35);
+        lblErrorConexion.setVisible(false);
+        panel.add(lblErrorConexion);
+        
+        lblLoadingImage = new JLabel("");
+        lblLoadingImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/loading-icon.gif")));
+        lblLoadingImage.setBounds(0, 158, 24, 21);
+        //ImageIcon loading_icon = new ImageIcon(Login.class.getResource("/imagenes/loading.gif")); // TODO
+        //lblLoadingImage.setIcon(new ImageIcon(loading_icon.getImage().getScaledInstance(lblLoadingImage.getWidth(), lblLoadingImage.getHeight(), Image.SCALE_SMOOTH)));
+        lblLoadingImage.setVisible(false);
+        
+        //lblLoadingImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/loading.png")));
+        panel.add(lblLoadingImage);
         
         header = new JPanel();
         header.setBounds(0, 0, 473, 35);
