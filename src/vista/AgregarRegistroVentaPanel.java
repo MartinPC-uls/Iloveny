@@ -13,12 +13,14 @@ import java.util.Date;
 import java.util.regex.Matcher;
 
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -303,13 +305,22 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private boolean isTodoCorrecto() {
 		stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 		if (verificarCantidadVendida() && verificarRegion() && verificarFecha() && articuloCB.getSelectedIndex()!=0 &&
-				stock > 0) {
+				verificarStock(stock)) {
 			return true;
-		} else if (consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString()))) == 0) {
-			System.out.println("no hay stock");
+		} else {
 			return false;
 		}
-		return false;
+	}
+	
+	private boolean verificarStock(int stock) {
+		if (stock < Integer.parseInt(cantidadVendidaTextField.getText())) {
+			setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
+			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+			JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	private Date convertirFecha(String string) {
@@ -324,7 +335,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private boolean verificarCantidadVendida() {
-		if(cantidadVendidaTextField.getText().equals("")) {
+		if(cantidadVendidaTextField.getText().equals("") || !isNumero(cantidadVendidaTextField.getText()) || cantidadVendidaTextField.getText().charAt(0) == '0') {
 			lblAlertaCantidadVendida.setVisible(true);
 			setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
 			return false;
@@ -344,7 +355,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private boolean verificarFecha() {
-		if(fechaTextField.getText().equals("") || fechaTextField.getText().length()>20) {
+		if(fechaTextField.getText().equals("") || !fechaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
 			setErroneo(lineaFecha, lblAlertaFecha);
 			return false;
 		}

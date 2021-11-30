@@ -531,7 +531,7 @@ public class Consulta extends Conexion{
         Connection con = conectar();
         String sql = "SELECT articulo.idarticulo, articulo.descripcion "
         		+ "FROM articulo "
-        		+ "WHERE stock>0;";
+        		+ "WHERE stock>0 ORDER BY articulo.idarticulo;";
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -988,7 +988,7 @@ public class Consulta extends Conexion{
      * @param FechaPedida Corresponde al dato que se va a agregar en la columna FechaPedida.
      * @param FechaRecibo Corresponde al dato que se va a agregar en la columna FechaRecibo.
      */
-    public void addRegistroCompra(int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
+    public void addRegistroCompra(int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, String FechaPedida, String FechaRecibo ) {
         PreparedStatement ps;
         Connection con = conectar();
         String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
@@ -1000,8 +1000,8 @@ public class Consulta extends Conexion{
 			ps.setInt(3, idProv);
 			ps.setInt(4,UnidadesAdquiridas);
 			ps.setInt(5,CostoUnitario);
-			ps.setDate(6, (java.sql.Date) FechaPedida);
-			ps.setDate(7, (java.sql.Date) FechaRecibo);
+			ps.setDate(6, java.sql.Date.valueOf(FechaPedida));
+			ps.setDate(7, java.sql.Date.valueOf(FechaRecibo));
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {

@@ -9,15 +9,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Matcher;
 
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -28,6 +31,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -41,7 +46,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private JComboBox articuloCB;
 	private JTextField fechaPedidaTextField;
 	private JLabel lblAlertaFechaPedida;
-	private JLabel lblAlertaUnidadesAdquiridas;
 	private JTextField unidadesAdquiridasTextField;
 	private JTextField costoUnitarioTextField;
 	private JTextField fechaReciboTextField;
@@ -55,13 +59,16 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private JPanel lineaFechaRecibo;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
+	private String nombreAdmin;
+	private JLabel lblAlertaUnidadesAdquirida;
 	
-	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
+	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
+		this.nombreAdmin = nombreAdmin;
 		
 		lblAlertaProveedor = new JLabel("");
 		lblAlertaProveedor.setVisible(false);
@@ -111,7 +118,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		unidadesAdquiridasTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarCalle();
+				verificarUnidadesAdquiridas();
 			}
 		});
 		unidadesAdquiridasTextField.setText("1");
@@ -141,7 +148,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		costoUnitarioTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarNumCalle();
+				verificarCostoUnitario();
 			}
 		});
 		costoUnitarioTextField.setText("1000");
@@ -183,7 +190,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		fechaPedidaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarComuna();
+				verificarFechaPedida();
 			}
 		});
 		fechaPedidaTextField.setToolTipText("a");
@@ -226,7 +233,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		fechaReciboTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarCiudad();
+				verificarFechaRecibo();
 			}
 		});
 		fechaReciboTextField.setText("yyyy-mm-dd");
@@ -284,13 +291,13 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lblAlertaFechaPedida.setBounds(99, 222, 30, 27);
 		add(lblAlertaFechaPedida);
 		
-		lblAlertaUnidadesAdquiridas = new JLabel("");
-		lblAlertaUnidadesAdquiridas.setVisible(false);
-		lblAlertaUnidadesAdquiridas.setToolTipText("Hay un error de formato");
-		lblAlertaUnidadesAdquiridas.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaUnidadesAdquiridas.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaUnidadesAdquiridas.setBounds(98, 280, 30, 27);
-		add(lblAlertaUnidadesAdquiridas);
+		lblAlertaUnidadesAdquirida = new JLabel("");
+		lblAlertaUnidadesAdquirida.setVisible(false);
+		lblAlertaUnidadesAdquirida.setToolTipText("Hay un error de formato");
+		lblAlertaUnidadesAdquirida.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaUnidadesAdquirida.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaUnidadesAdquirida.setBounds(98, 280, 30, 27);
+		add(lblAlertaUnidadesAdquirida);
 		
 		lblAlertaCostoUnitario = new JLabel("");
 		lblAlertaCostoUnitario.setVisible(false);
@@ -353,6 +360,13 @@ public class AgregarRegistroCompraPanel extends JPanel {
 			listaProveedores[0] = "Seleccione...";
 			for(int i=1; i<=proveedores.size();i++) {
 				listaProveedores[i] = proveedores.get(i-1).toString();
+				StringBuilder builder = new StringBuilder(listaProveedores[i]);
+				for (int j = 0; j < builder.toString().length(); j++) {
+					if (builder.charAt(j) == '[' || builder.charAt(j) == ']' || builder.charAt(j) == ',') {
+						builder.deleteCharAt(j);
+					}
+				}
+				listaProveedores[i] = builder.toString();
 			}
 			return new DefaultComboBoxModel(listaProveedores);
 		}else {
@@ -378,26 +392,58 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private void agregarDatos() {
-		agregarDatosTablaDireccion();
+		agregarDatosTablaRegistroCompra();
 	}
 	
-	private void agregarDatosTablaDireccion() {
+	private void agregarDatosTablaRegistroCompra() {
 		if (modo == 1) {
-			consulta.addDireccion((String)proveedorCB.getSelectedItem(), articuloCB.getSelectedIndex(), Integer.parseInt(costoUnitarioTextField.getText()),unidadesAdquiridasTextField.getText() , fechaReciboTextField.getText(), fechaPedidaTextField.getText()); 
+			int stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
+			consulta.addRegistroCompra(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), nombreAdmin,
+					Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString())),
+					Integer.parseInt(unidadesAdquiridasTextField.getText()), Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(),
+					fechaReciboTextField.getText());
+			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));
 		} else if(modo == 2) {
-			
+				
 		}
+	}
+	
+	private boolean verificarFechas() {
+		try {
+			Date fechaRecibo = new SimpleDateFormat("yyyy-MM-dd").parse(fechaReciboTextField.getText());
+			Date fechaPedida = new SimpleDateFormat("yyyy-MM-dd").parse(fechaPedidaTextField.getText());
+			if (fechaRecibo.compareTo(fechaPedida) < 0) {
+				setErroneo(lineaFechaPedida, lblAlertaFechaPedida);
+				setErroneo(lineaFechaRecibo, lblAlertaFechaRecibo);
+				Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+				JOptionPane.showMessageDialog(null, "La fecha de recibo no puede ser antes de la fecha de pedido","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+				return false;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		} 
+		return true;
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarCalle() && verificarNumCalle() && verificarRegion() && verificarComuna() && verificarCiudad() && existenRutsSinDireccion && proveedorCB.getSelectedIndex()!=0) {
+		if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && proveedorCB.getSelectedIndex()!=0
+				&& verificarFechas()) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean verificarCiudad() {
-		if(fechaReciboTextField.equals("") || fechaReciboTextField.getText().length()>20 || !isOnlyAlpha(fechaReciboTextField.getText())) {
+	private boolean isNumber(String string) {
+		try {
+			Integer.parseInt(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+	
+	private boolean verificarFechaRecibo() {
+		if(fechaReciboTextField.getText().equals("") || !fechaReciboTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
 			lblAlertaFechaRecibo.setVisible(true);
 			setErroneo(lineaFechaRecibo, lblAlertaFechaRecibo);
 			return false;
@@ -407,8 +453,8 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		return true;
 	}
 	
-	private boolean verificarComuna() {
-		if(fechaPedidaTextField.equals("") || fechaPedidaTextField.getText().length()>20 || !isOnlyAlpha(fechaPedidaTextField.getText())) {
+	private boolean verificarFechaPedida() {
+		if(fechaPedidaTextField.getText().equals("") || !fechaPedidaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
 			setErroneo(lineaFechaPedida, lblAlertaFechaPedida);
 			return false;
 		}
@@ -416,7 +462,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		return true;
 	}
 
-	private boolean verificarRegion() {
+	private boolean verificarArticulo() {
 		if(articuloCB.getSelectedIndex() == 0) {
 			lblAlertaArticulo.setVisible(true);
 			return false;
@@ -425,7 +471,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		return true;
 	}
 
-	private boolean verificarNumCalle() {
+	private boolean verificarCostoUnitario() {
 		if(costoUnitarioTextField.getText().equals("") || costoUnitarioTextField.getText().contains(" ") || costoUnitarioTextField.getText().length()>10 || !costoUnitarioTextField.getText().matches("[0-9]+") ) {
 			setErroneo(lineaCostoUnitario, lblAlertaCostoUnitario);
 			return false;
@@ -434,13 +480,25 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		return true;
 	}
 
-	private boolean verificarCalle() {
-		if(unidadesAdquiridasTextField.equals("") || unidadesAdquiridasTextField.getText().length()>50 || !isOnlyAlpha(unidadesAdquiridasTextField.getText())) {
-			setErroneo(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquiridas);
+	private boolean verificarUnidadesAdquiridas() {
+		if(unidadesAdquiridasTextField.getText().equals("") || !isNumber(unidadesAdquiridasTextField.getText())) {
+			setErroneo(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
 			return false;
 		}
-		setAcertado(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquiridas);
+		setAcertado(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
 		return true;
+	}
+	
+	private String obtenerIdEnString(String opcionSeleccionada) {
+		char[] caracteres = opcionSeleccionada.toCharArray();
+		String id = "";
+		for(char c : caracteres) {
+			if(c == ' ') {
+				break;
+			}
+			id+= c;
+		}
+		return id;
 	}
 	
 	public boolean isOnlyAlpha(String name) {

@@ -180,7 +180,7 @@ public class Administracion extends JFrame {
 					cambiarPanel(agregarRegistroVentaPanel);
 					break;
 				case 7:
-					agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin);
 					cambiarPanel(agregarRegistroCompraPanel);
 					break;
 				case 8:

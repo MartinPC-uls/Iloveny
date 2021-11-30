@@ -37,7 +37,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
 	private JTextField objetoTextField;
-	private JLabel lblAlertaMarca;
+	private JLabel lblAlertaTipoObjeto;
 	private JPanel lineaObjeto;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
@@ -99,8 +99,8 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		);
 		lineaObjeto.setLayout(gl_lineaObjeto);
 		
-		JButton btnAgregarMarca = new JButton("AGREGAR MARCA");
-		btnAgregarMarca.addActionListener(new ActionListener() {
+		JButton btnAgregarTipoObjeto = new JButton("AGREGAR TIPO OBJETO");
+		btnAgregarTipoObjeto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(isTodoCorrecto()) {
 					agregarDatos();
@@ -110,20 +110,20 @@ public class AgregarTipoObjetoPanel extends JPanel {
 				}
 			}
 		});
-		btnAgregarMarca.setBorder(null);
-		btnAgregarMarca.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnAgregarMarca.setBackground(Color.WHITE);
-		btnAgregarMarca.setFont(new Font("Roboto Light", Font.PLAIN, 25));
-		btnAgregarMarca.setBounds(199, 455, 302, 64);
-		add(btnAgregarMarca);
+		btnAgregarTipoObjeto.setBorder(null);
+		btnAgregarTipoObjeto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnAgregarTipoObjeto.setBackground(Color.WHITE);
+		btnAgregarTipoObjeto.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+		btnAgregarTipoObjeto.setBounds(199, 455, 302, 64);
+		add(btnAgregarTipoObjeto);
 		
-		lblAlertaMarca = new JLabel("");
-		lblAlertaMarca.setVisible(false);
-		lblAlertaMarca.setToolTipText("Hay un error de formato");
-		lblAlertaMarca.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaMarca.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaMarca.setBounds(215, 224, 30, 27);
-		add(lblAlertaMarca);
+		lblAlertaTipoObjeto = new JLabel("");
+		lblAlertaTipoObjeto.setVisible(false);
+		lblAlertaTipoObjeto.setToolTipText("Hay un error de formato");
+		lblAlertaTipoObjeto.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaTipoObjeto.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaTipoObjeto.setBounds(215, 224, 30, 27);
+		add(lblAlertaTipoObjeto);
 		
 		//DefaultComboBoxModel modelo = crearModeloComboBox();
 		
@@ -182,12 +182,12 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	
 	private boolean verificarMarca() {
 		if(objetoTextField.getText().equals("")) {
-			lblAlertaMarca.setVisible(true);
-			setErroneo(lineaObjeto, lblAlertaMarca);
+			lblAlertaTipoObjeto.setVisible(true);
+			setErroneo(lineaObjeto, lblAlertaTipoObjeto);
 			return false;
 		}
-		setAcertado(lineaObjeto, lblAlertaMarca);
-		lblAlertaMarca.setVisible(false);
+		setAcertado(lineaObjeto, lblAlertaTipoObjeto);
+		lblAlertaTipoObjeto.setVisible(false);
 		return true;
 	}
 	
