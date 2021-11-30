@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -115,6 +116,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lineaUnidadesAdquiridas.setLayout(gl_lineaUnidadesAdquiridas);
 		
 		unidadesAdquiridasTextField = new JTextField();
+		unidadesAdquiridasTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				verificarUnidadesAdquiridas();
+			}
+		});
 		unidadesAdquiridasTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -134,6 +141,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo = crearModeloComboBoxArticulo();
 		articuloCB = new JComboBox(new String[] {});
+		articuloCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarArticulo();
+			}
+		});
 		articuloCB.setModel(modelo);
 		articuloCB.setBounds(138, 180, 214, 21);
 		add(articuloCB);
@@ -145,6 +158,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		add(lblCostoUnitario);
 		
 		costoUnitarioTextField = new JTextField();
+		costoUnitarioTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCostoUnitario();
+			}
+		});
 		costoUnitarioTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -187,14 +206,20 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		add(lblFechaPedida);
 		
 		fechaPedidaTextField = new JTextField();
+		fechaPedidaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarFechaPedida();
+			}
+		});
 		fechaPedidaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarFechaPedida();
 			}
 		});
-		fechaPedidaTextField.setToolTipText("a");
-		fechaPedidaTextField.setText("yyyy-mm-dd");
+		fechaPedidaTextField.setToolTipText("");
+		fechaPedidaTextField.setText("AAAA-MM-DD");
 		fechaPedidaTextField.setOpaque(false);
 		fechaPedidaTextField.setForeground(new Color(170, 170, 170));
 		fechaPedidaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -230,13 +255,19 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		add(lblFechaRecibo);
 		
 		fechaReciboTextField = new JTextField();
+		fechaReciboTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarFechaRecibo();
+			}
+		});
 		fechaReciboTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarFechaRecibo();
 			}
 		});
-		fechaReciboTextField.setText("yyyy-mm-dd");
+		fechaReciboTextField.setText("AAAA-MM-DD");
 		fechaReciboTextField.setOpaque(false);
 		fechaReciboTextField.setForeground(new Color(170, 170, 170));
 		fechaReciboTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -281,6 +312,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		btnAgregarRegistroCompra.setBackground(Color.WHITE);
 		btnAgregarRegistroCompra.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarRegistroCompra.setBounds(138, 458, 458, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarRegistroCompra, 15);
 		add(btnAgregarRegistroCompra);
 		
 		lblAlertaFechaPedida = new JLabel("");
@@ -331,6 +363,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo2 = crearModeloComboBoxProveedor();
 		proveedorCB = new JComboBox(new Object[]{});
+		proveedorCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarProveedor();
+			}
+		});
 		proveedorCB.setModel(modelo2);
 		proveedorCB.setBounds(383, 180, 214, 21);
 		add(proveedorCB);
@@ -351,6 +389,15 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		add(btnVolver);
 	}
 	
+	private boolean verificarProveedor() {
+		if(proveedorCB.getSelectedIndex() == 0) {
+			lblAlertaProveedor.setVisible(true);
+			return false;
+		}
+		lblAlertaProveedor.setVisible(false);
+		return true;
+	}
+
 	private DefaultComboBoxModel crearModeloComboBoxProveedor() {
 		ArrayList proveedores = consulta.getProveedor();
 		if(proveedores.size()>0) {
@@ -426,24 +473,15 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && proveedorCB.getSelectedIndex()!=0
+		if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && verificarProveedor()
 				&& verificarFechas()) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean isNumber(String string) {
-		try {
-			Integer.parseInt(string);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-	
 	private boolean verificarFechaRecibo() {
-		if(fechaReciboTextField.getText().equals("") || !fechaReciboTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
+		if(!fechaReciboTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
 			lblAlertaFechaRecibo.setVisible(true);
 			setErroneo(lineaFechaRecibo, lblAlertaFechaRecibo);
 			return false;
@@ -454,7 +492,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private boolean verificarFechaPedida() {
-		if(fechaPedidaTextField.getText().equals("") || !fechaPedidaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
+		if(!fechaPedidaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
 			setErroneo(lineaFechaPedida, lblAlertaFechaPedida);
 			return false;
 		}
@@ -472,7 +510,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private boolean verificarCostoUnitario() {
-		if(costoUnitarioTextField.getText().equals("") || costoUnitarioTextField.getText().contains(" ") || costoUnitarioTextField.getText().length()>10 || !costoUnitarioTextField.getText().matches("[0-9]+") ) {
+		if(!costoUnitarioTextField.getText().matches("[0-9]{1,10}") || costoUnitarioTextField.getText().charAt(0) == '0' ) {
 			setErroneo(lineaCostoUnitario, lblAlertaCostoUnitario);
 			return false;
 		}
@@ -481,7 +519,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private boolean verificarUnidadesAdquiridas() {
-		if(unidadesAdquiridasTextField.getText().equals("") || !isNumber(unidadesAdquiridasTextField.getText())) {
+		if(!unidadesAdquiridasTextField.getText().matches("[0-9]{1,5}") || unidadesAdquiridasTextField.getText().charAt(0) == '0') {
 			setErroneo(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
 			return false;
 		}
@@ -499,28 +537,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 			id+= c;
 		}
 		return id;
-	}
-	
-	public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}
-	
-	public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 	
 	public void setAcertado(JPanel panel, JLabel label){
@@ -570,6 +586,29 @@ public class AgregarRegistroCompraPanel extends JPanel {
         		}
         	}
         });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

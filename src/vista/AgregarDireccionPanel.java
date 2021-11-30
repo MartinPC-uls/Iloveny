@@ -108,6 +108,12 @@ public class AgregarDireccionPanel extends JPanel {
 		lineaNombreCalle.setLayout(gl_lineaNombreCalle);
 		
 		calleTextField = new JTextField();
+		calleTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCalle();
+			}
+		});
 		calleTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -128,6 +134,12 @@ public class AgregarDireccionPanel extends JPanel {
 		RegionCB = new JComboBox(new String[] {"Seleccione...","Tarapaca", "Antofagasta", "Atacama", "Coquimbo", "Valparaiso",
 														"Ohiggins","Maule","Biobio","La Araucania","Los Lagos","Aysen","Magallanes",
 														"Metropolitana","Los Rios","Arica y P.","Ñuble"});
+		RegionCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarRegion();
+			}
+		});
 		RegionCB.setBounds(138, 180, 214, 21);
 		add(RegionCB);
 		
@@ -138,6 +150,12 @@ public class AgregarDireccionPanel extends JPanel {
 		add(lblNumeroCalle);
 		
 		numCalleTextField = new JTextField();
+		numCalleTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarNumCalle();
+			}
+		});
 		numCalleTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -180,13 +198,19 @@ public class AgregarDireccionPanel extends JPanel {
 		add(lblComuna);
 		
 		comunaTextField = new JTextField();
+		comunaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarComuna();
+			}
+		});
 		comunaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarComuna();
 			}
 		});
-		comunaTextField.setToolTipText("a");
+		comunaTextField.setToolTipText("");
 		comunaTextField.setText("EJ: Coquimbo ");
 		comunaTextField.setOpaque(false);
 		comunaTextField.setForeground(new Color(170, 170, 170));
@@ -223,6 +247,12 @@ public class AgregarDireccionPanel extends JPanel {
 		add(lblCiudad);
 		
 		ciudadTextField = new JTextField();
+		ciudadTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCiudad();
+			}
+		});
 		ciudadTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -274,6 +304,7 @@ public class AgregarDireccionPanel extends JPanel {
 		btnAgregarDireccion.setBackground(Color.WHITE);
 		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarDireccion.setBounds(215, 458, 302, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarDireccion, 15);
 		add(btnAgregarDireccion);
 		
 		lblAlertaComuna = new JLabel("");
@@ -324,6 +355,12 @@ public class AgregarDireccionPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo = crearModeloComboBox();
 		rutCB = new JComboBox(new Object[]{});
+		rutCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarRut();
+			}
+		});
 		rutCB.setModel(modelo);
 		rutCB.setBounds(383, 180, 214, 21);
 		add(rutCB);
@@ -344,6 +381,15 @@ public class AgregarDireccionPanel extends JPanel {
 		add(btnVolver);
 	}
 	
+	private boolean verificarRut() {
+		if(rutCB.getSelectedIndex() == 0) {
+			lblAlertaRut.setVisible(true);
+			return false;
+		}
+		lblAlertaRut.setVisible(false);
+		return true;
+	}
+
 	private DefaultComboBoxModel crearModeloComboBox() {
 		ArrayList ruts = consulta.getRutsSinDireccion();
 		if(ruts.size()>0) {
@@ -375,14 +421,14 @@ public class AgregarDireccionPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarCalle() && verificarNumCalle() && verificarRegion() && verificarComuna() && verificarCiudad() && existenRutsSinDireccion && rutCB.getSelectedIndex()!=0) {
+		if(verificarCalle() && verificarNumCalle() && verificarRegion() && verificarComuna() && verificarCiudad() && verificarRut()) {
 			return true;
 		}
 		return false;
 	}
 	
 	private boolean verificarCiudad() {
-		if(ciudadTextField.equals("") || ciudadTextField.getText().length()>20 || !isOnlyAlpha(ciudadTextField.getText())) {
+		if( !ciudadTextField.getText().matches("[a-zA-Z ]{1,20}") || ciudadTextField.getText().charAt(0) == ' ') {
 			lblAlertaCiudad.setVisible(true);
 			setErroneo(lineaCiudad, lblAlertaCiudad);
 			return false;
@@ -393,7 +439,7 @@ public class AgregarDireccionPanel extends JPanel {
 	}
 	
 	private boolean verificarComuna() {
-		if(comunaTextField.equals("") || comunaTextField.getText().length()>20 || !isOnlyAlpha(comunaTextField.getText())) {
+		if(!comunaTextField.getText().matches("[a-zA-Z ]{1,20}")|| comunaTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaComuna, lblAlertaComuna);
 			return false;
 		}
@@ -411,7 +457,7 @@ public class AgregarDireccionPanel extends JPanel {
 	}
 
 	private boolean verificarNumCalle() {
-		if(numCalleTextField.getText().equals("") || numCalleTextField.getText().contains(" ") || numCalleTextField.getText().length()>10 || !numCalleTextField.getText().matches("[0-9]+") ) {
+		if(!numCalleTextField.getText().matches("[0-9]{1-10}")) {
 			setErroneo(lineaNumeroCalle, lblAlertaNumCalle);
 			return false;
 		}
@@ -420,34 +466,12 @@ public class AgregarDireccionPanel extends JPanel {
 	}
 
 	private boolean verificarCalle() {
-		if(calleTextField.equals("") || calleTextField.getText().length()>50 || !isOnlyAlpha(calleTextField.getText())) {
+		if(!calleTextField.getText().matches("[a-zA-Z0-9. ]{1,50}") || calleTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaNombreCalle, lblAlertaNombreCalle);
 			return false;
 		}
 		setAcertado(lineaNombreCalle, lblAlertaNombreCalle);
 		return true;
-	}
-	
-	public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}
-	
-	public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 	
 	public void setAcertado(JPanel panel, JLabel label){
@@ -497,6 +521,29 @@ public class AgregarDireccionPanel extends JPanel {
         		}
         	}
         });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

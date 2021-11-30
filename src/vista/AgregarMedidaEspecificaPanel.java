@@ -68,10 +68,16 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		JLabel lblMedida = new JLabel("Medida");
 		lblMedida.setForeground(Color.WHITE);
 		lblMedida.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblMedida.setBounds(385, 154, 106, 14);
+		lblMedida.setBounds(382, 154, 106, 14);
 		add(lblMedida);
 		
 		medidaTextField = new JTextField();
+		medidaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarMedidaE();
+			}
+		});
 		medidaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -86,14 +92,14 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		medidaTextField.setCaretColor(Color.WHITE);
 		medidaTextField.setBorder(null);
 		medidaTextField.setBackground(new Color(51, 51, 51));
-		medidaTextField.setBounds(385, 179, 214, 21);
+		medidaTextField.setBounds(382, 169, 214, 21);
 		eventoCambiarJTextField(medidaTextField, medidaTextField.getText(), 20);
 		add(medidaTextField);
 		
 		lineaMedida = new JPanel();
 		lineaMedida.setPreferredSize(new Dimension(0, 3));
 		lineaMedida.setBackground(Color.WHITE);
-		lineaMedida.setBounds(385, 207, 214, 3);
+		lineaMedida.setBounds(382, 197, 214, 3);
 		add(lineaMedida);
 		GroupLayout gl_lineaMedida = new GroupLayout(lineaMedida);
 		gl_lineaMedida.setHorizontalGroup(
@@ -124,6 +130,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		btnAgregarDireccion.setBackground(Color.WHITE);
 		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarDireccion.setBounds(154, 458, 424, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarDireccion, 15);
 		add(btnAgregarDireccion);
 		
 		lblAlertaMedida = new JLabel("");
@@ -131,7 +138,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		lblAlertaMedida.setToolTipText("Hay un error de formato");
 		lblAlertaMedida.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaMedida.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaMedida.setBounds(609, 173, 30, 27);
+		lblAlertaMedida.setBounds(598, 173, 30, 27);
 		add(lblAlertaMedida);
 		
 		JLabel lblArticuloSinMedidaEsp = new JLabel("Id Articulos:");
@@ -142,6 +149,12 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo = crearModeloComboBoxId();
 		ArticuloSinMedidaEspCB = new JComboBox(new Object[]{});
+		ArticuloSinMedidaEspCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarArticulo();
+			}
+		});
 		ArticuloSinMedidaEspCB.setModel(modelo);
 		ArticuloSinMedidaEspCB.setBounds(122, 179, 214, 21);
 		add(ArticuloSinMedidaEspCB);
@@ -193,14 +206,14 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		if(existenArticuloSinMedidaEspecifica && ArticuloSinMedidaEspCB.getSelectedIndex()!=0) {
+		if(verificarArticulo() && verificarMedidaE()) {
 			return true;
 		}
 		return false;
 	}
 	
 	private boolean verificarMedidaE() {
-		if(medidaTextField.equals("") || medidaTextField.getText().length()>30) {
+		if(!medidaTextField.getText().matches("[a-zA-Z0-9 ]{1,30}") || medidaTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaMedida, lblAlertaMedida);
 			return false;
 		}
@@ -215,28 +228,6 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		}
 		lblAlertaArticuloSinMedidaEsp.setVisible(false);
 		return true;
-	}
-
-	public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}
-	
-	public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 	
 	public void setAcertado(JPanel panel, JLabel label){
@@ -263,6 +254,52 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
+		txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		if (text.length() == 0 || text.length() >maxCaracteres) {
+        			if(text.length() == 0) {
+        				txtUser.setText(relleno);
+        				txtUser.setForeground(new Color(170, 170, 170));
+        			}
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 26));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

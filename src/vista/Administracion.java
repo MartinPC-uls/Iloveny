@@ -122,25 +122,12 @@ public class Administracion extends JFrame {
 		panelPrincipal.setBackground(new Color(51,51,51));
 		getContentPane().add(panelPrincipal);
 		
-		
-		
-		
 		btnModificar = new JButton("");
 		this.addEventoBotonEnteredAndExited(btnModificar);
 		btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnModificar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Edit-icon-white.png")));
 		btnModificar.setBorder(null);
 		btnModificar.setBackground(new Color(51,51,51));
-		btnModificar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				/*int row = tableUsuarios.getSelectedRow();
-				if(row<0) {
-					mostrarAlertaFilaNoSeleccionada();
-				} else {
-					abrirVentanaAgregarUsuario(row);
-				}*/
-			}
-		});
 		panelPrincipal.setLayout(null);
 		btnModificar.setBounds(526, 67, 45, 45);
 		panelPrincipal.add(btnModificar);
@@ -374,16 +361,16 @@ public class Administracion extends JFrame {
 				elementosTabla = consulta.getListaMedidaGBusqueda(columnas4[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger4[filtroCB.getSelectedIndex()]);
 				break;
 			case 5:
-				elementosTabla = consulta.getListaMedidaE("idarticulo");
+				elementosTabla = consulta.getListaMedidaE("idarticulo");//falta
 				break;
 			case 6:
-				elementosTabla = consulta.getRegistrosVenta("idventa");
+				elementosTabla = consulta.getRegistrosVenta("idventa");//falta
 				break;
 			case 7:
-				elementosTabla = consulta.getProveedor();
+				elementosTabla = consulta.getProveedor();//falta
 				break;
 			case 8:
-				elementosTabla = consulta.getMarca();
+				elementosTabla = consulta.getMarca();//falta
 				break;
 			default:
 				
@@ -397,7 +384,6 @@ public class Administracion extends JFrame {
 				modeloTabla.addRow(elementos);
 			}
 		}
-		
 	}
 
 	private void repintarTabla() {
@@ -411,7 +397,6 @@ public class Administracion extends JFrame {
 		}else {
 			espacioParaColumna = 150;
 		}
-		
 		for(int i = 0; i<tabla.getColumnCount(); i++) {
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(espacioParaColumna);
 			System.out.println("Va en la columna numero: "+i+" "+tabla.getColumnModel().getColumn(i));
@@ -480,8 +465,9 @@ public class Administracion extends JFrame {
 	public void construirPanelMenu() {
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(null);
 		scrollPane.setViewportBorder(null);
-		scrollPane.setBounds(0, 191, 197, 406);
+		scrollPane.setBounds(-1, 196, 202, 416);
 		getContentPane().add(scrollPane);
 		MenuConBotonesPanel = new JPanel();
 		scrollPane.setViewportView(MenuConBotonesPanel);
@@ -680,6 +666,7 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnMedidaEspecifica);
 		
 		JButton btnRegistroVenta = new JButton("REGISTRO VENTA");
+		btnRegistroVenta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegistroVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(modo != 6) {
@@ -712,9 +699,11 @@ public class Administracion extends JFrame {
 		btnRegistroVenta.setBorder(null);
 		btnRegistroVenta.setBackground(new Color(34, 34, 34));
 		btnRegistroVenta.setBounds(0, 270, 197, 43);
+		addEventoBotonEnteredAndExitedMenu(btnRegistroVenta);
 		MenuConBotonesPanel.add(btnRegistroVenta);
 		
 		btnRegistroCompra = new JButton("REGISTRO COMPRA");
+		btnRegistroCompra.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegistroCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(modo != 7) {
@@ -739,8 +728,6 @@ public class Administracion extends JFrame {
 				if(!panelPrincipal.isVisible()) {
 					reacomodarPaneles();
 				}
-			
-			
 			}
 		});
 		btnRegistroCompra.setForeground(Color.WHITE);
@@ -749,9 +736,11 @@ public class Administracion extends JFrame {
 		btnRegistroCompra.setBorder(null);
 		btnRegistroCompra.setBackground(new Color(34, 34, 34));
 		btnRegistroCompra.setBounds(0, 324, 197, 43);
+		addEventoBotonEnteredAndExitedMenu(btnRegistroCompra);
 		MenuConBotonesPanel.add(btnRegistroCompra);
 		
 		btnMarcas = new JButton("MARCAS");
+		btnMarcas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnMarcas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(modo != 8) {
@@ -784,15 +773,18 @@ public class Administracion extends JFrame {
 		btnMarcas.setBorder(null);
 		btnMarcas.setBackground(new Color(34, 34, 34));
 		btnMarcas.setBounds(0, 378, 197, 43);
+		addEventoBotonEnteredAndExitedMenu(btnMarcas);
 		MenuConBotonesPanel.add(btnMarcas);
 		
 		btnTiposObjeto = new JButton("TIPOS DE OBJETO");
+		btnTiposObjeto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnTiposObjeto.setForeground(Color.WHITE);
 		btnTiposObjeto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnTiposObjeto.setFocusPainted(false);
 		btnTiposObjeto.setBorder(null);
 		btnTiposObjeto.setBackground(new Color(34, 34, 34));
 		btnTiposObjeto.setBounds(0, 432, 197, 43);
+		addEventoBotonEnteredAndExitedMenu(btnTiposObjeto);
 		MenuConBotonesPanel.add(btnTiposObjeto);
 	}
 	

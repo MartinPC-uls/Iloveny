@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -86,6 +87,12 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo = crearModeloComboBoxRut();
 		rutCB = new JComboBox(new String[] {});
+		rutCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCB(rutCB,lblAlertaRut);
+			}
+		});
 		rutCB.setModel(modelo);
 		rutCB.setBounds(138, 180, 214, 21);
 		add(rutCB);
@@ -97,21 +104,27 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		add(lblFecha);
 		
 		fechaTextField = new JTextField();
+		fechaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarFecha();
+			}
+		});
 		fechaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarFecha();
 			}
 		});
-		fechaTextField.setToolTipText("a");
-		fechaTextField.setText("yyyy-dd-mm");
+		fechaTextField.setToolTipText("");
+		fechaTextField.setText("AAAA-DD-MM");
 		fechaTextField.setOpaque(false);
 		fechaTextField.setForeground(new Color(170, 170, 170));
 		fechaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		fechaTextField.setCaretColor(Color.WHITE);
 		fechaTextField.setBorder(null);
 		fechaTextField.setBackground(new Color(51, 51, 51));
-		fechaTextField.setBounds(138, 225, 146, 21);
+		fechaTextField.setBounds(138, 225, 214, 21);
 		eventoCambiarJTextField(fechaTextField, fechaTextField.getText(), 20);
 		add(fechaTextField);
 		
@@ -140,6 +153,12 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		add(lblCantidadVendida);
 		
 		cantidadVendidaTextField = new JTextField();
+		cantidadVendidaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCantidadVendida();
+			}
+		});
 		cantidadVendidaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -191,6 +210,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		btnAgregarRegistroVenta.setBackground(Color.WHITE);
 		btnAgregarRegistroVenta.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarRegistroVenta.setBounds(138, 458, 459, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarRegistroVenta, 15);
 		add(btnAgregarRegistroVenta);
 		
 		lblAlertaFecha = new JLabel("");
@@ -225,6 +245,12 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo2 = crearModeloComboBoxArticulo();
 		articuloCB =  new JComboBox(new Object[]{});
+		articuloCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCB(articuloCB,lblAlertaArticulo);
+			}
+		});
 		articuloCB.setModel(modelo2);
 		articuloCB.setBounds(383, 180, 214, 21);
 		add(articuloCB);
@@ -304,7 +330,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 
 	private boolean isTodoCorrecto() {
 		stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
-		if (verificarCantidadVendida() && verificarRegion() && verificarFecha() && articuloCB.getSelectedIndex()!=0 &&
+		if (verificarCantidadVendida() && verificarCB(rutCB,lblAlertaRut) && verificarCB(articuloCB,lblAlertaArticulo) && verificarFecha() &&
 				verificarStock(stock)) {
 			return true;
 		} else {
@@ -335,7 +361,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private boolean verificarCantidadVendida() {
-		if(cantidadVendidaTextField.getText().equals("") || !isNumero(cantidadVendidaTextField.getText()) || cantidadVendidaTextField.getText().charAt(0) == '0') {
+		if(!cantidadVendidaTextField.getText().matches("[0-9]{1,5}") || cantidadVendidaTextField.getText().charAt(0) == '0') {
 			lblAlertaCantidadVendida.setVisible(true);
 			setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
 			return false;
@@ -345,17 +371,8 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		return true;
 	}
 	
-	private boolean isNumero(String string) {
-		try {
-			Integer.parseInt(string);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-	
 	private boolean verificarFecha() {
-		if(fechaTextField.getText().equals("") || !fechaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
+		if(!fechaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
 			setErroneo(lineaFecha, lblAlertaFecha);
 			return false;
 		}
@@ -363,35 +380,13 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		return true;
 	}
 
-	private boolean verificarRegion() {
-		if(rutCB.getSelectedIndex() == 0) {
-			lblAlertaRut.setVisible(true);
+	private boolean verificarCB(JComboBox comboBox, JLabel label) {
+		if(comboBox.getSelectedIndex() == 0) {
+			label.setVisible(true);
 			return false;
 		}
-		lblAlertaRut.setVisible(false);
+		label.setVisible(false);
 		return true;
-	}
-	
-	public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}
-	
-	public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
 	}
 	
 	public void setAcertado(JPanel panel, JLabel label){
@@ -418,6 +413,52 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
+		txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		if (text.length() == 0 || text.length() >maxCaracteres) {
+        			if(text.length() == 0) {
+        				txtUser.setText(relleno);
+        				txtUser.setForeground(new Color(170, 170, 170));
+        			}
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

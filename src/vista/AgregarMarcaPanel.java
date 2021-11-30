@@ -63,13 +63,19 @@ public class AgregarMarcaPanel extends JPanel {
 		add(lblMarca);
 		
 		marcaTextField = new JTextField();
+		marcaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarMarca();
+			}
+		});
 		marcaTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarMarca();
 			}
 		});
-		marcaTextField.setToolTipText("a");
+		marcaTextField.setToolTipText("");
 		marcaTextField.setText("EJ: Nike");
 		marcaTextField.setOpaque(false);
 		marcaTextField.setForeground(new Color(170, 170, 170));
@@ -115,6 +121,7 @@ public class AgregarMarcaPanel extends JPanel {
 		btnAgregarMarca.setBackground(Color.WHITE);
 		btnAgregarMarca.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarMarca.setBounds(199, 455, 302, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarMarca, 15);
 		add(btnAgregarMarca);
 		
 		lblAlertaMarca = new JLabel("");
@@ -181,12 +188,10 @@ public class AgregarMarcaPanel extends JPanel {
 	}
 	
 	private boolean verificarMarca() {
-		if(marcaTextField.getText().equals("")) {
-			lblAlertaMarca.setVisible(true);
+		if(!marcaTextField.getText().matches("[a-zA-Z ]{1,20}") || marcaTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaMarca, lblAlertaMarca);
 			return false;
 		}
-		setAcertado(lineaMarca, lblAlertaMarca);
 		lblAlertaMarca.setVisible(false);
 		return true;
 	}
@@ -215,6 +220,52 @@ public class AgregarMarcaPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
+		txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		if (text.length() == 0 || text.length() >maxCaracteres) {
+        			if(text.length() == 0) {
+        				txtUser.setText(relleno);
+        				txtUser.setForeground(new Color(170, 170, 170));
+        			}
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

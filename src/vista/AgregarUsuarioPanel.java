@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import java.awt.Font;
+import java.awt.Rectangle;
+
 import javax.swing.SwingConstants;
 
 import a.Modelo.Consulta;
@@ -103,6 +105,12 @@ public class AgregarUsuarioPanel extends JPanel {
 				verificarRut();
 			}
 		});
+		rutTextField.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		verificarRut();
+        	}
+        });
 		rutTextField.setText("EJ: 12.345.678-9");
 		rutTextField.setOpaque(false);
 		rutTextField.setForeground(new Color(170, 170, 170));
@@ -111,7 +119,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		rutTextField.setBorder(null);
 		rutTextField.setBackground(new Color(51, 51, 51));
 		rutTextField.setBounds(136, 153, 214, 21);
-		eventoCambiarJTextField(rutTextField, rutTextField.getText(), 20);
+		eventoCambiarJTextField(rutTextField, rutTextField.getText(), 30);
 		add(rutTextField);
 		
 		JLabel lblNombre = new JLabel("Nombre");
@@ -139,6 +147,12 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaNombre.setLayout(gl_lineaNombre);
 		
 		nombreTextField = new JTextField();
+		nombreTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarNombre();
+			}
+		});
 		nombreTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -181,6 +195,12 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaApellidos.setLayout(gl_lineaApellidos);
 		
 		apellidosTextField = new JTextField();
+		apellidosTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarApellidos();
+			}
+		});
 		apellidosTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -223,6 +243,12 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaNumTel.setLayout(gl_lineaNumTel);
 		
 		numTelefonoTextField = new JTextField();
+		numTelefonoTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarNumeroTelefonico();
+			}
+		});
 		numTelefonoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -265,6 +291,12 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaEmail.setLayout(gl_lineaEmail);
 		
 		emailTextField = new JTextField();
+		emailTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarEmail();
+			}
+		});
 		emailTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -293,6 +325,7 @@ public class AgregarUsuarioPanel extends JPanel {
 				}
 			}
 		});
+		eventoExpandirDisminuirTamañoBoton(btnAgregarUsuario, 15);
 		btnAgregarUsuario.setBorder(null);
 		btnAgregarUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAgregarUsuario.setBackground(Color.WHITE);
@@ -394,7 +427,7 @@ public class AgregarUsuarioPanel extends JPanel {
 	}
 
 	private boolean verificarNumeroTelefonico() {
-		if(numTelefonoTextField.getText().equals("") || numTelefonoTextField.getText().contains(" ") || (numTelefonoTextField.getText().length()<8 || numTelefonoTextField.getText().length()>15) || isHasAlpha(numTelefonoTextField.getText()) ) {
+		if(!numTelefonoTextField.getText().matches("\\+((569)|(562)){1}[0-9]{8}")) { 
 			setErroneo(lineaNumTel, lblAlertaNumTel);
 			return false;
 		}
@@ -402,30 +435,8 @@ public class AgregarUsuarioPanel extends JPanel {
 		return true;
 	}
 	
-	public boolean isOnlyAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(!Character.isLetter(c) && c != ' ') {
-	            return false;
-	        }
-	    }
-	    return true;
-	}
-	
-	public boolean isHasAlpha(String name) {
-	    char[] chars = name.toCharArray();
-
-	    for (char c : chars) {
-	        if(Character.isLetter(c)) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-
 	private boolean verificarApellidos() {
-		if(apellidosTextField.equals("") || apellidosTextField.getText().length()>50 || !isOnlyAlpha(apellidosTextField.getText())) {
+		if(!apellidosTextField.getText().matches("[a-zA-Z ]{1,50}") || apellidosTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaApellidos, lblAlertaApellidos);
 			return false;
 		}
@@ -434,7 +445,7 @@ public class AgregarUsuarioPanel extends JPanel {
 	}
 
 	private boolean verificarNombre() {
-		if(nombreTextField.equals("") || nombreTextField.getText().contains(" ") || nombreTextField.getText().length()>20 || !isOnlyAlpha(nombreTextField.getText()) ) {
+		if(!nombreTextField.getText().matches("[a-zA-Z]{1,20}")) {
 			setErroneo(lineaNombre, lblAlertaNombre);
 			return false;
 		}
@@ -502,5 +513,28 @@ public class AgregarUsuarioPanel extends JPanel {
         		}
         	}
         });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 }

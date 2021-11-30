@@ -67,7 +67,7 @@ public class Consulta extends Conexion{
     public boolean addMarca(String Marca){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO  Marca (NombreMarca) VALUES (?);";
+        String sql = "INSERT INTO  Marca (?) VALUES (?);";
         
         try {
             ps = con.prepareStatement(sql);

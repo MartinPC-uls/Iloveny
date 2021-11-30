@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -36,9 +37,9 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
-	private JTextField objetoTextField;
+	private JTextField tipoObjetoTextField;
 	private JLabel lblAlertaTipoObjeto;
-	private JPanel lineaObjeto;
+	private JPanel lineaTipoObjeto;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	
@@ -49,55 +50,61 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		setBackground(new Color(51,51,51));
 		setLayout(null);
 		
-		JLabel lblTipoObjeto = new JLabel("Tipo Objeto");
+		JLabel lblTipoObjeto = new JLabel("Tipo de Objeto");
 		lblTipoObjeto.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTipoObjeto.setForeground(Color.WHITE);
 		lblTipoObjeto.setFont(new Font("Roboto Medium", Font.PLAIN, 41));
 		lblTipoObjeto.setBounds(199, 11, 302, 55);
 		add(lblTipoObjeto);
 		
-		JLabel lblObjeto = new JLabel("Objeto");
+		JLabel lblObjeto = new JLabel("Tipo de objeto");
 		lblObjeto.setForeground(Color.WHITE);
 		lblObjeto.setFont(new Font("Roboto Light", Font.PLAIN, 11));
 		lblObjeto.setBounds(250, 211, 106, 14);
 		add(lblObjeto);
 		
-		objetoTextField = new JTextField();
-		objetoTextField.addKeyListener(new KeyAdapter() {
+		tipoObjetoTextField = new JTextField();
+		tipoObjetoTextField.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		verificarTipoObjeto();
+        	}
+        });
+		tipoObjetoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				verificarMarca();
+				verificarTipoObjeto();
 			}
 		});
-		objetoTextField.setToolTipText("a");
-		objetoTextField.setText("EJ: Cinturon");
-		objetoTextField.setOpaque(false);
-		objetoTextField.setForeground(new Color(170, 170, 170));
-		objetoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		objetoTextField.setCaretColor(Color.WHITE);
-		objetoTextField.setBorder(null);
-		objetoTextField.setBackground(new Color(51, 51, 51));
-		objetoTextField.setBounds(250, 222, 214, 21);
-		eventoCambiarJTextField(objetoTextField, objetoTextField.getText(), 20);
-		add(objetoTextField);
+		tipoObjetoTextField.setToolTipText("");
+		tipoObjetoTextField.setText("EJ: Cinturon");
+		tipoObjetoTextField.setOpaque(false);
+		tipoObjetoTextField.setForeground(new Color(170, 170, 170));
+		tipoObjetoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		tipoObjetoTextField.setCaretColor(Color.WHITE);
+		tipoObjetoTextField.setBorder(null);
+		tipoObjetoTextField.setBackground(new Color(51, 51, 51));
+		tipoObjetoTextField.setBounds(250, 222, 214, 21);
+		eventoCambiarJTextField(tipoObjetoTextField, tipoObjetoTextField.getText(), 20);
+		add(tipoObjetoTextField);
 		
-		lineaObjeto = new JPanel();
-		lineaObjeto.setPreferredSize(new Dimension(0, 3));
-		lineaObjeto.setBackground(Color.WHITE);
-		lineaObjeto.setBounds(248, 248, 214, 3);
-		add(lineaObjeto);
-		GroupLayout gl_lineaObjeto = new GroupLayout(lineaObjeto);
-		gl_lineaObjeto.setHorizontalGroup(
-			gl_lineaObjeto.createParallelGroup(Alignment.LEADING)
+		lineaTipoObjeto = new JPanel();
+		lineaTipoObjeto.setPreferredSize(new Dimension(0, 3));
+		lineaTipoObjeto.setBackground(Color.WHITE);
+		lineaTipoObjeto.setBounds(248, 248, 214, 3);
+		add(lineaTipoObjeto);
+		GroupLayout gl_lineaTipoObjeto = new GroupLayout(lineaTipoObjeto);
+		gl_lineaTipoObjeto.setHorizontalGroup(
+			gl_lineaTipoObjeto.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaObjeto.setVerticalGroup(
-			gl_lineaObjeto.createParallelGroup(Alignment.LEADING)
+		gl_lineaTipoObjeto.setVerticalGroup(
+			gl_lineaTipoObjeto.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaObjeto.setLayout(gl_lineaObjeto);
+		lineaTipoObjeto.setLayout(gl_lineaTipoObjeto);
 		
 		JButton btnAgregarTipoObjeto = new JButton("AGREGAR TIPO OBJETO");
 		btnAgregarTipoObjeto.addActionListener(new ActionListener() {
@@ -115,6 +122,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		btnAgregarTipoObjeto.setBackground(Color.WHITE);
 		btnAgregarTipoObjeto.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarTipoObjeto.setBounds(199, 455, 302, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarTipoObjeto, 15);
 		add(btnAgregarTipoObjeto);
 		
 		lblAlertaTipoObjeto = new JLabel("");
@@ -124,8 +132,6 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		lblAlertaTipoObjeto.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAlertaTipoObjeto.setBounds(215, 224, 30, 27);
 		add(lblAlertaTipoObjeto);
-		
-		//DefaultComboBoxModel modelo = crearModeloComboBox();
 		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -142,24 +148,6 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
 	}
-	
-	/*private DefaultComboBoxModel crearModeloComboBox() {
-		ArrayList ruts = consulta.getRutsSinDireccion();
-		if(ruts.size()>0) {
-			existenRutsSinDireccion = true;
-			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
-			listaRuts[0] = "Seleccione...";
-			for(int i=1; i<=ruts.size();i++) {
-				listaRuts[i] = ruts.get(i-1).toString();
-			}
-			return new DefaultComboBoxModel(listaRuts);
-		}else {
-			lblAlertaRut.setVisible(true);
-			existenRutsSinDireccion = false;
-			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
-		}
-	}*/
 
 	private void agregarDatos() {
 		agregarDatosTablaMarca();
@@ -167,26 +155,26 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	
 	private void agregarDatosTablaMarca() {
 		if (modo == 1) {
-			consulta.addMarca(objetoTextField.getText());
+			consulta.addTipoObj(tipoObjetoTextField.getText());
 		} else if(modo == 2) {
 			
 		}
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarMarca()) {
+		if(verificarTipoObjeto()) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean verificarMarca() {
-		if(objetoTextField.getText().equals("")) {
+	private boolean verificarTipoObjeto() {
+		if(!tipoObjetoTextField.getText().matches("[a-zA-Z ]{1,20}") || tipoObjetoTextField.getText().charAt(0) == '0') {
 			lblAlertaTipoObjeto.setVisible(true);
-			setErroneo(lineaObjeto, lblAlertaTipoObjeto);
+			setErroneo(lineaTipoObjeto, lblAlertaTipoObjeto);
 			return false;
 		}
-		setAcertado(lineaObjeto, lblAlertaTipoObjeto);
+		setAcertado(lineaTipoObjeto, lblAlertaTipoObjeto);
 		lblAlertaTipoObjeto.setVisible(false);
 		return true;
 	}
@@ -215,6 +203,52 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
+		txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		if (text.length() == 0 || text.length() >maxCaracteres) {
+        			if(text.length() == 0) {
+        				txtUser.setText(relleno);
+        				txtUser.setForeground(new Color(170, 170, 170));
+        			}
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

@@ -71,10 +71,10 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		lblArticulo.setBounds(312, 153, 62, 14);
 		add(lblArticulo);
 		
-		JLabel lblLargo = new JLabel("Largo");
+		JLabel lblLargo = new JLabel("Largo (cm)");
 		lblLargo.setForeground(Color.WHITE);
 		lblLargo.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblLargo.setBounds(312, 212, 50, 14);
+		lblLargo.setBounds(309, 212, 62, 14);
 		add(lblLargo);
 		
 		lineaLargo = new JPanel();
@@ -96,6 +96,12 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		lineaLargo.setLayout(gl_lineaLargo);
 		
 		largoTextField = new JTextField();
+		largoTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarTextFieldSoloNumeros(largoTextField,lblAlertaLargo,lineaLargo);
+			}
+		});
 		largoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -114,24 +120,36 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		add(largoTextField);
 		
 		ArticuloCB = new JComboBox();
+		ArticuloCB.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCB(ArticuloCB, lblAlertaArticulo);
+			}
+		});
 		ArticuloCB.setModel(crearModeloComboBoxId());
 		ArticuloCB.setBounds(240, 180, 214, 21);
 		add(ArticuloCB);
 		
-		JLabel lblAlto = new JLabel("Alto");
+		JLabel lblAlto = new JLabel("Alto (cm)");
 		lblAlto.setForeground(Color.WHITE);
 		lblAlto.setFont(new Font("Roboto Light", Font.PLAIN, 11));
 		lblAlto.setBounds(240, 212, 49, 14);
 		add(lblAlto);
 		
 		altoTextField = new JTextField();
+		altoTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarTextFieldSoloNumeros(altoTextField,lblAlertaAlto,lineaAlto);
+			}
+		});
 		altoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				verificarTextFieldSoloNumeros(altoTextField,lblAlertaAlto,lineaAlto);
 			}
 		});
-		altoTextField.setToolTipText("a");
+		altoTextField.setToolTipText("");
 		altoTextField.setText("EJ: 14");
 		altoTextField.setOpaque(false);
 		altoTextField.setForeground(new Color(170, 170, 170));
@@ -161,13 +179,19 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		);
 		lineaAlto.setLayout(gl_lineaAlto);
 		
-		JLabel lblAncho = new JLabel("Ancho");
+		JLabel lblAncho = new JLabel("Ancho(cm)");
 		lblAncho.setForeground(Color.WHITE);
 		lblAncho.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblAncho.setBounds(383, 212, 50, 14);
+		lblAncho.setBounds(383, 212, 62, 14);
 		add(lblAncho);
 		
 		anchoTextField = new JTextField();
+		anchoTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarTextFieldSoloNumeros(anchoTextField,lblAlertaAncho,lineaAncho);
+			}
+		});
 		anchoTextField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -219,6 +243,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		btnAgregarMedidaGeneral.setBackground(Color.WHITE);
 		btnAgregarMedidaGeneral.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarMedidaGeneral.setBounds(155, 457, 402, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarMedidaGeneral, 15);
 		add(btnAgregarMedidaGeneral);
 		
 		lblAlertaAlto = new JLabel("");
@@ -253,8 +278,6 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		lblAlertaArticulo.setBounds(200, 174, 30, 27);
 		add(lblAlertaArticulo);
 		
-		//DefaultComboBoxModel modelo = crearModeloComboBox();
-		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnVolver.setBorder(null);
@@ -270,7 +293,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
 	}
-	
+
 	private DefaultComboBoxModel crearModeloComboBoxId() {
 		ArrayList elementosObetenidos = consulta.getIdArticuloSinMedidaGeneral();
 		if(elementosObetenidos.size()>0) {
@@ -295,9 +318,8 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 	
 	private void agregarDatosTablaMedidaGeneral() {
 		if (modo == 1) {
-			System.out.println("ALLALALAALALLA");
 			consulta.addMedidaG(Integer.parseInt(largoTextField.getText()), Integer.parseInt(altoTextField.getText()), 
-					Integer.parseInt(anchoTextField.getText()), obtenerIdSeleccionado());
+								Integer.parseInt(anchoTextField.getText()), obtenerIdSeleccionado());
 		} else if(modo == 2) {
 			
 		}
@@ -329,26 +351,6 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		}
 		return false;
 	}
-	
-	private boolean verificarAncho() {
-		if(anchoTextField.getText().equals("") || !isNumber(anchoTextField.getText())) {
-			lblAlertaAncho.setVisible(true);
-			setErroneo(lineaAncho, lblAlertaAncho);
-			return false;
-		}
-		setAcertado(lineaAncho, lblAlertaAncho);
-		lblAlertaAncho.setVisible(false);
-		return true;
-	}
-	
-	private boolean isNumber(String string) {
-		try {
-			Integer.parseInt(string);
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		return true;
-	}
 
 	private boolean verificarCB(JComboBox comboBox, JLabel alerta) {
 		if(comboBox.getSelectedIndex() == 0) {
@@ -360,7 +362,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 	}
 
 	private boolean verificarTextFieldSoloNumeros(JTextField textfield,JLabel alerta, JPanel linea) {
-		if(textfield.getText().equals("") || !isNumber(textfield.getText())) {
+		if(!textfield.getText().matches("[0-9]{1,5}") || textfield.getText().charAt(0) == '0') {
 			setErroneo(linea, alerta);
 			return false;
 		}
@@ -416,6 +418,29 @@ public class AgregarMedidaGeneralPanel extends JPanel {
         		}
         	}
         });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }
