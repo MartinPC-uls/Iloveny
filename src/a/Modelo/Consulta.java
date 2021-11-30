@@ -250,7 +250,7 @@ public class Consulta extends Conexion{
         return null;
     }
     
-    public boolean verificarAdmin(String Usuario, String Contrasena){
+    public synchronized boolean verificarAdmin(String Usuario, String Contrasena){
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();

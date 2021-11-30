@@ -9,16 +9,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
-
-import vista.Administracion;
 import vista.Login;
 import a.Modelo.Consulta;
 
@@ -75,14 +69,13 @@ public class ControladorLogin {
         		login.botonX.setBackground(new Color(139,0,0));
         	}
         });
-		
 	}
 
 	private void eventoCambiarTxtPassword(Login login) {
 		login.txtPassword.addFocusListener(new FocusAdapter() {
 	       	 @Override
 	       	 public void focusLost(FocusEvent e) {
-	         		String text = login.txtPassword.getText();
+	         		String text = String.valueOf(login.txtPassword.getPassword());
 	         		
 	         		// cambiar downPanelUser a color rojo, si el usuario es incorrecto.
 	         		if (text.length() == 0 || text.length() >16) {
@@ -98,7 +91,6 @@ public class ControladorLogin {
 	         	}
 	         	@Override
 	         	public void focusGained(FocusEvent e) {
-	         		String text = login.txtPassword.getText();
 	         		Color color = new Color(170, 170, 170);
 	         		if (login.txtPassword.getForeground().equals(color)) {
 	         			login.txtPassword.setText("");
@@ -113,7 +105,6 @@ public class ControladorLogin {
         	@Override
         	public void focusLost(FocusEvent e) {
         		String text = login.txtUser.getText();
-        		// cambiar downPanelUser a color rojo, si el usuario es incorrecto.
         		if (text.length() == 0 || text.length() >20) {
         			if(text.length() == 0) {
         				login.txtUser.setText("Usuario");
@@ -127,7 +118,6 @@ public class ControladorLogin {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = login.txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (login.txtUser.getForeground().equals(color) && login.txtUser.getText().length() < 20) {
         			login.txtUser.setText("");
@@ -147,40 +137,46 @@ public class ControladorLogin {
 		}
 	}
 	
-	private void eventoClickBtnLogin(Login login, Consulta consulta) {
+	private void eventoClickBtnLogin(Login login, final Consulta consulta) {
 		login.btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		if(consulta.verificarAdmin(login.txtUser.getText(), login.txtPassword.getText())) {
-        			login.lblConectado.setVisible(true);
-        			login.lblLoadingImage.setVisible(true);
-        			System.out.println("Logeado dentro del sistema.");
-        			login.lblErrorImage.setVisible(false);
-        			login.lblErrorMessage.setVisible(false);
-        			login.downPanelUser.setBackground(Color.GREEN);
-        			login.downPanelPassword.setBackground(Color.GREEN);
-        				try {
-						mostrarAlerta(true);
-					} catch (HeadlessException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-        			ControladorAdministracion administracion = new ControladorAdministracion(login.txtUser.getText());
-        			login.setVisible(false);
-        		} else {
-        			System.out.println("No existe / mala contrasena");
-        			login.lblErrorImage.setVisible(true);
-        			login.lblErrorMessage.setVisible(true);
-        			login.downPanelUser.setBackground(Color.RED);
-        			login.downPanelPassword.setBackground(Color.RED);
-        				try {
-						mostrarAlerta(false);
-					} catch (HeadlessException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-        		}
+        		Thread t1 = new Thread() {
+        			@Override
+        			public void run() {
+        				if(consulta.verificarAdmin(login.txtUser.getText(), String.valueOf(login.txtPassword.getPassword()))) {
+        	        			login.lblConectado.setVisible(true);
+        	        			login.lblLoadingImage.setVisible(true);
+        	        			System.out.println("Logeado dentro del sistema.");
+        	        			login.lblErrorImage.setVisible(false);
+        	        			login.lblErrorMessage.setVisible(false);
+        	        			login.downPanelUser.setBackground(Color.GREEN);
+        	        			login.downPanelPassword.setBackground(Color.GREEN);
+        	 				try {
+        						mostrarAlerta(true);
+        					} catch (HeadlessException e) {
+        						e.printStackTrace();
+        					} catch (IOException e) {
+        						e.printStackTrace();
+        					}
+        	        			new ControladorAdministracion(login.txtUser.getText());
+        	        			login.setVisible(false);
+        	        		} else {
+        	        			System.out.println("No existe / mala contrasena");
+        	        			login.lblErrorImage.setVisible(true);
+        	        			login.lblErrorMessage.setVisible(true);
+        	        			login.downPanelUser.setBackground(Color.RED);
+        	        			login.downPanelPassword.setBackground(Color.RED);
+        	 				try {
+        						mostrarAlerta(false);
+        					} catch (HeadlessException e) {
+        						e.printStackTrace();
+        					} catch (IOException e) {
+        						e.printStackTrace();
+        					}
+        	        		}
+        			}
+        		};
+        		t1.start();
         	}
         });
 	}

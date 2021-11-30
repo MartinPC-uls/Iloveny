@@ -1,30 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vista;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.awt.event.MouseMotionAdapter;
 
-/**
- *
- * @author ghanv
- */
 public class Login extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -48,9 +28,8 @@ public class Login extends JFrame {
         try {
 		initialize();
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
-		}
+	}
     }
 
     private void initialize() throws IOException {
@@ -58,9 +37,7 @@ public class Login extends JFrame {
         setVisible(true);
         setBounds(100, 100, 473, 652);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         getContentPane().setLayout(null);
