@@ -349,46 +349,55 @@ public class Administracion extends JFrame {
 	}
 
 	private void realizarBusqueda() {
-		eliminarDatosTabla();
-		elementosTabla = new ArrayList<ArrayList<String>>();
-		switch(modo) {
-		case 1:
-			//elementosTabla = 
-			break;
-		case 2:
-			elementosTabla = consulta.getDirecciones();
-			break;
-		case 3:
-			String[] columnas = {"nada","idarticulo","nombretipo","nombremarca","stock","preciounitario","descripcion","rutaimg"};
- 			boolean[] isInteger = {false,true,false,false,true,true,true,false,false};
-			elementosTabla = consulta.getListaArticuloBusqueda(columnas[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger[filtroCB.getSelectedIndex()]);
-			break;
-		case 4:
-			elementosTabla = consulta.getListaMedidaG("idarticulo");
-			break;
-		case 5:
-			elementosTabla = consulta.getListaMedidaE("idarticulo");
-			break;
-		case 6:
-			elementosTabla = consulta.getRegistrosVenta("idventa");
-			break;
-		case 7:
-			elementosTabla = consulta.getProveedor();
-			break;
-		case 8:
-			elementosTabla = consulta.getMarca();
-			break;
-		default:
-			
-		}
-		Vector elementos = new Vector();
-		for (int i = 0; i < elementosTabla.size(); i++) {
-			elementos = new Vector();
-			for (int j = 0; j < elementosTabla.get(i).size(); j++) {
-				elementos.add(elementosTabla.get(i).get(j));
+		if(filtroCB.getSelectedIndex() != 0) {
+			eliminarDatosTabla();
+			elementosTabla = new ArrayList<ArrayList<String>>();
+			switch(modo) {
+			 case 1:
+				String[] columnas1 = {"nada","nombreusuario","apellidos","rut","telefonos","email"};
+	 			boolean[] isInteger1 = {false,false,false,false,false,false};
+				elementosTabla = consulta.getListaUsuarioBusqueda(columnas1[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger1[filtroCB.getSelectedIndex()]);
+				break;
+			case 2:
+				String[] columnas2 = {"nada","rut","nombreregion","numerodomicilio","calle","ciudad","comuna"};
+	 			boolean[] isInteger2 = {false,false,false,true,false,false};
+				elementosTabla = consulta.getListaDireccionBusqueda(columnas2[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger2[filtroCB.getSelectedIndex()]);
+				break;
+			case 3:
+				String[] columnas3 = {"nada","idarticulo","nombretipo","nombremarca","stock","preciounitario","descripcion","rutaimg"};
+	 			boolean[] isInteger3 = {false,true,false,false,true,true,false,false};
+				elementosTabla = consulta.getListaArticuloBusqueda(columnas3[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger3[filtroCB.getSelectedIndex()]);
+				break;
+			case 4:
+				String[] columnas4 = {"nada","medidageneral.idarticulo","nombretipo","alto","ancho","largo"};
+	 			boolean[] isInteger4 = {false,true,false,true,true,true};
+				elementosTabla = consulta.getListaMedidaGBusqueda(columnas4[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger4[filtroCB.getSelectedIndex()]);
+				break;
+			case 5:
+				elementosTabla = consulta.getListaMedidaE("idarticulo");
+				break;
+			case 6:
+				elementosTabla = consulta.getRegistrosVenta("idventa");
+				break;
+			case 7:
+				elementosTabla = consulta.getProveedor();
+				break;
+			case 8:
+				elementosTabla = consulta.getMarca();
+				break;
+			default:
+				
 			}
-			modeloTabla.addRow(elementos);
+			Vector elementos = new Vector();
+			for (int i = 0; i < elementosTabla.size(); i++) {
+				elementos = new Vector();
+				for (int j = 0; j < elementosTabla.get(i).size(); j++) {
+					elementos.add(elementosTabla.get(i).get(j));
+				}
+				modeloTabla.addRow(elementos);
+			}
 		}
+		
 	}
 
 	private void repintarTabla() {
@@ -606,13 +615,13 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Medida General");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Tipo de articulo","Alto", "Ancho", "Largo"});
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Tipo de articulo","Alto (cm)", "Ancho (cm)", "Largo (cm)"});
 					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
 							new String[] {
-								"ID Articulo","Tipo de articulo", "Alto", "Ancho", "Largo"
+								"ID Articulo","Tipo de articulo", "Alto (cm)", "Ancho (cm)", "Largo (cm)"
 							}
 					));
 					repintarTabla();

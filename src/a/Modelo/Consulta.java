@@ -363,9 +363,9 @@ public class Consulta extends Conexion{
                 ArrayList<String> columna = new ArrayList<>();
                 columna.add(rs.getString("idArticulo"));
                 columna.add(rs.getString("nombretipo"));
-                columna.add(rs.getString("Largo"));
-                columna.add(rs.getString("Alto"));
-                columna.add(rs.getString("Ancho"));
+                columna.add(rs.getString("alto"));
+                columna.add(rs.getString("ancho"));
+                columna.add(rs.getString("largo"));
                 fila.add(columna);
             }
             return fila;
@@ -632,22 +632,139 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getListaUsuarioBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT DISTINCT * "
+        		+ "FROM usuario ";
+        if(isInteger) {
+        	sql+= "WHERE UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "WHERE UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("NombreUsuario"));
+                columna.add(rs.getString("Apellidos"));
+                columna.add(rs.getString("Rut"));
+                columna.add(rs.getString("Telefono"));
+                columna.add(rs.getString("Email"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList getListaMedidaGBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT medidageneral.idarticulo, tipoobj.nombretipo, medidageneral.alto, medidageneral.ancho, medidageneral.largo "
+        		+ "FROM Medidageneral, articulo, tipoobj "
+        		+ "WHERE articulo.idarticulo = medidageneral.idarticulo "
+        		+ "AND tipoobj.idtipoobj = articulo.idtipoobj ";
+        if(isInteger) {
+        	sql+= "AND UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "AND UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("nombretipo"));
+                columna.add(rs.getString("alto"));
+                columna.add(rs.getString("ancho"));
+                columna.add(rs.getString("largo"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList getListaDireccionBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT rut, nombreregion, numerodomicilio, calle, ciudad, comuna " 
+    			+"FROM Direccion, Region " 
+    			+"WHERE direccion.idRegion = region.idRegion ";
+        if(isInteger) {
+        	sql+= "AND UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "AND UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("rut"));
+                columna.add(rs.getString("Nombreregion"));
+                columna.add(rs.getString("numerodomicilio"));
+                columna.add(rs.getString("calle"));
+                columna.add(rs.getString("ciudad"));
+                columna.add(rs.getString("comuna"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public ArrayList getListaArticuloBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion, rutaimg "
-        		+ "FROM Articulo, Marca, TipoObj WHERE Articulo.idMarca = Marca.idMarca "
+        String sql = "SELECT DISTINCT idArticulo, NombreTipo, NombreMarca, Stock, PrecioUnitario, descripcion, rutaimg "
+        		+ "FROM Articulo, Marca, TipoObj "
+        		+ "WHERE Articulo.idMarca = Marca.idMarca "
         		+ "AND Articulo.idTipoObj = TipoObj.idTipoObj ";
         if(isInteger) {
-        	sql+= "AND CAST(? as CHAR) LIKE '%"+aBuscar+"%'";
+        	sql+= "AND UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
         }else {
-        	sql+= "AND ? LIKE '%"+aBuscar+"%'";
+        	sql+= "AND UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
         }
+        
+        System.out.println(sql);
         		
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, nombreColumna);
             rs = ps.executeQuery();
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
@@ -660,6 +777,7 @@ public class Consulta extends Conexion{
                 columna.add(rs.getString("descripcion"));
                 columna.add(rs.getString("rutaimg"));
                 fila.add(columna);
+                System.out.println(fila);
             }
             return fila;
         } catch (SQLException ex) {
@@ -870,11 +988,11 @@ public class Consulta extends Conexion{
      * @param FechaPedida Corresponde al dato que se va a agregar en la columna FechaPedida.
      * @param FechaRecibo Corresponde al dato que se va a agregar en la columna FechaRecibo.
      */
-    public void addRegistroCompra(int idCompra,int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
+    public void addRegistroCompra(int idArticulo, String Usuario, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedida, Date FechaRecibo ) {
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo, idCompra) "
-        		+ " VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
+        		+ " VALUES (?,?,?,?,?,?,?)";
         try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, idArticulo);
@@ -884,7 +1002,6 @@ public class Consulta extends Conexion{
 			ps.setInt(5,CostoUnitario);
 			ps.setDate(6, (java.sql.Date) FechaPedida);
 			ps.setDate(7, (java.sql.Date) FechaRecibo);
-			ps.setInt(8, idCompra);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -1318,7 +1435,6 @@ public class Consulta extends Conexion{
             rs = ps.executeQuery();
             ArrayList<ArrayList<String>> fila = new ArrayList<>();
             ArrayList<String> columna;
-            
             while(rs.next()){
        	  columna = new ArrayList<>();
                 columna.add(rs.getString("NombreUsuario"));
