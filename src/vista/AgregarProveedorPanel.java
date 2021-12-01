@@ -144,6 +144,7 @@ public class AgregarProveedorPanel extends JPanel {
 		add(btnVolver);
 		
 		if (modo == 2) {
+			btnAgregarProveedor.setText("EDITAR PROVEEDOR");
 			setElementos(elementoSeleccionado);
 		}
 	}

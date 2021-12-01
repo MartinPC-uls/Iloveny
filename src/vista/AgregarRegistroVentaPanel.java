@@ -234,10 +234,10 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		lblAlertaRut.setBounds(98, 174, 30, 27);
 		add(lblAlertaRut);
 		
-		JLabel lblArticulo = new JLabel("Articulo");
+		JLabel lblArticulo = new JLabel("Articulos con stock");
 		lblArticulo.setForeground(Color.WHITE);
 		lblArticulo.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblArticulo.setBounds(383, 155, 62, 14);
+		lblArticulo.setBounds(383, 155, 144, 14);
 		add(lblArticulo);
 		
 		DefaultComboBoxModel modelo2 = crearModeloComboBoxArticulo();
@@ -273,15 +273,23 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		}
 	}
 	
+	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
+	        for (int i = 0; i < comboBox.getItemCount(); i++) {
+	            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
+	                comboBox.setSelectedIndex(i);
+	                break;
+	            }
+	        }
+	    } 
+	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
 		cantidadAntigua = Integer.parseInt(elementoSeleccionado.get(3));
 		idVenta = Integer.parseInt(elementoSeleccionado.get(4));
 		cambiarColorTextFieldsBlanco();
 		fechaTextField.setText(elementoSeleccionado.get(2));
 		cantidadVendidaTextField.setText(elementoSeleccionado.get(3));
-		rutCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...", elementoSeleccionado.get(1)}));
-		rutCB.setSelectedIndex(1);
-		rutCB.setEnabled(false);
+		//rutCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...", elementoSeleccionado.get(1)}));
+		setIndiceElementoSeleccionado(rutCB, elementoSeleccionado.get(1));
 		for (int i = 0; i < articuloCB.getItemCount(); i++) {
 			if (articuloCB.getItemAt(i).toString().contains(elementoSeleccionado.get(0))) {
 				articuloCB.setSelectedIndex(i);
@@ -350,17 +358,10 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
 		} else if(modo == 2) {
-			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), date.parse(fechaTextField.getText()),
-						Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
-				consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())),
-						getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())));
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText(),
+					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
+			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())),
+					getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())));
 		}
 	}
 	

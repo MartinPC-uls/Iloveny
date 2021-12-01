@@ -396,9 +396,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
 		unidadesAdquiridasAntigua = Integer.parseInt(elementoSeleccionado.get(3));
 		idCompraAntiguo = Integer.parseInt(elementoSeleccionado.get(7));
-		idProveedor = Integer.parseInt(elementoSeleccionado.get(2));
+		
+		//idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
+		
 		setIndiceElementoSeleccionado(articuloCB, elementoSeleccionado.get(0));
 		setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
+		idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
 		cambiarColorTextFieldsBlanco();
 		fechaPedidaTextField.setText(elementoSeleccionado.get(5));
 		fechaReciboTextField.setText(elementoSeleccionado.get(6));
@@ -484,17 +487,10 @@ public class AgregarRegistroCompraPanel extends JPanel {
 					fechaReciboTextField.getText());
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));
 		} else if(modo == 2) {
-			Date fechaPedida = null;
-			Date fechaRecibo = null;
-			try {
-				fechaPedida = new SimpleDateFormat("yyyy-MM-dd").parse(fechaPedidaTextField.getText());
-				fechaRecibo = new SimpleDateFormat("yyyy-MM-dd").parse(fechaReciboTextField.getText());
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+
 			this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 			consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
-					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedida, fechaRecibo,
+					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(), fechaReciboTextField.getText(),
 					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), idCompraAntiguo);
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), getNewStock(stock,
 					Integer.parseInt(unidadesAdquiridasTextField.getText()), unidadesAdquiridasAntigua));

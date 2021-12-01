@@ -1494,7 +1494,7 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtRegistroCompra(String UsuarioNuevo, int idProv, int UnidadesAdquiridas, int CostoUnitario, Date FechaPedidaNueva, Date FechaRecibo, int idArticuloNuevo, int idCompraAntiguo) {
+    public boolean updtRegistroCompra(String UsuarioNuevo, int idProv, int UnidadesAdquiridas, int CostoUnitario, String FechaPedidaNueva, String FechaRecibo, int idArticuloNuevo, int idCompraAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE RegistroCompra "
@@ -1507,8 +1507,8 @@ public class Consulta extends Conexion{
             ps.setInt(3, idProv);
             ps.setInt(4, UnidadesAdquiridas);
             ps.setInt(5, CostoUnitario);
-            ps.setDate(6, (java.sql.Date) FechaPedidaNueva);
-            ps.setDate(7, (java.sql.Date) FechaRecibo);
+            ps.setDate(6, java.sql.Date.valueOf(FechaPedidaNueva));
+            ps.setDate(7, java.sql.Date.valueOf(FechaRecibo));
             ps.setInt(8, idCompraAntiguo);
             ps.execute();
             ps.close();
@@ -1525,17 +1525,17 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtRegistroVenta(int CantidadVendida, Date FechaVentaNueva, int idArticuloNuevo, String rutNuevo,int idVentaAntiguo) {
+    public boolean updtRegistroVenta(int CantidadVendida, String FechaVentaNueva, int idArticuloNuevo, String rutNuevo,int idVentaAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
-        String sql = "UPDATE RegistroCompra "
+        String sql = "UPDATE RegistroVenta "
         		+ "SET idArticulo = ?, Rut = ?, FechaVenta = ?, CantidadVendida = ? "
         		+"WHERE idVenta = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, idArticuloNuevo);
             ps.setString(2, rutNuevo);
-            ps.setDate(3, (java.sql.Date) FechaVentaNueva);
+            ps.setDate(3, java.sql.Date.valueOf(FechaVentaNueva));
             ps.setInt(4, CantidadVendida);
             ps.setInt(5, idVentaAntiguo);
             ps.execute();
