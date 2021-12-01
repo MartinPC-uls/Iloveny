@@ -9,21 +9,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
@@ -32,7 +27,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class AgregarDireccionPanel extends JPanel {
-	private static final Object[] String = null;
+
+	private static final long serialVersionUID = -7474338284438590427L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
@@ -56,6 +52,7 @@ public class AgregarDireccionPanel extends JPanel {
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	
+	@SuppressWarnings("unchecked")
 	public AgregarDireccionPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
@@ -391,11 +388,10 @@ public class AgregarDireccionPanel extends JPanel {
 	}
 
 	private DefaultComboBoxModel crearModeloComboBox() {
-		ArrayList ruts = consulta.getRutsSinDireccion();
+		ArrayList<?> ruts = consulta.getRutsSinDireccion();
 		if(ruts.size()>0) {
 			existenRutsSinDireccion = true;
 			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
 			listaRuts[0] = "Seleccione...";
 			for(int i=1; i<=ruts.size();i++) {
 				listaRuts[i] = ruts.get(i-1).toString();
@@ -513,7 +509,7 @@ public class AgregarDireccionPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
+        		txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");

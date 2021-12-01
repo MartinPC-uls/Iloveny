@@ -8,11 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Matcher;
-
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -20,14 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
@@ -38,7 +32,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class AgregarRegistroCompraPanel extends JPanel {
-	private static final Object[] String = null;
+
+	private static final long serialVersionUID = -1178501338264937978L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
@@ -399,11 +394,10 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private DefaultComboBoxModel crearModeloComboBoxProveedor() {
-		ArrayList proveedores = consulta.getProveedor();
+		ArrayList<?> proveedores = consulta.getProveedor();
 		if(proveedores.size()>0) {
 			existenRutsSinDireccion = true;
 			String[] listaProveedores = new String[proveedores.size()+1];
-			System.out.println(proveedores.size());
 			listaProveedores[0] = "Seleccione...";
 			for(int i=1; i<=proveedores.size();i++) {
 				listaProveedores[i] = proveedores.get(i-1).toString();
@@ -423,10 +417,9 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
-		ArrayList articulo = consulta.getDescripcionArticulosConStock();
+		ArrayList<?> articulo = consulta.getDescripcionArticulosConStock();
 		if(articulo.size()>0) {
 			String[] listaArticulos = new String[articulo.size()+1];
-			System.out.println(articulo.size());
 			listaArticulos[0] = "Seleccione...";
 			for(int i=1; i<=articulo.size();i++) {
 				listaArticulos[i] = articulo.get(i-1).toString();
@@ -578,7 +571,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
+        		txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");

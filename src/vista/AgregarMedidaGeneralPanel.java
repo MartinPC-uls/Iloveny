@@ -9,21 +9,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
@@ -32,7 +27,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class AgregarMedidaGeneralPanel extends JPanel {
-	private static final Object[] String = null;
+
+	private static final long serialVersionUID = 2114849683033413530L;
 	public int modo;
 	public boolean existenArticulosConMedida;
 	public Consulta consulta = new Consulta();
@@ -295,11 +291,10 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 	}
 
 	private DefaultComboBoxModel crearModeloComboBoxId() {
-		ArrayList elementosObetenidos = consulta.getIdArticuloSinMedidaGeneral();
+		ArrayList<?> elementosObetenidos = consulta.getIdArticuloSinMedidaGeneral();
 		if(elementosObetenidos.size()>0) {
 			existenArticulosConMedida = true;
 			String[] listasMedidas = new String[elementosObetenidos.size()+1];
-			System.out.println(elementosObetenidos.size());
 			listasMedidas[0] = "Seleccione...";
 			for(int i=1; i<=elementosObetenidos.size();i++) {
 				listasMedidas[i] = elementosObetenidos.get(i-1).toString();
@@ -329,7 +324,6 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		String opcionSeleccionada = (String)ArticuloCB.getSelectedItem();
 		String idString = obtenerIdEnString(opcionSeleccionada);
 		int id = Integer.parseInt(idString);
-		System.out.println(id);
 		return id;
 	}
 
@@ -410,7 +404,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
+        		txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");

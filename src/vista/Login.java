@@ -34,7 +34,7 @@ public class Login extends JFrame {
     }
 
     private void initialize() throws IOException {
-    	setResizable(false);
+    	 setResizable(false);
         setVisible(true);
         setBounds(100, 100, 473, 652);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,7 +84,6 @@ public class Login extends JFrame {
         lblErrorImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/error.png")));
         lblErrorImage.setBounds(0, 158, 24, 21);
         panel.add(lblErrorImage);
-        //lblLoadingImage.setHorizontalAlignment(SwingConstants.CENTER);
         
         lblErrorMessage = new JLabel("Acceso denegado");
         lblErrorMessage.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -181,11 +180,7 @@ public class Login extends JFrame {
         lblLoadingImage = new JLabel("");
         lblLoadingImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/loading-icon.gif")));
         lblLoadingImage.setBounds(0, 158, 24, 21);
-        //ImageIcon loading_icon = new ImageIcon(Login.class.getResource("/imagenes/loading.gif")); // TODO
-        //lblLoadingImage.setIcon(new ImageIcon(loading_icon.getImage().getScaledInstance(lblLoadingImage.getWidth(), lblLoadingImage.getHeight(), Image.SCALE_SMOOTH)));
         lblLoadingImage.setVisible(false);
-        
-        //lblLoadingImage.setIcon(new ImageIcon(Login.class.getResource("/imagenes/loading.png")));
         panel.add(lblLoadingImage);
         
         header = new JPanel();

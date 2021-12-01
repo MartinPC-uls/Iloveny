@@ -4,20 +4,13 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-
 import java.awt.Font;
-import java.awt.Rectangle;
-
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -32,10 +25,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseMotionAdapter;
 
 public class AgregarUsuarioPanel extends JPanel {
 	
+	private static final long serialVersionUID = -4869686066977683583L;
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
 		    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 	public int modoPanel=0;
@@ -56,7 +49,6 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JPanel lineaNombre;
 	private JPanel lineaNumTel;
 	private JPanel lineaApellidos;
-	private JLabel lblVolver;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 
@@ -159,7 +151,7 @@ public class AgregarUsuarioPanel extends JPanel {
 				verificarNombre();
 			}
 		});
-		nombreTextField.setText("EJ: Pedro ");
+		nombreTextField.setText("EJ: Pedro");
 		nombreTextField.setOpaque(false);
 		nombreTextField.setForeground(new Color(170, 170, 170));
 		nombreTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -505,7 +497,7 @@ public class AgregarUsuarioPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
+        		txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");
