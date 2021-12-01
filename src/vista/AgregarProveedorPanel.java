@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -36,7 +37,7 @@ public class AgregarProveedorPanel extends JPanel {
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
-	private JTextField proveedortextField;
+	private JTextField proveedorTextField;
 	private JLabel lblAlertaProveedor;
 	private JPanel lineaProveedor;
 	private JButton btnVolver;
@@ -62,24 +63,30 @@ public class AgregarProveedorPanel extends JPanel {
 		lblProveedor2.setBounds(259, 210, 106, 14);
 		add(lblProveedor2);
 		
-		proveedortextField = new JTextField();
-		proveedortextField.addKeyListener(new KeyAdapter() {
+		proveedorTextField = new JTextField();
+		proveedorTextField.addFocusListener(new FocusAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
-				verificarMarca();
+			public void focusLost(FocusEvent arg0) {
+				verificarProveedor();
 			}
 		});
-		proveedortextField.setToolTipText("a");
-		proveedortextField.setText("EJ: Proveedor3");
-		proveedortextField.setOpaque(false);
-		proveedortextField.setForeground(new Color(170, 170, 170));
-		proveedortextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		proveedortextField.setCaretColor(Color.WHITE);
-		proveedortextField.setBorder(null);
-		proveedortextField.setBackground(new Color(51, 51, 51));
-		proveedortextField.setBounds(259, 222, 214, 21);
-		eventoCambiarJTextField(proveedortextField, proveedortextField.getText(), 20);
-		add(proveedortextField);
+		proveedorTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarProveedor();
+			}
+		});
+		proveedorTextField.setToolTipText("");
+		proveedorTextField.setText("EJ: Proveedor3");
+		proveedorTextField.setOpaque(false);
+		proveedorTextField.setForeground(new Color(170, 170, 170));
+		proveedorTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		proveedorTextField.setCaretColor(Color.WHITE);
+		proveedorTextField.setBorder(null);
+		proveedorTextField.setBackground(new Color(51, 51, 51));
+		proveedorTextField.setBounds(259, 222, 214, 21);
+		eventoCambiarJTextField(proveedorTextField, proveedorTextField.getText(), 20);
+		add(proveedorTextField);
 		
 		lineaProveedor = new JPanel();
 		lineaProveedor.setPreferredSize(new Dimension(0, 3));
@@ -115,6 +122,7 @@ public class AgregarProveedorPanel extends JPanel {
 		btnAgregarProveedor.setBackground(Color.WHITE);
 		btnAgregarProveedor.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarProveedor.setBounds(206, 455, 320, 64);
+		eventoExpandirDisminuirTamañoBoton(btnAgregarProveedor, 15);
 		add(btnAgregarProveedor);
 		
 		lblAlertaProveedor = new JLabel("");
@@ -124,8 +132,6 @@ public class AgregarProveedorPanel extends JPanel {
 		lblAlertaProveedor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAlertaProveedor.setBounds(223, 222, 30, 27);
 		add(lblAlertaProveedor);
-		
-		//DefaultComboBoxModel modelo = crearModeloComboBox();
 		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -143,51 +149,31 @@ public class AgregarProveedorPanel extends JPanel {
 		add(btnVolver);
 	}
 	
-	/*private DefaultComboBoxModel crearModeloComboBox() {
-		ArrayList ruts = consulta.getRutsSinDireccion();
-		if(ruts.size()>0) {
-			existenRutsSinDireccion = true;
-			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
-			listaRuts[0] = "Seleccione...";
-			for(int i=1; i<=ruts.size();i++) {
-				listaRuts[i] = ruts.get(i-1).toString();
-			}
-			return new DefaultComboBoxModel(listaRuts);
-		}else {
-			lblAlertaRut.setVisible(true);
-			existenRutsSinDireccion = false;
-			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
-		}
-	}*/
-
 	private void agregarDatos() {
-		agregarDatosTablaMarca();
+		agregarDatosProveedor();
 	}
 	
-	private void agregarDatosTablaMarca() {
+	private void agregarDatosProveedor() {
 		if (modo == 1) {
-			consulta.addMarca(proveedortextField.getText());
+			consulta.addProveedor(proveedorTextField.getText());
 		} else if(modo == 2) {
 			
 		}
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarMarca()) {
+		if(verificarProveedor()) {
 			return true;
 		}
 		return false;
 	}
 	
-	private boolean verificarMarca() {
-		if(proveedortextField.getText().equals("")) {
-			lblAlertaProveedor.setVisible(true);
+	private boolean verificarProveedor() {
+		if(!proveedorTextField.getText().matches("[a-zA-Z0-9 ]{1,20}") && proveedorTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaProveedor, lblAlertaProveedor);
 			return false;
 		}
 		setAcertado(lineaProveedor, lblAlertaProveedor);
-		lblAlertaProveedor.setVisible(false);
 		return true;
 	}
 	
@@ -215,6 +201,52 @@ public class AgregarProveedorPanel extends JPanel {
 	}
 	
 	private void eventoCambiarJTextField(JTextField txtUser, String relleno, int maxCaracteres) {
+		txtUser.addFocusListener(new FocusAdapter() {
+        	@Override
+        	public void focusLost(FocusEvent e) {
+        		String text = txtUser.getText();
+        		if (text.length() == 0 || text.length() >maxCaracteres) {
+        			if(text.length() == 0) {
+        				txtUser.setText(relleno);
+        				txtUser.setForeground(new Color(170, 170, 170));
+        			}
+        		} else {
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        	@Override
+        	public void focusGained(FocusEvent e) {
+        		String text = txtUser.getText();
+        		Color color = new Color(170, 170, 170);
+        		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
+        			txtUser.setText("");
+        			txtUser.setForeground(new Color(255, 255, 255));
+        		}
+        	}
+        });
+	}
+	
+	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {	
+				boton.setBounds(
+						(int)boton.getBounds().getX()-pixeles/2,
+						(int)boton.getBounds().getY()-pixeles/2,
+						(int)boton.getBounds().getWidth()+pixeles,
+						(int)boton.getBounds().getHeight()+pixeles);
+				boton.setFont(new Font("Roboto Light", Font.BOLD, 27));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBounds(
+						(int)boton.getBounds().getX()+pixeles/2,
+						(int)boton.getBounds().getY()+pixeles/2,
+						(int)boton.getBounds().getWidth()-pixeles,
+						(int)boton.getBounds().getHeight()-pixeles);
+				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
+			}
+		});
 	}
 
 }

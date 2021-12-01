@@ -32,6 +32,7 @@ import javax.swing.table.TableRowSorter;
 import a.Modelo.Consulta;
 import javax.swing.JLabel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Component;
 import java.awt.Rectangle;
@@ -90,10 +91,13 @@ public class Administracion extends JFrame {
 	public AgregarRegistroVentaPanel agregarRegistroVentaPanel;
 	public AgregarMarcaPanel agregarMarcaPanel;
 	public AgregarRegistroCompraPanel agregarRegistroCompraPanel;
+	public AgregarTipoObjetoPanel agregarTipoObjetoPanel;
+	public AgregarProveedorPanel agregarProveedorPanel;
 	private JPanel panelPrincipal;
 	private JButton btnRegistroCompra;
 	private JButton btnMarcas;
 	private JButton btnTiposObjeto;
+	private JButton btnProveedores;
 
 	public Administracion(String nombreAdmin) {
 		this.nombreAdmin = nombreAdmin;
@@ -123,6 +127,7 @@ public class Administracion extends JFrame {
 		getContentPane().add(panelPrincipal);
 		
 		btnModificar = new JButton("");
+		btnModificar.setToolTipText("Modificar");
 		this.addEventoBotonEnteredAndExited(btnModificar);
 		btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnModificar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Edit-icon-white.png")));
@@ -133,6 +138,7 @@ public class Administracion extends JFrame {
 		panelPrincipal.add(btnModificar);
 		
 		btnAgregar = new JButton("");
+		btnAgregar.setToolTipText("Agregar");
 		btnAgregar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAgregar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Add-icon-blanco.png")));
 		btnAgregar.setBackground(new Color(51, 51, 51));
@@ -174,6 +180,14 @@ public class Administracion extends JFrame {
 					agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
 					cambiarPanel(agregarMarcaPanel);
 					break;
+				case 9:
+					agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarTipoObjetoPanel);
+					break;
+				case 10:
+					agregarProveedorPanel = new AgregarProveedorPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					cambiarPanel(agregarProveedorPanel);
+					break;
 				default:
 				
 				}
@@ -197,6 +211,7 @@ public class Administracion extends JFrame {
 		panelPrincipal.add(btnAgregar);
 		
 		btnEliminar = new JButton("");
+		btnEliminar.setToolTipText("Eliminar");
 		btnEliminar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnEliminar.setBounds(new Rectangle(0, 0, 45, 45));
 		btnEliminar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Trash-icon-white.png")));
@@ -223,6 +238,7 @@ public class Administracion extends JFrame {
 		iniciarTabla();
 		rellenarTabla();
 		btnActualizar = new JButton("");
+		btnActualizar.setToolTipText("Refrezcar");
 		btnActualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnActualizar.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Reload-white.png")));
 		btnActualizar.setBackground(new Color(51, 51, 51));
@@ -249,7 +265,7 @@ public class Administracion extends JFrame {
 		filtroCB.setName("");
 		filtroCB.setForeground(Color.BLACK);
 		filtroCB.setBorder(null);
-		filtroCB.setBounds(315, 67, 115, 41);
+		filtroCB.setBounds(315, 67, 137, 41);
 		panelPrincipal.add(filtroCB);
 		
 		buscadorTextField = new JTextField();
@@ -312,21 +328,51 @@ public class Administracion extends JFrame {
 					consulta.delMedidaE(Integer.parseInt(value));
 					break;
 				case 6:
+					int cantidadComprada = Integer.parseInt(tabla.getValueAt(row, 3).toString());
+					int reAjustarStockC = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (restar el stock en: "+cantidadComprada+" unidades)");
+					if(JOptionPane.YES_OPTION == reAjustarStockC) {
+						int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
+						int stockActual = consulta.getArticuloStock(idArticulo);
+						if(stockActual-cantidadComprada>=0) {
+							consulta.updtStockArticulo(idArticulo,stockActual-cantidadComprada);
+						}else {
+							Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+							JOptionPane.showMessageDialog(null, "No fue posible dado que el stock es menor que la cantidad comprada","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+						}
+					}
 					consulta.delRegistroVenta(Integer.parseInt(value));
 					break;
 				case 7:
-					// delProveedor (soon...)
+					int cantidadVendida = Integer.parseInt(tabla.getValueAt(row, 3).toString());
+					int reAjustarStockV = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (aumentar el stock en: "+cantidadVendida+" unidades)");
+					if(JOptionPane.YES_OPTION == reAjustarStockV) {
+						int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
+						int stockActual = consulta.getArticuloStock(idArticulo);
+						consulta.updtStockArticulo(idArticulo,stockActual+cantidadVendida);
+					}
+					consulta.delRegistroCompra(Integer.parseInt(value));
 					break;
 				case 8:
-					ArrayList idsArticulos = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
-					for (int i = 0; i < idsArticulos.size(); i++) {
-						consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
-						consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulos.get(i).toString()));
+					ArrayList idsArticulosMarca = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
+					for (int i = 0; i < idsArticulosMarca.size(); i++) {
+						consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
+						consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
 					}
 					consulta.delArticuloSegunMarca(Integer.parseInt(value));
 					consulta.delMarca(Integer.parseInt(value));
 					break;
-					
+				case 9:
+					ArrayList idsArticulosTipoObj = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
+					for (int i = 0; i < idsArticulosTipoObj.size(); i++) {
+						consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
+						consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
+					}
+					consulta.delArticuloSegunMarca(Integer.parseInt(value));
+					consulta.delMarca(Integer.parseInt(value));
+					break;
+				case 10:
+					consulta.delProveedor(Integer.parseInt(value));
+					break;
 				default:
 			}
 			eliminarDatosTabla();
@@ -361,16 +407,30 @@ public class Administracion extends JFrame {
 				elementosTabla = consulta.getListaMedidaGBusqueda(columnas4[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger4[filtroCB.getSelectedIndex()]);
 				break;
 			case 5:
-				elementosTabla = consulta.getListaMedidaE("idarticulo");//falta
+				String[] columnas5 = {"nada","medidaespecifica.idarticulo","nombretipo","medidaespecifica"};
+	 			boolean[] isInteger5 = {false,true,false,false};
+				elementosTabla = consulta.getListaMedidaEBusqueda(columnas5[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger5[filtroCB.getSelectedIndex()]);
 				break;
 			case 6:
-				elementosTabla = consulta.getRegistrosVenta("idventa");//falta
+				String[] columnas6 = {"nada","registroventa.idarticulo","rut","fechaventa","cantidadvendida","idventa"};
+	 			boolean[] isInteger6 = {false,true,false,true,true,true};
+				elementosTabla = consulta.getRegistrosVentaBusqueda(columnas6[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger6[filtroCB.getSelectedIndex()]);
 				break;
 			case 7:
-				elementosTabla = consulta.getProveedor();//falta
+				String[] columnas7 = {"nada","registrocompra.idarticulo","usuario","nombreprov","unidadesadquiridas","costounitario","fechapedida","fecharecibo","idcompra"};
+	 			boolean[] isInteger7 = {false,true,false,false,true,true,true,true,true};
+				elementosTabla = consulta.getRegistrosCompraBusqueda(columnas7[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger7[filtroCB.getSelectedIndex()]);
 				break;
 			case 8:
-				elementosTabla = consulta.getMarca();//falta
+				String[] columnas8 = {"nada","registrocompra.idarticulo","usuario","nombreprov","unidadesadquiridas","costounitario","fechapedida","fecharecibo","idcompra"};
+	 			boolean[] isInteger8 = {false,true,false};
+				elementosTabla = consulta.getMarcaBusqueda(columnas8[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger8[filtroCB.getSelectedIndex()]);
+				break;
+			case 9:
+				//falta elementosTabla = consulta.getMarca();
+				break;
+			case 10:
+				//falta elementosTabla = consulta.getMarca();
 				break;
 			default:
 				
@@ -472,7 +532,7 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel = new JPanel();
 		scrollPane.setViewportView(MenuConBotonesPanel);
 		MenuConBotonesPanel.setBackground(new Color(34, 34, 34));
-		MenuConBotonesPanel.setPreferredSize(new Dimension(170, 600));
+		MenuConBotonesPanel.setPreferredSize(new Dimension(170, 550));
 		MenuConBotonesPanel.setLayout(null);
 		
 		btnUsuarios = new JButton("USUARIOS");
@@ -666,12 +726,13 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnMedidaEspecifica);
 		
 		JButton btnRegistroVenta = new JButton("REGISTRO VENTA");
+		btnRegistroVenta.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/monedas-icono-white.png")));
 		btnRegistroVenta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegistroVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(modo != 6) {
 					modo = 6;
-					columnaPK = 0;
+					columnaPK = 4;
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro venta");
 					buscadorTextField.setText("");
@@ -703,6 +764,7 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnRegistroVenta);
 		
 		btnRegistroCompra = new JButton("REGISTRO COMPRA");
+		btnRegistroCompra.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/carrito-white.png")));
 		btnRegistroCompra.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegistroCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -740,6 +802,7 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnRegistroCompra);
 		
 		btnMarcas = new JButton("MARCAS");
+		btnMarcas.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/marca-icono-white.png")));
 		btnMarcas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnMarcas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -777,6 +840,32 @@ public class Administracion extends JFrame {
 		MenuConBotonesPanel.add(btnMarcas);
 		
 		btnTiposObjeto = new JButton("TIPOS DE OBJETO");
+		btnTiposObjeto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 9) {
+					modo = 9;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("Tipo de objeto");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Tipo","Nombre Tipo"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+									"ID Tipo","Nombre Tipo"}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}
+		});
+		btnTiposObjeto.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/objeto-icono-white.png")));
 		btnTiposObjeto.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnTiposObjeto.setForeground(Color.WHITE);
 		btnTiposObjeto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -786,6 +875,43 @@ public class Administracion extends JFrame {
 		btnTiposObjeto.setBounds(0, 432, 197, 43);
 		addEventoBotonEnteredAndExitedMenu(btnTiposObjeto);
 		MenuConBotonesPanel.add(btnTiposObjeto);
+		
+		btnProveedores = new JButton("PROVEEDORES");
+		btnProveedores.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(modo != 10) {
+					modo = 10;
+					columnaPK = 0;
+					eliminarDatosTabla();
+					lblTitulo.setText("PROVEEDOR");
+					buscadorTextField.setText("");
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Proveedor","Nombre Proveedor"});
+					filtroCB.setModel(model);
+					tabla.setModel(new DefaultTableModel(
+							new Object[][] {
+							},
+							new String[] {
+									"ID Proveedor","Nombre proveedor"}
+					));
+					repintarTabla();
+					rellenarTabla();
+					filtroCB.setSelectedIndex(0);
+				}
+				if(!panelPrincipal.isVisible()) {
+					reacomodarPaneles();
+				}
+			}
+		});
+		btnProveedores.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/handshake-white-icon.png")));
+		btnProveedores.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnProveedores.setForeground(Color.WHITE);
+		btnProveedores.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		btnProveedores.setFocusPainted(false);
+		btnProveedores.setBorder(null);
+		btnProveedores.setBackground(new Color(34, 34, 34));
+		btnProveedores.setBounds(0, 486, 197, 43);
+		addEventoBotonEnteredAndExitedMenu(btnProveedores);
+		MenuConBotonesPanel.add(btnProveedores);
 	}
 	
 	private void reacomodarPaneles() {
@@ -828,7 +954,12 @@ public class Administracion extends JFrame {
 		case 8:
 			elementosTabla = consulta.getMarca();
 			break;
+		case 9:
+			elementosTabla = consulta.getTipoObjeto();
 		default:
+		case 10:
+			elementosTabla = consulta.getProveedor();
+			break;
 			
 		}
 		Vector elementos = new Vector();

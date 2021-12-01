@@ -122,7 +122,7 @@ public class Consulta extends Conexion{
 	    try {
 		    ps = con.prepareStatement(sql);
 		    rs = ps.executeQuery();
-		    int value = -1;
+		    int value = 0;
 		    if (rs.next()) {
 			    value = rs.getInt("stock");
 		    }
@@ -144,6 +144,39 @@ public class Consulta extends Conexion{
         ResultSet rs;
         Connection con = conectar();
         String sql = "SELECT * FROM Marca;";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idMarca"));
+                columna.add(rs.getString("NombreMarca"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList getMarcaBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * FROM Marca ";
+        if(isInteger) {
+        	sql+= "WHERE UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "WHERE UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -669,6 +702,43 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getListaMedidaEBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT medidaespecifica.idarticulo, tipoobj.nombretipo, medidaespecifica.medida "
+        		+ "FROM MedidaEspecifica, articulo, tipoobj "
+        		+ "WHERE articulo.idarticulo = medidaespecifica.idarticulo "
+        		+ "AND tipoobj.idtipoobj = articulo.idtipoobj ";
+        if(isInteger) {
+        	sql+= "AND UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "AND UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("nombretipo"));
+                columna.add(rs.getString("Medida"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public ArrayList getListaMedidaGBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
         PreparedStatement ps;
         ResultSet rs;
@@ -760,8 +830,6 @@ public class Consulta extends Conexion{
         }else {
         	sql+= "AND UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
         }
-        
-        System.out.println(sql);
         		
         try {
             ps = con.prepareStatement(sql);
@@ -777,7 +845,6 @@ public class Consulta extends Conexion{
                 columna.add(rs.getString("descripcion"));
                 columna.add(rs.getString("rutaimg"));
                 fila.add(columna);
-                System.out.println(fila);
             }
             return fila;
         } catch (SQLException ex) {
@@ -1091,6 +1158,48 @@ public class Consulta extends Conexion{
 		return null;
     }
     
+    public ArrayList getRegistrosCompraBusqueda (String nombreColumna, String aBuscar, boolean isInteger) {
+    	PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT idArticulo, Usuario, NombreProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo, idCompra "
+        		+ "FROM RegistroCompra, Proveedor "
+        		+ "WHERE RegistroCompra.idProv = Proveedor.idProv ";
+        if(isInteger) {
+        	sql+= "AND UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "AND UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+        	ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("Usuario"));
+                columna.add(rs.getString("NombreProv"));
+                columna.add(rs.getString("UnidadesAdquiridas"));
+                columna.add(rs.getString("CostoUnitario"));
+                columna.add(rs.getString("FechaPedida"));
+                columna.add(rs.getString("FechaRecibo"));
+                columna.add(rs.getString("idcompra"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
     /**
      * Obtiene los datos de la tabla de RegistrosVenta
      * @param orden Es el parametro que determinará el orden de la lista.
@@ -1106,6 +1215,45 @@ public class Consulta extends Conexion{
         try {
         	ps = con.prepareStatement(sql);
         	ps.setString(1, orden);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idArticulo"));
+                columna.add(rs.getString("Rut"));
+                columna.add(rs.getString("FechaVenta"));
+                columna.add(rs.getString("CantidadVendida"));
+                columna.add(rs.getString("idventa"));
+                fila.add(columna);
+            }
+            ps.close();
+            return fila;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+		return null;
+    }
+    
+    public ArrayList getRegistrosVentaBusqueda(String nombreColumna, String aBuscar, boolean isInteger) {
+    	PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * "
+        		+ "FROM RegistroVenta ";
+    
+        if(isInteger) {
+        	sql+= "WHERE UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "WHERE UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+        	ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
@@ -1165,41 +1313,6 @@ public class Consulta extends Conexion{
         }
 		return null;
     }
-    /*
-    public ArrayList getBusquedaDinamica(String[] nombresTablas, String columnaString, String aBuscarEnColumna, String[] nombresColumnas) {
-    	PreparedStatement ps;
-        ResultSet rs;
-        Connection con = conectar();
-        String sql = "SELECT * "
-        		+ "FROM ? "
-        		+ "WHERE ? = ?";
-        try {
-        	ps = con.prepareStatement(sql);
-        	ps.setString(1, nombreTabla);
-        	ps.setString(2, columnaString);
-        	ps.setString(3, aBuscarEnColumna);
-            rs = ps.executeQuery();
-            ArrayList<ArrayList> fila = new ArrayList<>();
-            while(rs.next()){
-                ArrayList<String> columna = new ArrayList<>();
-                for(int i = 0; i<nombresColumnas.length;i++) {
-                	columna.add(rs.getString(nombresColumnas[i]));
-                }
-                fila.add(columna);
-            }
-            ps.close();
-            return fila;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-            try {
-                con.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-		return null;
-    }*/
     
     /**
      * Borra una fila de la tabla RegistroCompra.
@@ -1236,6 +1349,28 @@ public class Consulta extends Conexion{
         try {
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, idArticulo);
+			ps.execute();
+			ps.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void delProveedor(int idProveedor) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM Proveedor "
+        		+ "WHERE idProv = ? ";
+        try {
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, idProveedor);
 			ps.execute();
 			ps.close();
 		} catch (SQLException e) {
@@ -1643,6 +1778,56 @@ public class Consulta extends Conexion{
             }
         }
         return null;
+    }
+    
+    public ArrayList getidArticulosSegunIdTipoObj(int idTipoObj){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT idarticulo " +
+        		"FROM articulo " + 
+        		"WHERE idTipoObj = ? ";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idTipoObj);
+            rs = ps.executeQuery();
+            ArrayList<String> fila = new ArrayList<>();
+            while(rs.next()){
+                fila.add(rs.getString("idarticulo"));
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public boolean delArticuloSegunIdTipoObj(int idTipoObj){
+        PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "DELETE FROM Articulo WHERE idtipoobj = ?";
+        
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idTipoObj);
+            ps.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     public boolean delArticuloSegunMarca(int idMarca){
