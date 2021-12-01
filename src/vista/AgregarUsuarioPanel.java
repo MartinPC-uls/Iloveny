@@ -52,6 +52,7 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JPanel lineaApellidos;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
+	private String rutAntiguo;
 
 	public AgregarUsuarioPanel(int modo, JComponent[] paneles,JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modoPanel = modo;
@@ -393,6 +394,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		apellidosTextField.setText(elementoSeleccionado.get(1));
 		rutTextField.setForeground(Color.WHITE);
 		rutTextField.setText(elementoSeleccionado.get(2));
+		rutAntiguo = elementoSeleccionado.get(2);
 		numTelefonoTextField.setForeground(Color.WHITE);
 		numTelefonoTextField.setText(elementoSeleccionado.get(3));
 		emailTextField.setForeground(Color.WHITE);
@@ -407,7 +409,8 @@ public class AgregarUsuarioPanel extends JPanel {
 		if (modoPanel == 1) {
     		consulta.addUsuario(nombreTextField.getText(),apellidosTextField.getText(),rutTextField.getText(),numTelefonoTextField.getText(),emailTextField.getText());    		
 		} else if (modoPanel == 2){
-			//consulta.updtUsuario(rut, rutAntiguo, nombreUsuario, apellidos, telefono, email);
+			consulta.updtUsuario(rutTextField.getText(), rutAntiguo, nombreTextField.getText(), apellidosTextField.getText(),
+					numTelefonoTextField.getText(), emailTextField.getText());
 		}
 	}
 
