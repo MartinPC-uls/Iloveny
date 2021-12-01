@@ -58,6 +58,10 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	public JButton btnRefrezcar;
 	private String nombreAdmin;
 	private JLabel lblAlertaUnidadesAdquirida;
+	private int idProveedor;
+	private int idCompraAntiguo;
+	private int unidadesAdquiridasAntigua;
+	private int stock;
 	
 	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -390,6 +394,9 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		unidadesAdquiridasAntigua = Integer.parseInt(elementoSeleccionado.get(3));
+		idCompraAntiguo = Integer.parseInt(elementoSeleccionado.get(7));
+		idProveedor = Integer.parseInt(elementoSeleccionado.get(2));
 		setIndiceElementoSeleccionado(articuloCB, elementoSeleccionado.get(0));
 		setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
 		cambiarColorTextFieldsBlanco();
@@ -477,8 +484,32 @@ public class AgregarRegistroCompraPanel extends JPanel {
 					fechaReciboTextField.getText());
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));
 		} else if(modo == 2) {
-				
+			Date fechaPedida = null;
+			Date fechaRecibo = null;
+			try {
+				fechaPedida = new SimpleDateFormat("yyyy-MM-dd").parse(fechaPedidaTextField.getText());
+				fechaRecibo = new SimpleDateFormat("yyyy-MM-dd").parse(fechaReciboTextField.getText());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
+			consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
+					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedida, fechaRecibo,
+					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), idCompraAntiguo);
+			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), getNewStock(stock,
+					Integer.parseInt(unidadesAdquiridasTextField.getText()), unidadesAdquiridasAntigua));
 		}
+	}
+	
+	private int getNewStock(int stock, int cNueva, int cAntigua) {
+		if (cNueva > cAntigua) {
+			return stock+(cNueva-cAntigua);
+		} else if (cNueva < cAntigua) {
+			return stock-(cAntigua-cNueva);
+		} else if (cNueva == cAntigua) {
+			return stock;
+		}
+		return stock;
 	}
 	
 	private boolean verificarFechas() {
@@ -499,11 +530,30 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && verificarProveedor()
-				&& verificarFechas()) {
-			return true;
+		if (modo == 1) {
+			if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && verificarProveedor()
+					&& verificarFechas()) {
+				return true;
+			}
+		} else if (modo == 2) {
+			if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && verificarProveedor()
+					&& verificarFechas() && verificarStock()) {
+				return true;
+			}
 		}
 		return false;
+	}
+	
+	private boolean verificarStock() {
+		if (getNewStock(this.stock, unidadesAdquiridasAntigua, Integer.parseInt(unidadesAdquiridasTextField.getText())) < 0) {
+			setErroneo(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
+			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+			JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+			return false;
+		} else {
+			setAcertado(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
+			return true;
+		}
 	}
 	
 	private boolean verificarFechaRecibo() {

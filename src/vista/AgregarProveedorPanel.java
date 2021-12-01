@@ -12,7 +12,6 @@ import java.awt.event.FocusEvent;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,6 +36,7 @@ public class AgregarProveedorPanel extends JPanel {
 	private JPanel lineaProveedor;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
+	private int idProveedor;
 	
 	public AgregarProveedorPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -149,6 +149,7 @@ public class AgregarProveedorPanel extends JPanel {
 	}
 	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		idProveedor = Integer.parseInt(elementoSeleccionado.get(0));
 		cambiarColorTextFieldsBlanco();
 		proveedorTextField.setText(elementoSeleccionado.get(1));
 	}
@@ -170,7 +171,7 @@ public class AgregarProveedorPanel extends JPanel {
 		if (modo == 1) {
 			consulta.addProveedor(proveedorTextField.getText());
 		} else if(modo == 2) {
-			
+			consulta.updtProveedor(idProveedor, proveedorTextField.getText());
 		}
 	}
 

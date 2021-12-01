@@ -53,6 +53,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	public JButton btnRefrezcar;
 	private static int stock;
 	private int idVenta;
+	private int cantidadAntigua;
 	
 	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -273,6 +274,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cantidadAntigua = Integer.parseInt(elementoSeleccionado.get(3));
 		idVenta = Integer.parseInt(elementoSeleccionado.get(4));
 		cambiarColorTextFieldsBlanco();
 		fechaTextField.setText(elementoSeleccionado.get(2));
@@ -348,16 +350,29 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
 		} else if(modo == 2) {
-			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
 			try {
 				consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), date.parse(fechaTextField.getText()),
 						Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
+				consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())),
+						getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())));
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private int getNewStock(int stock, int cantidadAntigua, int cantidadNueva) {
+		if (cantidadNueva > cantidadAntigua) {
+			return stock-(cantidadNueva-cantidadAntigua);
+		} else if (cantidadAntigua > cantidadNueva) {
+			return stock-(cantidadAntigua-cantidadNueva);
+		} else if (cantidadAntigua == cantidadNueva) {
+			return stock;
+		}
+		return stock;
 	}
 
 	private boolean isTodoCorrecto() {
@@ -371,14 +386,28 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private boolean verificarStock(int stock) {
-		if (stock < Integer.parseInt(cantidadVendidaTextField.getText())) {
-			setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
-			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
-			JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
-			return false;
-		} else {
-			return true;
+		if (modo == 1) {
+			if (stock < Integer.parseInt(cantidadVendidaTextField.getText())) {
+				setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
+				Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+				JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+				return false;
+			} else {
+				setAcertado(lineaCantidadVendida, lblAlertaCantidadVendida);
+				return true;
+			}
+		} else if (modo == 2) {
+			if (getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())) < 0) {
+				setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
+				Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+				JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+				return false;
+			} else {
+				setAcertado(lineaCantidadVendida, lblAlertaCantidadVendida);
+				return true;
+			}
 		}
+		return false;
 	}
 	
 	private boolean verificarCantidadVendida() {
