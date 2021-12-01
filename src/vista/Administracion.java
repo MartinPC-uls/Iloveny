@@ -422,18 +422,21 @@ public class Administracion extends JFrame {
 				elementosTabla = consulta.getRegistrosCompraBusqueda(columnas7[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger7[filtroCB.getSelectedIndex()]);
 				break;
 			case 8:
-				String[] columnas8 = {"nada","registrocompra.idarticulo","usuario","nombreprov","unidadesadquiridas","costounitario","fechapedida","fecharecibo","idcompra"};
+				String[] columnas8 = {"nada","idmarca","nombremarca"};
 	 			boolean[] isInteger8 = {false,true,false};
 				elementosTabla = consulta.getMarcaBusqueda(columnas8[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger8[filtroCB.getSelectedIndex()]);
 				break;
 			case 9:
-				//falta elementosTabla = consulta.getMarca();
+				String[] columnas9 = {"nada","idtipoobj","nombretipo"};
+	 			boolean[] isInteger9 = {false,true,false};
+				elementosTabla = consulta.getTipoObjetoBusqueda(columnas9[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger9[filtroCB.getSelectedIndex()]);
 				break;
 			case 10:
-				//falta elementosTabla = consulta.getMarca();
+				String[] columnas10 = {"nada","idprov","nombreprov"};
+	 			boolean[] isInteger10 = {false,true,false};
+				elementosTabla = consulta.getProveedorBusqueda(columnas10[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger10[filtroCB.getSelectedIndex()]);
 				break;
 			default:
-				
 			}
 			Vector elementos = new Vector();
 			for (int i = 0; i < elementosTabla.size(); i++) {

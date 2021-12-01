@@ -114,6 +114,39 @@ public class Consulta extends Conexion{
         return null;
     }
     
+    public ArrayList getTipoObjetoBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * FROM TipoObj ";
+        if(isInteger) {
+        	sql+= "WHERE UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "WHERE UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                rs.getString("idTipoObj");
+                rs.getString("NombreTipo");
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
     public int getArticuloStock(int idArticulo) {
 	    PreparedStatement ps;
 	    ResultSet rs;
@@ -205,6 +238,39 @@ public class Consulta extends Conexion{
         ResultSet rs;
         Connection con = conectar();
         String sql = "SELECT * FROM Proveedor;";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ArrayList<ArrayList> fila = new ArrayList<>();
+            while(rs.next()){
+                ArrayList<String> columna = new ArrayList<>();
+                columna.add(rs.getString("idProv"));
+                columna.add(rs.getString("NombreProv"));
+                fila.add(columna);
+            }
+            return fila;
+        } catch (SQLException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList getProveedorBusqueda(String nombreColumna, String aBuscar, boolean isInteger){
+        PreparedStatement ps;
+        ResultSet rs;
+        Connection con = conectar();
+        String sql = "SELECT * FROM Proveedor ";
+        if(isInteger) {
+        	sql+= "WHERE UPPER(CAST("+nombreColumna+" as VARCHAR)) LIKE UPPER('%"+aBuscar+"%')";
+        }else {
+        	sql+= "WHERE UPPER("+nombreColumna+") LIKE UPPER('%"+aBuscar+"%')";
+        }
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
