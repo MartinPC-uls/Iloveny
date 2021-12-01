@@ -135,15 +135,15 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT * FROM TipoObj;";
+        String sql = "SELECT * FROM TipoObj ORDER BY idTipoObj";
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                rs.getString("idTipoObj");
-                rs.getString("NombreTipo");
+                columna.add(rs.getString("idTipoObj"));
+                columna.add(rs.getString("NombreTipo"));
                 fila.add(columna);
             }
             return fila;
@@ -175,8 +175,8 @@ public class Consulta extends Conexion{
             ArrayList<ArrayList> fila = new ArrayList<>();
             while(rs.next()){
                 ArrayList<String> columna = new ArrayList<>();
-                rs.getString("idTipoObj");
-                rs.getString("NombreTipo");
+                columna.add(rs.getString("idTipoObj"));
+                columna.add(rs.getString("NombreTipo"));
                 fila.add(columna);
             }
             return fila;
@@ -1020,7 +1020,7 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         Connection con = conectar();
         String sql = "UPDATE Articulo "
-        		+ "SET IdTipoObjeto= ?, idMarca= ?, Stock= ?, RutaImg= ?, PrecioUnitario =?, descripcion = ? "
+        		+ "SET IdTipoObj= ?, idMarca= ?, Stock= ?, RutaImg= ?, PrecioUnitario =?, descripcion = ? "
         		+ "WHERE idArticulo = ?";
         try {
             ps = con.prepareStatement(sql);
@@ -1769,7 +1769,7 @@ public class Consulta extends Conexion{
     public boolean updtDireccion(int idRegion, int NumeroDomicilio, String Calle, String Ciudad, String Comuna, String rutAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
-    	String sql = "UPDATE Direccion "
+    	String sql = "UPDATE Direccion SET "
     			+ "idRegion = ?, NumeroDomicilio = ?, Calle = ?, Ciudad = ?, Comuna = ? "
     			+ "WHERE Rut = ?";
     	try {
@@ -1780,6 +1780,31 @@ public class Consulta extends Conexion{
             ps.setString(4, Ciudad);
             ps.setString(5, Comuna);
             ps.setString(6, rutAntiguo);
+            ps.execute();
+            ps.close();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public boolean updtProveedor(int idProv, String nombreprov) {
+    	PreparedStatement ps;
+        Connection con = conectar();
+    	String sql = "UPDATE proveedor "
+    			+ "SET nombreprov = ? "
+    			+ "WHERE idprov = ?";
+    	try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombreprov);
+            ps.setInt(2, idProv);
             ps.execute();
             ps.close();
             return true;
@@ -1818,7 +1843,7 @@ public class Consulta extends Conexion{
                 Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//XD
+    }
     
     public void delUsuario(String Rut) {
     	PreparedStatement ps;

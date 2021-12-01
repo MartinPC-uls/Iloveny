@@ -1011,11 +1011,11 @@ public class Administracion extends JFrame {
 			break;
 		case 9:
 			elementosTabla = consulta.getTipoObjeto();
-		default:
+			break;
 		case 10:
 			elementosTabla = consulta.getProveedor();
 			break;
-			
+		default:	
 		}
 		Vector elementos = new Vector();
 		for (int i = 0; i < elementosTabla.size(); i++) {

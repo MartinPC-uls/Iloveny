@@ -478,7 +478,7 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private boolean verificarPrecioUnitario() {
-		if(!precioTextField.getText().matches("[0-9]{1-10}") || precioTextField.getText().charAt(0) == '0') {
+		if(!precioTextField.getText().matches("[0-9]{1,10}") || precioTextField.getText().charAt(0) == '0') {
 			setErroneo(lineaPrecioUnitario, lblAlertaPrecioUnitario);
 			return false;
 		}

@@ -181,7 +181,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
 		cambiarColorTextFieldsBlanco();
 		ArticuloSinMedidaEspCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...",elementoSeleccionado.get(0) + " ("+elementoSeleccionado.get(1)+")"}));
-		ArticuloSinMedidaEspCB.setSelectedItem(1);
+		ArticuloSinMedidaEspCB.setSelectedIndex(1);
 		ArticuloSinMedidaEspCB.setEnabled(false);
 		medidaTextField.setText(elementoSeleccionado.get(2));
 	}
