@@ -594,7 +594,6 @@ public class Consulta extends Conexion{
             rs = ps.executeQuery();
             ArrayList<String> fila = new ArrayList<>();
             while(rs.next()){
-            	System.out.println(rs.getString("nombreMarca"));
                 fila.add(rs.getString("idmarca") +" ("+rs.getString("nombremarca")+")");
             }
             return fila;

@@ -624,7 +624,7 @@ public class Administracion extends JFrame {
 		btnUsuarios.setBounds(0, 0, 197, 43);
 		MenuConBotonesPanel.add(btnUsuarios);
 		
-		btnArticulos = new JButton("ART\u00CDCULOS");
+		btnArticulos = new JButton("ARTICULOS");
 		btnArticulos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnArticulos.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/Box-White.png")));
 		btnArticulos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -634,7 +634,7 @@ public class Administracion extends JFrame {
 					modo = 3;
 					columnaPK = 0;
 					eliminarDatosTabla();
-					lblTitulo.setText("Artículos");
+					lblTitulo.setText("Articulos");
 					buscadorTextField.setText("");
 					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID Articulo", "Tipo de articulo", "Marca", "Stock", "Precio unitario", "Descripcion", "rutaImagen"});
 					filtroCB.setModel(model);
@@ -662,7 +662,7 @@ public class Administracion extends JFrame {
 		btnArticulos.setBounds(0, 108, 197, 43);
 		MenuConBotonesPanel.add(btnArticulos);
 		
-		JButton btnDireccion = new JButton("DIRECCI\u00D3N");
+		JButton btnDireccion = new JButton("DIRECCION");
 		btnDireccion.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		addEventoBotonEnteredAndExitedMenu(btnDireccion);
 		btnDireccion.addActionListener(new ActionListener() {
@@ -1035,7 +1035,7 @@ public class Administracion extends JFrame {
 		getContentPane().add(IconoIlovenyPanel);
 		
 		lblIcono = new JLabel("");
-		lblIcono.setBounds(new Rectangle(4, 2, 187, 186));
+		lblIcono.setBounds(new Rectangle(19, 18, 159, 156));
 		ImageIcon iloveny_icon = new ImageIcon(Administracion.class.getResource("/imagenes/iloveny-icon.png"));
 		IconoIlovenyPanel.setLayout(null);
 		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
