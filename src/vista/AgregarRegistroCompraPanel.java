@@ -396,9 +396,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
 		unidadesAdquiridasAntigua = Integer.parseInt(elementoSeleccionado.get(3));
 		idCompraAntiguo = Integer.parseInt(elementoSeleccionado.get(7));
-		
-		//idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
-		
 		setIndiceElementoSeleccionado(articuloCB, elementoSeleccionado.get(0));
 		setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
 		idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
@@ -407,6 +404,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		fechaReciboTextField.setText(elementoSeleccionado.get(6));
 		unidadesAdquiridasTextField.setText(elementoSeleccionado.get(3));
 		costoUnitarioTextField.setText(elementoSeleccionado.get(4));
+		this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 	}
 	
 	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
@@ -487,8 +485,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 					fechaReciboTextField.getText());
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));
 		} else if(modo == 2) {
-
-			this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 			consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
 					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(), fechaReciboTextField.getText(),
 					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), idCompraAntiguo);
@@ -498,6 +494,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private int getNewStock(int stock, int cNueva, int cAntigua) {
+		System.out.println("stock: " + stock);
 		if (cNueva > cAntigua) {
 			return stock+(cNueva-cAntigua);
 		} else if (cNueva < cAntigua) {
