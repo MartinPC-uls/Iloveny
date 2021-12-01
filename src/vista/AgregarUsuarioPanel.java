@@ -381,6 +381,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		add(lblAlertaApellidos);
 		
 		if (modo == 2) {
+			btnAgregarUsuario.setText("MODIFICAR USUARIO");
 			setElementos(elementoSeleccionado);
 		}
 	}
@@ -396,7 +397,6 @@ public class AgregarUsuarioPanel extends JPanel {
 		numTelefonoTextField.setText(elementoSeleccionado.get(3));
 		emailTextField.setForeground(Color.WHITE);
 		emailTextField.setText(elementoSeleccionado.get(4));
-		//nombreTextField.removeFocusListener(fo);
 	}
 	
 	private void agregarDatos() {

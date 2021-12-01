@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -382,6 +383,38 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		setIndiceElementoSeleccionado(articuloCB, elementoSeleccionado.get(0));
+		setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
+		cambiarColorTextFieldsBlanco();
+		fechaPedidaTextField.setText(elementoSeleccionado.get(5));
+		fechaReciboTextField.setText(elementoSeleccionado.get(6));
+		unidadesAdquiridasTextField.setText(elementoSeleccionado.get(3));
+		costoUnitarioTextField.setText(elementoSeleccionado.get(4));
+	}
+	
+	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
+	        for (int i = 0; i < comboBox.getItemCount(); i++) {
+	            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
+	                comboBox.setSelectedIndex(i);
+	                break;
+	            }
+	        }
+	    }
+	
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+	        for(int i = 0; i<componentes.length;i++) {
+	       	 if(componentes[i].getClass().equals(JTextField.class)) {
+	       		 componentes[i].setForeground(Color.WHITE);
+	       	 }
+	        }
 	}
 	
 	private boolean verificarProveedor() {

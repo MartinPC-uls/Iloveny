@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -51,6 +52,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	private static int stock;
+	private int idVenta;
 	
 	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -111,7 +113,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			}
 		});
 		fechaTextField.setToolTipText("");
-		fechaTextField.setText("AAAA-DD-MM");
+		fechaTextField.setText("AAAA-MM-DD");
 		fechaTextField.setOpaque(false);
 		fechaTextField.setForeground(new Color(170, 170, 170));
 		fechaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -263,6 +265,36 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			btnAgregarRegistroVenta.setText("MODIFICAR REGISTRO VENTA");
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		idVenta = Integer.parseInt(elementoSeleccionado.get(4));
+		cambiarColorTextFieldsBlanco();
+		fechaTextField.setText(elementoSeleccionado.get(2));
+		cantidadVendidaTextField.setText(elementoSeleccionado.get(3));
+		rutCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...", elementoSeleccionado.get(1)}));
+		rutCB.setSelectedIndex(1);
+		rutCB.setEnabled(false);
+		for (int i = 0; i < articuloCB.getItemCount(); i++) {
+			if (articuloCB.getItemAt(i).toString().contains(elementoSeleccionado.get(0))) {
+				articuloCB.setSelectedIndex(i);
+				break;
+			}
+		}
+	}
+	
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+	        for(int i = 0; i<componentes.length;i++) {
+	       	 if(componentes[i].getClass().equals(JTextField.class)) {
+	       		 componentes[i].setForeground(Color.WHITE);
+	       	 }
+	        }
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxRut() {
@@ -316,7 +348,15 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
 		} else if(modo == 2) {
-			
+			SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd");
+			try {
+				consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), date.parse(fechaTextField.getText()),
+						Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

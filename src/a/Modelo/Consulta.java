@@ -42,14 +42,15 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean addTipoObj(String Tipo){
+    public boolean updtTipoObj(String Tipo, int id){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "INSERT INTO TipoObj (NombreTipo) VALUES (?);";
+        String sql = "UPDATE TipoObj SET NombreTipo = ? WHERE IdTipoObj = ?;";
         
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Tipo);
+            ps.setInt(2, id);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -63,6 +64,28 @@ public class Consulta extends Conexion{
             }
         }
     }
+    
+    public boolean addTipoObj(String Tipo){
+	        PreparedStatement ps;
+	        Connection con = conectar();
+	        String sql = "INSERT INTO TipoObj (NombreTipo) VALUES (?);";
+	        
+	        try {
+	            ps = con.prepareStatement(sql);
+	            ps.setString(1, Tipo);
+	            ps.execute();
+	            return true;
+	        } catch (SQLException ex) {
+	            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+	            return false;
+	        }finally {
+	            try {
+	                con.close();
+	            } catch (SQLException ex) {
+	                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+	            }
+	        }
+	    }
     
     public boolean addMarca(String Marca){
         PreparedStatement ps;

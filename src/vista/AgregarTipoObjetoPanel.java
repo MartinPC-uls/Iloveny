@@ -35,6 +35,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	private JPanel lineaTipoObjeto;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
+	private int idTipoObjeto;
 	
 	public AgregarTipoObjetoPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -140,6 +141,17 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			btnAgregarTipoObjeto.setText("MODIFICAR TIPO OBJETO");
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		idTipoObjeto = Integer.parseInt(elementoSeleccionado.get(0));
+		tipoObjetoTextField.setForeground(Color.WHITE);
+		tipoObjetoTextField.setText(elementoSeleccionado.get(1));
 	}
 
 	private void agregarDatos() {
@@ -150,7 +162,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		if (modo == 1) {
 			consulta.addTipoObj(tipoObjetoTextField.getText());
 		} else if(modo == 2) {
-			
+			consulta.updtTipoObj(tipoObjetoTextField.getText(), idTipoObjeto);
 		}
 	}
 

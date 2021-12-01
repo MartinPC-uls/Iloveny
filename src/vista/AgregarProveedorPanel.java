@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,6 +12,7 @@ import java.awt.event.FocusEvent;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -140,6 +142,24 @@ public class AgregarProveedorPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cambiarColorTextFieldsBlanco();
+		proveedorTextField.setText(elementoSeleccionado.get(1));
+	}
+	
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+	        for(int i = 0; i<componentes.length;i++) {
+	       	 if(componentes[i].getClass().equals(JTextField.class)) {
+	       		 componentes[i].setForeground(Color.WHITE);
+	       	 }
+	        }
 	}
 	
 	private void agregarDatos() {
