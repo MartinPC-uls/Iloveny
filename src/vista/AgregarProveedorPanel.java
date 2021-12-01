@@ -8,32 +8,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class AgregarProveedorPanel extends JPanel {
-	private static final Object[] String = null;
+
+	private static final long serialVersionUID = 4153463407399988729L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
@@ -216,7 +208,7 @@ public class AgregarProveedorPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
+        		txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");

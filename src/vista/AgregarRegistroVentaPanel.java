@@ -8,11 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Matcher;
-
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -20,16 +17,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -39,7 +32,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class AgregarRegistroVentaPanel extends JPanel {
-	private static final Object[] String = null;
+
+	private static final long serialVersionUID = -5223254028468888947L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
@@ -272,10 +266,9 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxRut() {
-		ArrayList ruts = consulta.getRuts();
+		ArrayList<?> ruts = consulta.getRuts();
 		if(ruts.size()>0) {
 			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
 			listaRuts[0] = "Seleccione...";
 			for(int i=1; i<=ruts.size();i++) {
 				listaRuts[i] = ruts.get(i-1).toString();
@@ -288,10 +281,9 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
-		ArrayList articulo = consulta.getDescripcionArticulosConStock();
+		ArrayList<?> articulo = consulta.getDescripcionArticulosConStock();
 		if(articulo.size()>0) {
 			String[] listaArticulos = new String[articulo.size()+1];
-			System.out.println(articulo.size());
 			listaArticulos[0] = "Seleccione...";
 			for(int i=1; i<=articulo.size();i++) {
 				listaArticulos[i] = articulo.get(i-1).toString();
@@ -347,17 +339,6 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		} else {
 			return true;
 		}
-	}
-	
-	private Date convertirFecha(String string) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-dd-sMM");
-		try {
-			Date date = format.parse(string);
-			return date;
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	private boolean verificarCantidadVendida() {
@@ -428,7 +409,6 @@ public class AgregarRegistroVentaPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");

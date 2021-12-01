@@ -8,23 +8,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import a.Modelo.Consulta;
-
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
@@ -33,6 +27,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class AgregarArticuloPanel extends JPanel {
+
+	private static final long serialVersionUID = -4579039619021999060L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
@@ -244,9 +240,7 @@ public class AgregarArticuloPanel extends JPanel {
 		JButton btnAgregarArticulo = new JButton("AGREGAR ART\u00CDCULO");
 		btnAgregarArticulo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("before isTodoCorrecto()");
 				if(isTodoCorrecto()) {
-					System.out.println("inside of isTodoCorrecto() if statement.");
 					agregarDatos();
 					btnRefrezcar.doClick();
 					paneles[1].setVisible(true);
@@ -396,33 +390,14 @@ public class AgregarArticuloPanel extends JPanel {
 		return true;
 	}
 
-	private DefaultComboBoxModel crearModeloComboBox() {
-		ArrayList ruts = consulta.getRutsSinDireccion();
-		if(ruts.size()>0) {
-			existenRutsSinDireccion = true;
-			String[] listaRuts = new String[ruts.size()+1];
-			System.out.println(ruts.size());
-			listaRuts[0] = "Seleccione...";
-			for(int i=1; i<=ruts.size();i++) {
-				listaRuts[i] = ruts.get(i-1).toString();
-			}
-			return new DefaultComboBoxModel(listaRuts);
-		}else {
-			lblAlertaTipoObjeto.setVisible(true);
-			existenRutsSinDireccion = false;
-			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
-		}
-	}
-
 	private void agregarDatos() {
 		agregarDatosTablaArticulo();
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxTipos() {
-		ArrayList elementosObtenidos = consulta.getNombresTipoObjeto();
+		ArrayList<?> elementosObtenidos = consulta.getNombresTipoObjeto();
 		if(elementosObtenidos.size()>0) {
 			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
-			System.out.println(elementosObtenidos.size());
 			listaStringElementosAdquiridos[0] = "Seleccione...";
 			for(int i=1; i<=elementosObtenidos.size();i++) {
 				listaStringElementosAdquiridos[i] = elementosObtenidos.get(i-1).toString();
@@ -435,10 +410,9 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxMarca() {
-		ArrayList elementosObtenidos = consulta.getNombresTipoObjeto();
+		ArrayList<?> elementosObtenidos = consulta.getNombresTipoObjeto();
 		if(elementosObtenidos.size()>0) {
 			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
-			System.out.println(elementosObtenidos.size());
 			listaStringElementosAdquiridos[0] = "Seleccione...";
 			for(int i=1; i<=elementosObtenidos.size();i++) {
 				listaStringElementosAdquiridos[i] = elementosObtenidos.get(i-1).toString();
@@ -451,13 +425,9 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private void agregarDatosTablaArticulo() {
-		System.out.println("inside of agregarDatosTablaArticulo() function");
 		if (modo == 1) {
-			System.out.println("modo 1?");
 			consulta.addArticulo(tipoObjetoCB.getSelectedIndex(), MarcaCB.getSelectedIndex(), Integer.parseInt(stockTextField.getText()),
 					descripcionTextField.getText(), txtRutaImg.getText(), Integer.parseInt(precioTextField.getText()));
-		} else if(modo == 2) {
-			System.out.println("modo 2?");
 		}
 	}
 
@@ -486,15 +456,6 @@ public class AgregarArticuloPanel extends JPanel {
 		return true;
 	}
 	
-	private boolean isNumber(String string) {
-		try {
-			Integer.parseInt(string);
-		} catch (NumberFormatException e) {
-			return false;
-		}
-		return true;
-	}
-
 	private boolean verificarMarca() {
 		if(MarcaCB.getSelectedIndex() == 0) {
 			lblAlertaMarca.setVisible(true);
@@ -552,7 +513,6 @@ public class AgregarArticuloPanel extends JPanel {
         	}
         	@Override
         	public void focusGained(FocusEvent e) {
-        		String text = txtUser.getText();
         		Color color = new Color(170, 170, 170);
         		if (txtUser.getForeground().equals(color) && txtUser.getText().length() < maxCaracteres) {
         			txtUser.setText("");
