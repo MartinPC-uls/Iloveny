@@ -18,6 +18,7 @@ import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
@@ -52,7 +53,7 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 
-	public AgregarUsuarioPanel(int modo, JComponent[] paneles,JButton btnRefrezcar) {
+	public AgregarUsuarioPanel(int modo, JComponent[] paneles,JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modoPanel = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);
@@ -378,6 +379,12 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaApellidos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAlertaApellidos.setBounds(602, 204, 30, 27);
 		add(lblAlertaApellidos);
+		
+		setElementos(elementoSeleccionado);
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		nombreTextField.setText("");
 	}
 	
 	private void agregarDatos() {

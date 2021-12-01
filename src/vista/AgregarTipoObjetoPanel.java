@@ -20,6 +20,7 @@ import a.Modelo.Consulta;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -35,7 +36,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	
-	public AgregarTipoObjetoPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
+	public AgregarTipoObjetoPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);

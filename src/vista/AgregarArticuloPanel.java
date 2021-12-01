@@ -52,7 +52,7 @@ public class AgregarArticuloPanel extends JPanel {
 	private JPanel lineaRutaImg;
 	public JLabel lblAlertaURL;
 	
-	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
+	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);

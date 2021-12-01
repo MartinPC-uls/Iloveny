@@ -127,6 +127,64 @@ public class Administracion extends JFrame {
 		getContentPane().add(panelPrincipal);
 		
 		btnModificar = new JButton("");
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(tabla.getSelectedRow() > -1) {
+					ArrayList<String> elementoSeleccionado = getSelectedRow();
+					switch(modo) {
+					
+					case 1:
+						agregarUsuarioPanel = new AgregarUsuarioPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarUsuarioPanel);
+						break;
+					case 2:
+						agregarDireccionPanel = new AgregarDireccionPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarDireccionPanel);
+						break;
+					case 3:
+						agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarArticuloPanel);
+						break;
+					case 4:
+						agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarMedidaGeneralPanel);
+						break;
+					case 5:
+						agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarMedidaEspecificaPanel);
+						break;
+					case 6:
+						agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarRegistroVentaPanel);
+						break;
+					case 7:
+						agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, elementoSeleccionado);
+						cambiarPanel(agregarRegistroCompraPanel);
+						break;
+					case 8:
+						agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarMarcaPanel);
+						break;
+					case 9:
+						agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarTipoObjetoPanel);
+						break;
+					case 10:
+						agregarProveedorPanel = new AgregarProveedorPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						cambiarPanel(agregarProveedorPanel);
+						break;
+					default:
+					
+					}
+					moverLayeredPanel();
+					panelPrincipal.setVisible(false);
+				} else {
+					Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+					JOptionPane.showMessageDialog(null, "No tiene una fila seleccioanda","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+				}
+			
+			}
+		});
 		btnModificar.setToolTipText("Modificar");
 		this.addEventoBotonEnteredAndExited(btnModificar);
 		btnModificar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -149,43 +207,43 @@ public class Administracion extends JFrame {
 				switch(modo) {
 				
 				case 1:
-					agregarUsuarioPanel = new AgregarUsuarioPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarUsuarioPanel = new AgregarUsuarioPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarUsuarioPanel);
 					break;
 				case 2:
-					agregarDireccionPanel = new AgregarDireccionPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarDireccionPanel = new AgregarDireccionPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarDireccionPanel);
 					break;
 				case 3:
-					agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarArticuloPanel);
 					break;
 				case 4:
-					agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarMedidaGeneralPanel);
 					break;
 				case 5:
-					agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarMedidaEspecificaPanel);
 					break;
 				case 6:
-					agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarRegistroVentaPanel);
 					break;
 				case 7:
-					agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin);
+					agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, null);
 					cambiarPanel(agregarRegistroCompraPanel);
 					break;
 				case 8:
-					agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarMarcaPanel);
 					break;
 				case 9:
-					agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarTipoObjetoPanel);
 					break;
 				case 10:
-					agregarProveedorPanel = new AgregarProveedorPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar);
+					agregarProveedorPanel = new AgregarProveedorPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarProveedorPanel);
 					break;
 				default:
@@ -193,17 +251,6 @@ public class Administracion extends JFrame {
 				}
 				moverLayeredPanel();
 				panelPrincipal.setVisible(false);
-			}
-
-			private void moverLayeredPanel() {
-				funcionesLayeredPane.setBounds(197, 39, 732, 558);
-			}
-
-			private void cambiarPanel(JPanel panel) {
-				funcionesLayeredPane.removeAll();
-				funcionesLayeredPane.add(panel);
-				funcionesLayeredPane.repaint();
-				funcionesLayeredPane.revalidate();
 			}
 
 		});
@@ -380,7 +427,7 @@ public class Administracion extends JFrame {
 				repintarTabla();
 				rellenarTabla();
 			}
-		}else {
+		} else {
 			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
 			JOptionPane.showMessageDialog(null, "No tiene una fila seleccioanda","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
 		}
@@ -998,6 +1045,26 @@ public class Administracion extends JFrame {
 		IconoIlovenyPanel.setLayout(null);
 		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
 		IconoIlovenyPanel.add(lblIcono);
+	}
+	
+	private ArrayList<String> getSelectedRow() {
+		ArrayList<String> elementos = new ArrayList<String>();
+		int row = tabla.getSelectedRow();
+		for (int i = 0; i < tabla.getColumnCount(); i++) {
+			elementos.add(String.valueOf(modeloTabla.getValueAt(tabla.getSelectedRow(), i)));
+		}
+		return elementos;
+	}
+	
+	private void moverLayeredPanel() {
+		funcionesLayeredPane.setBounds(197, 39, 732, 558);
+	}
+
+	private void cambiarPanel(JPanel panel) {
+		funcionesLayeredPane.removeAll();
+		funcionesLayeredPane.add(panel);
+		funcionesLayeredPane.repaint();
+		funcionesLayeredPane.revalidate();
 	}
 	
 	public void addEventoBotonEnteredAndExitedMenu(JButton boton) {

@@ -52,7 +52,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	public JButton btnRefrezcar;
 	private static int stock;
 	
-	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
+	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);

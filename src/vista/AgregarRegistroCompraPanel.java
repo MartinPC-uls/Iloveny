@@ -58,7 +58,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private String nombreAdmin;
 	private JLabel lblAlertaUnidadesAdquirida;
 	
-	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin) {
+	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);

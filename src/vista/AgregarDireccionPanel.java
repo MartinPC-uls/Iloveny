@@ -53,7 +53,7 @@ public class AgregarDireccionPanel extends JPanel {
 	public JButton btnRefrezcar;
 	
 	@SuppressWarnings("unchecked")
-	public AgregarDireccionPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
+	public AgregarDireccionPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);

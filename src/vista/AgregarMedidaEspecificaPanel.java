@@ -40,7 +40,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	
-	public AgregarMedidaEspecificaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar) {
+	public AgregarMedidaEspecificaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);
