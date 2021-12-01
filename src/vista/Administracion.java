@@ -459,7 +459,7 @@ public class Administracion extends JFrame {
 				elementosTabla = consulta.getListaMedidaGBusqueda(columnas4[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger4[filtroCB.getSelectedIndex()]);
 				break;
 			case 5:
-				String[] columnas5 = {"nada","medidaespecifica.idarticulo","nombretipo","medidaespecifica"};
+				String[] columnas5 = {"nada","medidaespecifica.idarticulo","nombretipo","medida"};
 	 			boolean[] isInteger5 = {false,true,false,false};
 				elementosTabla = consulta.getListaMedidaEBusqueda(columnas5[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger5[filtroCB.getSelectedIndex()]);
 				break;
