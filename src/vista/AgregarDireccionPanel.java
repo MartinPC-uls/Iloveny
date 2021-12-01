@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -30,6 +31,7 @@ public class AgregarDireccionPanel extends JPanel {
 
 	private static final long serialVersionUID = -7474338284438590427L;
 	public int modo;
+	ArrayList<String> elementoSeleccionado;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
 	
@@ -56,6 +58,7 @@ public class AgregarDireccionPanel extends JPanel {
 	public AgregarDireccionPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
+		this.elementoSeleccionado = elementoSeleccionado;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
@@ -376,6 +379,40 @@ public class AgregarDireccionPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cambiarColorTextFieldsBlanco();
+		rutCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...",elementoSeleccionado.get(0)}));
+		rutCB.setSelectedIndex(1);
+		rutCB.setEnabled(false);
+		setIndiceElementoSeleccionado(RegionCB, elementoSeleccionado.get(1));
+		numCalleTextField.setText(elementoSeleccionado.get(2));
+		calleTextField.setText(elementoSeleccionado.get(3));
+		ciudadTextField.setText(elementoSeleccionado.get(4));
+		comunaTextField.setText(elementoSeleccionado.get(5));
+	}
+
+	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
+		for (int i = 0; i < comboBox.getItemCount(); i++) {
+            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
+            	comboBox.setSelectedIndex(i);
+            	break;
+            }
+        }
+	}
+
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+		for(int i = 0; i<componentes.length;i++) {
+			if(componentes[i].getClass().equals(JTextField.class)) {
+				componentes[i].setForeground(Color.WHITE);
+			}
+		}
 	}
 	
 	private boolean verificarRut() {
@@ -412,7 +449,7 @@ public class AgregarDireccionPanel extends JPanel {
 		if (modo == 1) {
 			consulta.addDireccion((String)rutCB.getSelectedItem(), RegionCB.getSelectedIndex(), Integer.parseInt(numCalleTextField.getText()),calleTextField.getText() , ciudadTextField.getText(), comunaTextField.getText()); 
 		} else if(modo == 2) {
-			
+			consulta.updtDireccion(RegionCB.getSelectedIndex(), Integer.parseInt(numCalleTextField.getText()), calleTextField.getText() , ciudadTextField.getText(), comunaTextField.getText(), (String)rutCB.getSelectedItem());
 		}
 	}
 
@@ -453,7 +490,7 @@ public class AgregarDireccionPanel extends JPanel {
 	}
 
 	private boolean verificarNumCalle() {
-		if(!numCalleTextField.getText().matches("[0-9]{1-10}")) {
+		if(!numCalleTextField.getText().matches("[0-9]{1,10}")) {
 			setErroneo(lineaNumeroCalle, lblAlertaNumCalle);
 			return false;
 		}

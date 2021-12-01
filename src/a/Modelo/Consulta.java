@@ -65,6 +65,28 @@ public class Consulta extends Conexion{
         }
     }
     
+    public boolean updtMarca(String Marca, int idMarca){
+        PreparedStatement ps;
+        Connection con = conectar();
+        String sql = "UPDATE marca SET Nombremarca = ? WHERE Idmarca = ?;";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, Marca);
+            ps.setInt(2, idMarca);
+            ps.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     public boolean addTipoObj(String Tipo){
 	        PreparedStatement ps;
 	        Connection con = conectar();
@@ -948,17 +970,16 @@ public class Consulta extends Conexion{
         return null;
     }
     
-    public boolean updtMedidaG(int Largo, int Alto, int Ancho, int idArticuloNuevo, int idArticuloAntiguo){
+    public boolean updtMedidaG(int Largo, int Alto, int Ancho, int idArticuloAntiguo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "UPDATE MedidaGeneral SET Largo= ?,Alto= ?,Ancho= ?,idArticulo= ? WHERE idArticulo = ?";
+        String sql = "UPDATE MedidaGeneral SET Largo= ?,Alto= ?,Ancho= ? WHERE idArticulo = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, Largo);
             ps.setInt(2, Alto);
             ps.setInt(3, Ancho);
-            ps.setInt(4, idArticuloNuevo);
-            ps.setInt(5, idArticuloAntiguo);
+            ps.setInt(4, idArticuloAntiguo);
             ps.execute();
             return true;
         } catch (SQLException ex) {
@@ -973,15 +994,14 @@ public class Consulta extends Conexion{
         }
     }
     
-    public boolean updtMedidaE(String Medida, int idArticuloNuevo, int idArticuloAntiguo){
+    public boolean updtMedidaE(String Medida, int idArticuloAntiguo){
         PreparedStatement ps;
         Connection con = conectar();
-        String sql = "UPDATE MedidaEspecifica SET Medida= ? ,idArticulo= ? WHERE idArticulo = ?;";
+        String sql = "UPDATE MedidaEspecifica SET Medida= ? WHERE idArticulo = ?";
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, Medida);
-            ps.setInt(2, idArticuloNuevo);
-            ps.setInt(3, idArticuloAntiguo);
+            ps.setInt(2, idArticuloAntiguo);
             ps.execute();
             return true;
         } catch (SQLException ex) { 
@@ -1746,21 +1766,20 @@ public class Consulta extends Conexion{
          }
     }
     
-    public boolean updtDireccion(String rutNuevo, int idRegion, int NumeroDomicilio, String Calle, String Ciudad, String Comuna, String rutAntiguo) {
+    public boolean updtDireccion(int idRegion, int NumeroDomicilio, String Calle, String Ciudad, String Comuna, String rutAntiguo) {
     	PreparedStatement ps;
         Connection con = conectar();
     	String sql = "UPDATE Direccion "
-    			+ "SET Rut = ?, idRegion = ?, NumeroDomicilio = ?, Calle = ?, Ciudad = ?, Comuna = ? "
+    			+ "idRegion = ?, NumeroDomicilio = ?, Calle = ?, Ciudad = ?, Comuna = ? "
     			+ "WHERE Rut = ?";
     	try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, rutNuevo);
-            ps.setInt(2, idRegion);
-            ps.setInt(3, NumeroDomicilio);
-            ps.setString(4, Calle);
-            ps.setString(5, Ciudad);
-            ps.setString(6, Comuna);
-            ps.setString(7, rutAntiguo);
+            ps.setInt(1, idRegion);
+            ps.setInt(2, NumeroDomicilio);
+            ps.setString(3, Calle);
+            ps.setString(4, Ciudad);
+            ps.setString(5, Comuna);
+            ps.setString(6, rutAntiguo);
             ps.execute();
             ps.close();
             return true;

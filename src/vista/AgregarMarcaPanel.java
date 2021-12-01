@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,6 +29,7 @@ public class AgregarMarcaPanel extends JPanel {
 
 	private static final long serialVersionUID = -5578566432967000551L;
 	public int modo;
+	ArrayList<String> elementoSeleccionado;
 	public boolean existenRutsSinDireccion;
 	public Consulta consulta = new Consulta();
 	private JTextField marcaTextField;
@@ -39,6 +41,7 @@ public class AgregarMarcaPanel extends JPanel {
 	public AgregarMarcaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
+		this.elementoSeleccionado = elementoSeleccionado;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
@@ -126,8 +129,6 @@ public class AgregarMarcaPanel extends JPanel {
 		lblAlertaMarca.setBounds(215, 224, 30, 27);
 		add(lblAlertaMarca);
 		
-		//DefaultComboBoxModel modelo = crearModeloComboBox();
-		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnVolver.setBorder(null);
@@ -142,6 +143,23 @@ public class AgregarMarcaPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cambiarColorTextFieldsBlanco();
+		marcaTextField.setText(elementoSeleccionado.get(1));
+	}
+
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+		for(int i = 0; i<componentes.length;i++) {
+			if(componentes[i].getClass().equals(JTextField.class)) {
+				componentes[i].setForeground(Color.WHITE);
+			}
+		}
 	}
 
 	private void agregarDatos() {
@@ -152,7 +170,7 @@ public class AgregarMarcaPanel extends JPanel {
 		if (modo == 1) {
 			consulta.addMarca(marcaTextField.getText());
 		} else if(modo == 2) {
-			
+			consulta.updtMarca(marcaTextField.getText(), Integer.parseInt(elementoSeleccionado.get(0)));
 		}
 	}
 

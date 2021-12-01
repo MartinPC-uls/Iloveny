@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -20,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import a.Modelo.Consulta;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -31,6 +33,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 	private static final long serialVersionUID = 2114849683033413530L;
 	public int modo;
 	public boolean existenArticulosConMedida;
+	ArrayList<String> elementoSeleccionado;
 	public Consulta consulta = new Consulta();
 	
 	private JLabel lblAlertaArticulo;
@@ -50,6 +53,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 	public AgregarMedidaGeneralPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
+		this.elementoSeleccionado = elementoSeleccionado;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
@@ -288,6 +292,29 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cambiarColorTextFieldsBlanco();
+		ArticuloCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...",elementoSeleccionado.get(0)+ " ("+elementoSeleccionado.get(1)+")"}));
+		ArticuloCB.setSelectedIndex(1);
+		ArticuloCB.setEnabled(false);
+		altoTextField.setText(elementoSeleccionado.get(2));
+		anchoTextField.setText(elementoSeleccionado.get(3));
+		largoTextField.setText(elementoSeleccionado.get(4));
+	}
+
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+		for(int i = 0; i<componentes.length;i++) {
+			if(componentes[i].getClass().equals(JTextField.class)) {
+				componentes[i].setForeground(Color.WHITE);
+			}
+		}
 	}
 
 	private DefaultComboBoxModel crearModeloComboBoxId() {
@@ -316,7 +343,8 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 			consulta.addMedidaG(Integer.parseInt(largoTextField.getText()), Integer.parseInt(altoTextField.getText()), 
 								Integer.parseInt(anchoTextField.getText()), obtenerIdSeleccionado());
 		} else if(modo == 2) {
-			
+			consulta.updtMedidaG(Integer.parseInt(largoTextField.getText()), Integer.parseInt(altoTextField.getText()), 
+								Integer.parseInt(anchoTextField.getText()), Integer.parseInt(elementoSeleccionado.get(0)));
 		}
 	}
 

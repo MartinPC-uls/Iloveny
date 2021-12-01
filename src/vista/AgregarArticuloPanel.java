@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -31,6 +32,7 @@ public class AgregarArticuloPanel extends JPanel {
 	private static final long serialVersionUID = -4579039619021999060L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
+	ArrayList<String> elementoSeleccionado;
 	public Consulta consulta = new Consulta();
 	
 	private JLabel lblAlertaMarca;
@@ -55,6 +57,7 @@ public class AgregarArticuloPanel extends JPanel {
 	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
+		this.elementoSeleccionado = elementoSeleccionado;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
@@ -370,6 +373,38 @@ public class AgregarArticuloPanel extends JPanel {
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
 		lineaRutaImg.setLayout(gl_lineaRutaImg);
+		
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cambiarColorTextFieldsBlanco();
+		setIndiceElementoSeleccionado(tipoObjetoCB, elementoSeleccionado.get(1));
+		setIndiceElementoSeleccionado(MarcaCB, elementoSeleccionado.get(2));
+		stockTextField.setText(elementoSeleccionado.get(3));
+		precioTextField.setText(elementoSeleccionado.get(4));
+		descripcionTextField.setText(elementoSeleccionado.get(5));
+		txtRutaImg.setText(elementoSeleccionado.get(6));
+	}
+	
+	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
+		for (int i = 0; i < comboBox.getItemCount(); i++) {
+            if (comboBox.getItemAt(i).toString().equalsIgnoreCase(elementoABuscar)) {
+            	comboBox.setSelectedIndex(i);
+            	break;
+            }
+        }
+	}
+	
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+		for(int i = 0; i<componentes.length;i++) {
+			if(componentes[i].getClass().equals(JTextField.class)) {
+				componentes[i].setForeground(Color.WHITE);
+			}
+		}
 	}
 	
 	private boolean verificarTipoObjeto() {
@@ -410,7 +445,7 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxMarca() {
-		ArrayList<?> elementosObtenidos = consulta.getNombresTipoObjeto();
+		ArrayList<?> elementosObtenidos = consulta.getNombresMarca();
 		if(elementosObtenidos.size()>0) {
 			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
 			listaStringElementosAdquiridos[0] = "Seleccione...";
@@ -428,6 +463,10 @@ public class AgregarArticuloPanel extends JPanel {
 		if (modo == 1) {
 			consulta.addArticulo(tipoObjetoCB.getSelectedIndex(), MarcaCB.getSelectedIndex(), Integer.parseInt(stockTextField.getText()),
 					descripcionTextField.getText(), txtRutaImg.getText(), Integer.parseInt(precioTextField.getText()));
+		}else {
+			consulta.updtArticulo(tipoObjetoCB.getSelectedIndex(), MarcaCB.getSelectedIndex(), Integer.parseInt(stockTextField.getText()),
+					Integer.parseInt(precioTextField.getText()), Integer.parseInt(elementoSeleccionado.get(0)), descripcionTextField.getText(),
+					txtRutaImg.getText());
 		}
 	}
 

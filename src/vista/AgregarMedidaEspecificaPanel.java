@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -30,6 +31,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 
 	private static final long serialVersionUID = -3746277232928924825L;
 	public int modo;
+	ArrayList<String> elementoSeleccionado;
 	public boolean existenArticuloSinMedidaEspecifica;
 	public Consulta consulta = new Consulta();
 	private JTextField medidaTextField;
@@ -43,6 +45,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 	public AgregarMedidaEspecificaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
+		this.elementoSeleccionado = elementoSeleccionado;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
@@ -169,6 +172,27 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
+	}
+	
+	private void setElementos(ArrayList<String> elementoSeleccionado) {
+		cambiarColorTextFieldsBlanco();
+		ArticuloSinMedidaEspCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...",elementoSeleccionado.get(0) + " ("+elementoSeleccionado.get(1)+")"}));
+		ArticuloSinMedidaEspCB.setSelectedItem(1);
+		ArticuloSinMedidaEspCB.setEnabled(false);
+		medidaTextField.setText(elementoSeleccionado.get(2));
+	}
+
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+		for(int i = 0; i<componentes.length;i++) {
+			if(componentes[i].getClass().equals(JTextField.class)) {
+				componentes[i].setForeground(Color.WHITE);
+			}
+		}
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxId() {
@@ -196,7 +220,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		if (modo == 1) {
 			consulta.addMedidaE(medidaTextField.getText(), Integer.parseInt((String)ArticuloSinMedidaEspCB.getSelectedItem())); 
 		} else if(modo == 2) {
-			
+			consulta.updtMedidaE(medidaTextField.getText(), Integer.parseInt(elementoSeleccionado.get(0)));
 		}
 	}
 
