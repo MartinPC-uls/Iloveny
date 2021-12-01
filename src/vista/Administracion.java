@@ -134,43 +134,43 @@ public class Administracion extends JFrame {
 					switch(modo) {
 					
 					case 1:
-						agregarUsuarioPanel = new AgregarUsuarioPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarUsuarioPanel = new AgregarUsuarioPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarUsuarioPanel);
 						break;
 					case 2:
-						agregarDireccionPanel = new AgregarDireccionPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarDireccionPanel = new AgregarDireccionPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarDireccionPanel);
 						break;
 					case 3:
-						agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarArticuloPanel = new AgregarArticuloPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarArticuloPanel);
 						break;
 					case 4:
-						agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarMedidaGeneralPanel);
 						break;
 					case 5:
-						agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarMedidaEspecificaPanel);
 						break;
 					case 6:
-						agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarRegistroVentaPanel);
 						break;
 					case 7:
-						agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, elementoSeleccionado);
+						agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, elementoSeleccionado);
 						cambiarPanel(agregarRegistroCompraPanel);
 						break;
 					case 8:
-						agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarMarcaPanel = new AgregarMarcaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarMarcaPanel);
 						break;
 					case 9:
-						agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarTipoObjetoPanel);
 						break;
 					case 10:
-						agregarProveedorPanel = new AgregarProveedorPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						agregarProveedorPanel = new AgregarProveedorPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarProveedorPanel);
 						break;
 					default:
@@ -1051,7 +1051,7 @@ public class Administracion extends JFrame {
 		ArrayList<String> elementos = new ArrayList<String>();
 		int row = tabla.getSelectedRow();
 		for (int i = 0; i < tabla.getColumnCount(); i++) {
-			elementos.add(String.valueOf(modeloTabla.getValueAt(tabla.getSelectedRow(), i)));
+			elementos.add(String.valueOf(tabla.getValueAt(tabla.getSelectedRow(), i)));
 		}
 		return elementos;
 	}

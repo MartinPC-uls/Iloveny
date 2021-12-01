@@ -380,11 +380,23 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaApellidos.setBounds(602, 204, 30, 27);
 		add(lblAlertaApellidos);
 		
-		setElementos(elementoSeleccionado);
+		if (modo == 2) {
+			setElementos(elementoSeleccionado);
+		}
 	}
 	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
-		nombreTextField.setText("");
+		nombreTextField.setForeground(Color.WHITE);
+		nombreTextField.setText(elementoSeleccionado.get(0));
+		apellidosTextField.setForeground(Color.WHITE);
+		apellidosTextField.setText(elementoSeleccionado.get(1));
+		rutTextField.setForeground(Color.WHITE);
+		rutTextField.setText(elementoSeleccionado.get(2));
+		numTelefonoTextField.setForeground(Color.WHITE);
+		numTelefonoTextField.setText(elementoSeleccionado.get(3));
+		emailTextField.setForeground(Color.WHITE);
+		emailTextField.setText(elementoSeleccionado.get(4));
+		//nombreTextField.removeFocusListener(fo);
 	}
 	
 	private void agregarDatos() {
