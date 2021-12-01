@@ -494,7 +494,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private int getNewStock(int stock, int cNueva, int cAntigua) {
-		System.out.println("stock: " + stock);
 		if (cNueva > cAntigua) {
 			return stock+(cNueva-cAntigua);
 		} else if (cNueva < cAntigua) {

@@ -275,6 +275,8 @@ public class Administracion extends JFrame {
 		panelPrincipal.add(btnEliminar);
 		
 		tabla = new JTable();
+		tabla.setDoubleBuffered(true);
+		tabla.setShowGrid(false);
 		tabla.setModel(new DefaultTableModel(
 				new Object[][] {
 				},
