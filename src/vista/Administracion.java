@@ -350,7 +350,6 @@ public class Administracion extends JFrame {
 		int row = tabla.getSelectedRow();
 		if(row>-1) {
 			String value = tabla.getValueAt(row, columnaPK).toString();
-			System.out.println(value);
 			int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
 			if (JOptionPane.YES_OPTION == confirm) {
 				switch(modo) {
@@ -514,12 +513,10 @@ public class Administracion extends JFrame {
 		}
 		for(int i = 0; i<tabla.getColumnCount(); i++) {
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(espacioParaColumna);
-			System.out.println("Va en la columna numero: "+i+" "+tabla.getColumnModel().getColumn(i));
 			tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
 			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla.getModel());
 			tabla.setRowSorter(sorter);
 			List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
-			sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 			sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 			sorter.setSortKeys(sortKeys);
 		}
@@ -531,7 +528,6 @@ public class Administracion extends JFrame {
 		tabla.setPreferredScrollableViewportSize(tabla.getPreferredSize());
 		for(int i = 0; i<tabla.getColumnCount(); i++) {
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(150);
-			System.out.println("Va en la columna numero: "+i+" "+tabla.getColumnModel().getColumn(i));
 		}
 		tabla.getTableHeader().setOpaque(false);
 		tabla.getTableHeader().setForeground(new Color(255, 255, 255));
@@ -976,7 +972,6 @@ public class Administracion extends JFrame {
 	
 	public void eliminarDatosTabla() {
 		int rowCount = modeloTabla.getRowCount();
-		System.out.println(rowCount);
 		for (int i = rowCount - 1; i >= 0; i--) {
 			modeloTabla.removeRow(i);
 		}
