@@ -450,7 +450,7 @@ public class AgregarUsuarioPanel extends JPanel {
 			setErroneo(lineaRut, lblAlertaRUT);
 			return false;
 		}
-		if(rutTextField.getText().matches("[0-9]{1,2}[.][1-9][0-9]{2}[.][1-9][0-9]{2}[-]([1-9]|(k|K))")) {
+		if(rutTextField.getText().matches("[0-9]{1,2}[.][1-9][0-9]{2}[.][1-9][0-9]{2}[-]([0-9]|(k|K))")) {
 			setAcertado(lineaRut,lblAlertaRUT);
 			return true;
 		}
