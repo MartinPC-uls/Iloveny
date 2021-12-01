@@ -563,13 +563,13 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT tipoobj.nombretipo FROM tipoobj";
+        String sql = "SELECT * FROM tipoobj ORDER BY idtipoobj";
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             ArrayList<String> fila = new ArrayList<>();
             while(rs.next()){
-                fila.add(rs.getString("nombretipo"));
+                fila.add(rs.getString("idtipoobj")+" ("+rs.getString("nombretipo")+")");
             }
             return fila;
         } catch (SQLException ex) {
@@ -588,13 +588,14 @@ public class Consulta extends Conexion{
         PreparedStatement ps;
         ResultSet rs;
         Connection con = conectar();
-        String sql = "SELECT marca.nombremarca FROM marca";
+        String sql = "SELECT * FROM marca ORDER BY idmarca";
         try {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
             ArrayList<String> fila = new ArrayList<>();
             while(rs.next()){
-                fila.add(rs.getString("nombremarca"));
+            	System.out.println(rs.getString("nombreMarca"));
+                fila.add(rs.getString("idmarca") +" ("+rs.getString("nombremarca")+")");
             }
             return fila;
         } catch (SQLException ex) {

@@ -541,7 +541,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private boolean verificarStock() {
-		if (getNewStock(this.stock, unidadesAdquiridasAntigua, Integer.parseInt(unidadesAdquiridasTextField.getText())) < 0) {
+		if (getNewStock(this.stock,Integer.parseInt(unidadesAdquiridasTextField.getText()), unidadesAdquiridasAntigua) < 0) {
 			setErroneo(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
 			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
 			JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);

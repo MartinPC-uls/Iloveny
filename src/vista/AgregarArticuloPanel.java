@@ -391,7 +391,7 @@ public class AgregarArticuloPanel extends JPanel {
 	
 	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
 		for (int i = 0; i < comboBox.getItemCount(); i++) {
-            if (comboBox.getItemAt(i).toString().equalsIgnoreCase(elementoABuscar)) {
+            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
             	comboBox.setSelectedIndex(i);
             	break;
             }
@@ -455,16 +455,16 @@ public class AgregarArticuloPanel extends JPanel {
 			return new DefaultComboBoxModel(listaStringElementosAdquiridos);
 		}else {
 			lblAlertaTipoObjeto.setVisible(true);
-			return new DefaultComboBoxModel(new String[] {"No existen tipos"});
+			return new DefaultComboBoxModel(new String[] {"No existen marcas"});
 		}
 	}
 	
 	private void agregarDatosTablaArticulo() {
 		if (modo == 1) {
-			consulta.addArticulo(tipoObjetoCB.getSelectedIndex(), MarcaCB.getSelectedIndex(), Integer.parseInt(stockTextField.getText()),
+			consulta.addArticulo(Integer.parseInt(obtenerIdEnString(tipoObjetoCB.getSelectedItem().toString())),Integer.parseInt(obtenerIdEnString(MarcaCB.getSelectedItem().toString())), Integer.parseInt(stockTextField.getText()),
 					descripcionTextField.getText(), txtRutaImg.getText(), Integer.parseInt(precioTextField.getText()));
 		}else {
-			consulta.updtArticulo(tipoObjetoCB.getSelectedIndex(), MarcaCB.getSelectedIndex(), Integer.parseInt(stockTextField.getText()),
+			consulta.updtArticulo(Integer.parseInt(obtenerIdEnString(tipoObjetoCB.getSelectedItem().toString())), Integer.parseInt(obtenerIdEnString(MarcaCB.getSelectedItem().toString())), Integer.parseInt(stockTextField.getText()),
 					Integer.parseInt(precioTextField.getText()), Integer.parseInt(elementoSeleccionado.get(0)), descripcionTextField.getText(),
 					txtRutaImg.getText());
 		}
@@ -487,7 +487,7 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private boolean verificarDescripcion() {
-		if(!descripcionTextField.getText().matches("[a-zA-Z0-9 ]{1,50}")|| descripcionTextField.getText().charAt(0) == ' ') {
+		if(!descripcionTextField.getText().matches("[a-zA-Z0-9ñÑ ]{1,50}")|| descripcionTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaDescripcion, lblAlertaDescripcion);
 			return false;
 		}
@@ -582,5 +582,17 @@ public class AgregarArticuloPanel extends JPanel {
 				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 			}
 		});
+	}
+	
+	private String obtenerIdEnString(String opcionSeleccionada) {
+		char[] caracteres = opcionSeleccionada.toCharArray();
+		String id = "";
+		for(char c : caracteres) {
+			if(c == ' ') {
+				break;
+			}
+			id+= c;
+		}
+		return id;
 	}
 }

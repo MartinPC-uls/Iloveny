@@ -288,7 +288,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		cambiarColorTextFieldsBlanco();
 		fechaTextField.setText(elementoSeleccionado.get(2));
 		cantidadVendidaTextField.setText(elementoSeleccionado.get(3));
-		//rutCB.setModel(new DefaultComboBoxModel(new String[] {"Seleccione...", elementoSeleccionado.get(1)}));
+		setIndiceElementoSeleccionado(articuloCB, obtenerIdEnString(articuloCB.getSelectedItem().toString()));
 		setIndiceElementoSeleccionado(rutCB, elementoSeleccionado.get(1));
 		for (int i = 0; i < articuloCB.getItemCount(); i++) {
 			if (articuloCB.getItemAt(i).toString().contains(elementoSeleccionado.get(0))) {
