@@ -14,7 +14,6 @@ public class Inicializador {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		
 		new ControladorLogin();
     }
 }

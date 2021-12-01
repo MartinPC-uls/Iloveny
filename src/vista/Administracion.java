@@ -301,83 +301,88 @@ public class Administracion extends JFrame {
 
 	private void eliminarFilaTabla() {
 		int row = tabla.getSelectedRow();
-		String value = tabla.getValueAt(row, columnaPK).toString();
-		System.out.println(value);
-		int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
-		if (JOptionPane.YES_OPTION == confirm) {
-			switch(modo) {
-				case 1:						
-					consulta.delDireccion(value);
-					consulta.delRegistroVentaRut(value);
-					consulta.delUsuario(value);
-					break;
-				case 2:
-					consulta.delDireccion(value);
-					break;
-				case 3:
-					consulta.delMedidaE(Integer.parseInt(value));
-					consulta.delMedidaG(Integer.parseInt(value));
-					consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
-					consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
-					consulta.delArticulo(Integer.parseInt(value));
-					break;
-				case 4:
-					consulta.delMedidaG(Integer.parseInt(value));
-					break;
-				case 5:
-					consulta.delMedidaE(Integer.parseInt(value));
-					break;
-				case 6:
-					int cantidadComprada = Integer.parseInt(tabla.getValueAt(row, 3).toString());
-					int reAjustarStockC = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (restar el stock en: "+cantidadComprada+" unidades)");
-					if(JOptionPane.YES_OPTION == reAjustarStockC) {
-						int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
-						int stockActual = consulta.getArticuloStock(idArticulo);
-						if(stockActual-cantidadComprada>=0) {
-							consulta.updtStockArticulo(idArticulo,stockActual-cantidadComprada);
-						}else {
-							Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
-							JOptionPane.showMessageDialog(null, "No fue posible dado que el stock es menor que la cantidad comprada","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+		if(row>-1) {
+			String value = tabla.getValueAt(row, columnaPK).toString();
+			System.out.println(value);
+			int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
+			if (JOptionPane.YES_OPTION == confirm) {
+				switch(modo) {
+					case 1:						
+						consulta.delDireccion(value);
+						consulta.delRegistroVentaRut(value);
+						consulta.delUsuario(value);
+						break;
+					case 2:
+						consulta.delDireccion(value);
+						break;
+					case 3:
+						consulta.delMedidaE(Integer.parseInt(value));
+						consulta.delMedidaG(Integer.parseInt(value));
+						consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
+						consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
+						consulta.delArticulo(Integer.parseInt(value));
+						break;
+					case 4:
+						consulta.delMedidaG(Integer.parseInt(value));
+						break;
+					case 5:
+						consulta.delMedidaE(Integer.parseInt(value));
+						break;
+					case 6:
+						int cantidadComprada = Integer.parseInt(tabla.getValueAt(row, 3).toString());
+						int reAjustarStockC = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (restar el stock en: "+cantidadComprada+" unidades)");
+						if(JOptionPane.YES_OPTION == reAjustarStockC) {
+							int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
+							int stockActual = consulta.getArticuloStock(idArticulo);
+							if(stockActual-cantidadComprada>=0) {
+								consulta.updtStockArticulo(idArticulo,stockActual-cantidadComprada);
+							}else {
+								Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+								JOptionPane.showMessageDialog(null, "No fue posible dado que el stock es menor que la cantidad comprada","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
+							}
 						}
-					}
-					consulta.delRegistroVenta(Integer.parseInt(value));
-					break;
-				case 7:
-					int cantidadVendida = Integer.parseInt(tabla.getValueAt(row, 3).toString());
-					int reAjustarStockV = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (aumentar el stock en: "+cantidadVendida+" unidades)");
-					if(JOptionPane.YES_OPTION == reAjustarStockV) {
-						int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
-						int stockActual = consulta.getArticuloStock(idArticulo);
-						consulta.updtStockArticulo(idArticulo,stockActual+cantidadVendida);
-					}
-					consulta.delRegistroCompra(Integer.parseInt(value));
-					break;
-				case 8:
-					ArrayList idsArticulosMarca = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
-					for (int i = 0; i < idsArticulosMarca.size(); i++) {
-						consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
-						consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
-					}
-					consulta.delArticuloSegunMarca(Integer.parseInt(value));
-					consulta.delMarca(Integer.parseInt(value));
-					break;
-				case 9:
-					ArrayList idsArticulosTipoObj = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
-					for (int i = 0; i < idsArticulosTipoObj.size(); i++) {
-						consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
-						consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
-					}
-					consulta.delArticuloSegunMarca(Integer.parseInt(value));
-					consulta.delMarca(Integer.parseInt(value));
-					break;
-				case 10:
-					consulta.delProveedor(Integer.parseInt(value));
-					break;
-				default:
+						consulta.delRegistroVenta(Integer.parseInt(value));
+						break;
+					case 7:
+						int cantidadVendida = Integer.parseInt(tabla.getValueAt(row, 3).toString());
+						int reAjustarStockV = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (aumentar el stock en: "+cantidadVendida+" unidades)");
+						if(JOptionPane.YES_OPTION == reAjustarStockV) {
+							int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
+							int stockActual = consulta.getArticuloStock(idArticulo);
+							consulta.updtStockArticulo(idArticulo,stockActual+cantidadVendida);
+						}
+						consulta.delRegistroCompra(Integer.parseInt(value));
+						break;
+					case 8:
+						ArrayList idsArticulosMarca = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
+						for (int i = 0; i < idsArticulosMarca.size(); i++) {
+							consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
+							consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
+						}
+						consulta.delArticuloSegunMarca(Integer.parseInt(value));
+						consulta.delMarca(Integer.parseInt(value));
+						break;
+					case 9:
+						ArrayList idsArticulosTipoObj = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
+						for (int i = 0; i < idsArticulosTipoObj.size(); i++) {
+							consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
+							consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
+						}
+						consulta.delArticuloSegunMarca(Integer.parseInt(value));
+						consulta.delMarca(Integer.parseInt(value));
+						break;
+					case 10:
+						consulta.delProveedor(Integer.parseInt(value));
+						break;
+					default:
+				}
+				eliminarDatosTabla();
+				repintarTabla();
+				rellenarTabla();
 			}
-			eliminarDatosTabla();
-			repintarTabla();
-			rellenarTabla();
+		}else {
+			Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
+			JOptionPane.showMessageDialog(null, "No tiene una fila seleccioanda","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
 		}
 	}
 
@@ -387,13 +392,13 @@ public class Administracion extends JFrame {
 			elementosTabla = new ArrayList<ArrayList<String>>();
 			switch(modo) {
 			 case 1:
-				String[] columnas1 = {"nada","nombreusuario","apellidos","rut","telefonos","email"};
+				String[] columnas1 = {"nada","nombreusuario","apellidos","rut","telefono","email"};
 	 			boolean[] isInteger1 = {false,false,false,false,false,false};
 				elementosTabla = consulta.getListaUsuarioBusqueda(columnas1[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger1[filtroCB.getSelectedIndex()]);
 				break;
 			case 2:
 				String[] columnas2 = {"nada","rut","nombreregion","numerodomicilio","calle","ciudad","comuna"};
-	 			boolean[] isInteger2 = {false,false,false,true,false,false};
+	 			boolean[] isInteger2 = {false,false,false,true,false,false,false};
 				elementosTabla = consulta.getListaDireccionBusqueda(columnas2[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger2[filtroCB.getSelectedIndex()]);
 				break;
 			case 3:
