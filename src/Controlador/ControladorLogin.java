@@ -166,8 +166,8 @@ public class ControladorLogin {
 	        						e.printStackTrace();
 	        					}
 	        	        			new ControladorAdministracion(login.txtUser.getText());
-	        	        			Consulta consulta = new Consulta();
-	        	        			consulta.addRegistroVenta_batch();
+	        	        			//Consulta consulta = new Consulta();
+	        	        			//consulta.addRegistroVenta_batch();
 	        	        			login.setVisible(false);
 	        	        		} else {
 	        	        			System.out.println("No existe / mala contrasena");
