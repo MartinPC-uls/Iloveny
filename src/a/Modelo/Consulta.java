@@ -1223,6 +1223,96 @@ public class Consulta extends Conexion{
         }
     }
     
+    public void addRegistroVenta_batch() {
+	    	PreparedStatement ps = null;
+	    	Connection con = conectar();
+	    	String sql = "INSERT INTO RegistroVenta (idArticulo, Rut, CantidadVendida, FechaVenta) "
+	    			+ "VALUES (?,?,?,?)";
+	    	try {
+	    		
+	    		System.out.println("Agregando datos...");
+	    		
+	    		ps = con.prepareStatement(sql);
+	    		
+	    		String[] ruts = new String[12];
+	   	    ruts[0] = "20.295.419-7";
+	   	    ruts[1] = "18.755.052-5";
+	   	    ruts[2] = "12.484.045-1";
+	   	    ruts[3] = "8.622.158-9";
+	   	    ruts[4] = "9.261.001-7";
+	   	    ruts[5] = "12.159.963-3";
+	   	    ruts[6] = "14.741.258-0";
+	   	    ruts[7] = "7.751.102-4";
+	   	    ruts[8] = "10.761.163-K";
+	   	    ruts[9] = "13.451.418-7";
+	   	    ruts[10] = "14.103.451-9";
+	   	    ruts[11] = "16.551.777-8";
+	   	    
+	   	    int min = 0;
+	   	    int max = 11;
+	   	    int random_rut;
+	   	    int random_idarticulo;
+	   	    int random_cantidadvendida;
+	   	    
+	   	    int random_dia;
+	   	    int random_mes;
+	   	    int random_ano;
+	   	    
+	   	    int min_dia = 1, max_dia = 31;
+	   	    int min_mes = 1, max_mes = 12;
+	   	    int min_ano = 2018, max_ano = 2021;
+	   	    
+	   	    int min_idarticulo = 1, max_idarticulo = 20;
+	   	    
+	   	    int min_cantidadvendida = 1, max_cantidadvendida = 3;
+	   	    
+	   	    //Consulta consulta = new Consulta();
+	   	    
+	   	    String fecha = "";
+	   	    
+	   	    int maxDatos = 447200;
+	   	    for (int i = 0; i < maxDatos; i++) {
+	   		    random_rut =  (int)Math.floor(Math.random()*(max-min+1)+min);
+	   		    random_dia = (int)Math.floor(Math.random()*(max_dia-min_dia+1)+min_dia);
+	   		    random_mes = (int)Math.floor(Math.random()*(max_mes-min_mes+1)+min_mes);
+	   		    random_ano = (int)Math.floor(Math.random()*(max_ano-min_ano+1)+min_ano);
+	   		    random_idarticulo = (int)Math.floor(Math.random()*(max_idarticulo-min_idarticulo+1)+min_idarticulo);
+	   		    random_cantidadvendida = (int)Math.floor(Math.random()*(max_cantidadvendida-min_cantidadvendida+1)+min_cantidadvendida);
+	   		    if (random_mes == 2 && random_dia > 28) {
+	   			    random_dia = 28;
+	   		    } else if (random_mes == 4 || random_mes == 6 || random_mes == 9 || random_mes == 11 && random_dia > 31) {
+	   			    random_dia = 30;
+	   		    }
+	   		    
+	   		    fecha = random_ano + "-" + String.format("%02d", random_mes) + "-" + String.format("%02d", random_dia);
+	   		    
+	   		    	ps.setInt(1, random_idarticulo);
+				ps.setString(2, ruts[random_rut]);
+				ps.setInt(3, random_cantidadvendida);
+				ps.setDate(4, java.sql.Date.valueOf(fecha));
+				
+				ps.addBatch();
+				if ((i + 1) % 100 == 0) {
+					ps.executeBatch();
+				}
+	   	    }
+	    		
+				
+				
+				ps.executeBatch();
+				System.out.println("se ha terminado de ejecutar el script.");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+	            try {
+	                con.close();
+	            } catch (SQLException ex) {
+	                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+	            }
+	        }
+	    }
+    
     /**
      * Obtiene los datos de la tabla RegistrosCompra en conjunto de la proveedores
      * @param orden Es el atributo por el cual se va a ordenar la tabla (default: FechaPedida).

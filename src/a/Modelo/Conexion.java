@@ -23,9 +23,11 @@ public class Conexion {
      * @return Un objeto tipo connection
      */
     public  Connection conectar(){
+	    
         try {
             Class.forName("org.postgresql.Driver");
             con = (Connection) DriverManager.getConnection(this.url, this.user, this.password);
+            
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,4 +45,29 @@ public class Conexion {
             
         }
     }    
+    
+    public void scriptDatos() {
+	    Consulta consulta = new Consulta();
+	    consulta.addRegistroVenta_batch();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
