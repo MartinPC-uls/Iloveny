@@ -1191,6 +1191,85 @@ public class Consulta extends Conexion{
         }
     }
     
+    public void addRegistroCompra_batch() {
+	    	PreparedStatement ps = null;
+	    	Connection con = conectar();
+	    	String sql = "INSERT INTO RegistroCompra (idArticulo, Usuario, idProv, UnidadesAdquiridas, CostoUnitario, FechaPedida, FechaRecibo) "
+	        		+ " VALUES (?,?,?,?,?,?,?)";
+	    	try {
+	    		
+	    		System.out.println("Agregando datos...");
+	    		
+	    		ps = con.prepareStatement(sql);
+	    		
+	    		String usuario = "admin";
+	   	    
+	   	    int random_dia;
+	   	    int random_mes;
+	   	    int random_ano;
+	   	    
+	   	    int min_dia = 1, max_dia = 31;
+	   	    int min_mes = 1, max_mes = 12;
+	   	    int min_ano = 2018, max_ano = 2021;
+	   	    
+	   	    int random_idarticulo;
+	   	    int min_idarticulo = 1, max_idarticulo = 20;
+	   	    
+	   	    int random_unidadesadquiridas;
+	   	    int min_unidadesadquiridas = 1, max_unidadesadquiridas = 3;
+	   	    
+	   	    int random_idproveedor;
+	   	    int min_idproveedor = 1, max_idproveedor = 2;
+	   	    
+	   	    
+	   	    String fecha = "";
+	   	    
+	   	    int maxDatos = 99999;
+	   	    for (int i = 0; i < maxDatos; i++) {
+	   		    random_dia = (int)Math.floor(Math.random()*(max_dia-min_dia+1)+min_dia);
+	   		    random_mes = (int)Math.floor(Math.random()*(max_mes-min_mes+1)+min_mes);
+	   		    random_ano = (int)Math.floor(Math.random()*(max_ano-min_ano+1)+min_ano);
+	   		    random_idarticulo = (int)Math.floor(Math.random()*(max_idarticulo-min_idarticulo+1)+min_idarticulo);
+	   		    random_idproveedor = (int)Math.floor(Math.random()*(max_idproveedor-min_idproveedor+1)+min_idproveedor);
+	   		    random_unidadesadquiridas = (int)Math.floor(Math.random()*(max_unidadesadquiridas-min_unidadesadquiridas+1)+min_unidadesadquiridas);
+	   		    if (random_mes == 2 && random_dia > 28) {
+	   			    random_dia = 28;
+	   		    } else if (random_mes == 4 || random_mes == 6 || random_mes == 9 || random_mes == 11 && random_dia > 31) {
+	   			    random_dia = 30;
+	   		    }
+	   		    
+	   		    fecha = random_ano + "-" + String.format("%02d", random_mes) + "-" + String.format("%02d", random_dia);
+	   		    
+	   		    	ps.setInt(1, random_idarticulo);
+				ps.setString(2, usuario);
+				ps.setInt(3, random_idproveedor);
+				ps.setInt(4, random_unidadesadquiridas);
+				//ps.setInt(5, costounitario); ?
+				//ps.setString(6, random_fechapedido); ?
+				//ps.setString(7, random_fecharecibo); ?
+				
+				ps.addBatch();
+				if ((i + 1) % 100 == 0) {
+					ps.executeBatch();
+				}
+	   	    }
+	    		
+				
+				
+				ps.executeBatch();
+				System.out.println("se ha terminado de ejecutar el script.");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+	            try {
+	                con.close();
+	            } catch (SQLException ex) {
+	                Logger.getLogger(Consulta.class.getName()).log(Level.SEVERE, null, ex);
+	            }
+	        }
+	    }
+    
     /**
      * Esta funcion permite agregar una nueva fila a la tabla de RegistroVenta con sus correspondientes datos.
      * @param idArticulo Corresponde al dato que se va a agregar en la columna idArticulo.
