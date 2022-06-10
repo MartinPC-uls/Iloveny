@@ -116,7 +116,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
 		btnAgregarTipoObjeto.setBackground(Color.WHITE);
 		btnAgregarTipoObjeto.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarTipoObjeto.setBounds(199, 455, 302, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarTipoObjeto, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarTipoObjeto, 15);
 		add(btnAgregarTipoObjeto);
 		
 		lblAlertaTipoObjeto = new JLabel("");
@@ -233,7 +233,7 @@ public class AgregarTipoObjetoPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

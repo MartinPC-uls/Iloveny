@@ -207,7 +207,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		btnAgregarRegistroVenta.setBackground(Color.WHITE);
 		btnAgregarRegistroVenta.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarRegistroVenta.setBounds(138, 458, 459, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarRegistroVenta, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarRegistroVenta, 15);
 		add(btnAgregarRegistroVenta);
 		
 		lblAlertaFecha = new JLabel("");
@@ -488,7 +488,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

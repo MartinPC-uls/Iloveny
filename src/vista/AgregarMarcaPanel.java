@@ -118,7 +118,7 @@ public class AgregarMarcaPanel extends JPanel {
 		btnAgregarMarca.setBackground(Color.WHITE);
 		btnAgregarMarca.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarMarca.setBounds(199, 455, 302, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarMarca, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarMarca, 15);
 		add(btnAgregarMarca);
 		
 		lblAlertaMarca = new JLabel("");
@@ -238,7 +238,7 @@ public class AgregarMarcaPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

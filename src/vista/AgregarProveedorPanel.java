@@ -117,7 +117,7 @@ public class AgregarProveedorPanel extends JPanel {
 		btnAgregarProveedor.setBackground(Color.WHITE);
 		btnAgregarProveedor.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarProveedor.setBounds(206, 455, 320, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarProveedor, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarProveedor, 15);
 		add(btnAgregarProveedor);
 		
 		lblAlertaProveedor = new JLabel("");
@@ -241,7 +241,7 @@ public class AgregarProveedorPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

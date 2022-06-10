@@ -133,7 +133,7 @@ public class AgregarDireccionPanel extends JPanel {
 		
 		RegionCB = new JComboBox(new String[] {"Seleccione...","Tarapaca", "Antofagasta", "Atacama", "Coquimbo", "Valparaiso",
 														"Ohiggins","Maule","Biobio","La Araucania","Los Lagos","Aysen","Magallanes",
-														"Metropolitana","Los Rios","Arica y P.","Ñuble"});
+														"Metropolitana","Los Rios","Arica y P.","ï¿½uble"});
 		RegionCB.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -304,7 +304,7 @@ public class AgregarDireccionPanel extends JPanel {
 		btnAgregarDireccion.setBackground(Color.WHITE);
 		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarDireccion.setBounds(215, 458, 302, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarDireccion, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarDireccion, 15);
 		add(btnAgregarDireccion);
 		
 		lblAlertaComuna = new JLabel("");
@@ -556,7 +556,7 @@ public class AgregarDireccionPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

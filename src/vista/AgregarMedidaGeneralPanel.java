@@ -243,7 +243,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
 		btnAgregarMedidaGeneral.setBackground(Color.WHITE);
 		btnAgregarMedidaGeneral.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarMedidaGeneral.setBounds(155, 457, 402, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarMedidaGeneral, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarMedidaGeneral, 15);
 		add(btnAgregarMedidaGeneral);
 		
 		lblAlertaAlto = new JLabel("");
@@ -442,7 +442,7 @@ public class AgregarMedidaGeneralPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

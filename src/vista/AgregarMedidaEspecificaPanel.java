@@ -129,7 +129,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
 		btnAgregarDireccion.setBackground(Color.WHITE);
 		btnAgregarDireccion.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 		btnAgregarDireccion.setBounds(154, 458, 424, 64);
-		eventoExpandirDisminuirTamañoBoton(btnAgregarDireccion, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarDireccion, 15);
 		add(btnAgregarDireccion);
 		
 		lblAlertaMedida = new JLabel("");
@@ -297,7 +297,7 @@ public class AgregarMedidaEspecificaPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	

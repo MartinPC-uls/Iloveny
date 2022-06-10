@@ -319,7 +319,7 @@ public class AgregarUsuarioPanel extends JPanel {
 				}
 			}
 		});
-		eventoExpandirDisminuirTamañoBoton(btnAgregarUsuario, 15);
+		eventoExpandirDisminuirTamanoBoton(btnAgregarUsuario, 15);
 		btnAgregarUsuario.setBorder(null);
 		btnAgregarUsuario.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAgregarUsuario.setBackground(Color.WHITE);
@@ -529,7 +529,7 @@ public class AgregarUsuarioPanel extends JPanel {
         });
 	}
 	
-	private void eventoExpandirDisminuirTamañoBoton(JButton boton, int pixeles) {
+	private void eventoExpandirDisminuirTamanoBoton(JButton boton, int pixeles) {
 		boton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {	
