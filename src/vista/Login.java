@@ -27,14 +27,14 @@ public class Login extends JFrame {
     	setUndecorated(true);
     	getContentPane().setBackground(new Color(51,51,51));
         try {
-		initialize();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
+        	initialize();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
     private void initialize() throws IOException {
-    	 setResizable(false);
+    	setResizable(false);
         setVisible(true);
         setBounds(100, 100, 473, 652);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

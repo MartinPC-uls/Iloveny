@@ -13,7 +13,7 @@ public class Inicializador {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
-		}//
+		}
 		new ControladorLogin();
     }
 }

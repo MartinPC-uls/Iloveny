@@ -13,8 +13,9 @@ import java.io.IOException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
+import mongodb.Consulta;
 import vista.Login;
-import a.Modelo.Consulta;
 
 public class ControladorLogin {
 	
@@ -141,16 +142,15 @@ public class ControladorLogin {
 		login.btnLogin.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		login.lblConectando.setVisible(true);
-  			login.lblLoadingImage.setVisible(true);
-  			login.lblErrorConexion.setVisible(false);
-  			login.lblLoadingImage.setVisible(true);
-  			login.lblErrorMessage.setVisible(false);
+	  			login.lblLoadingImage.setVisible(true);
+	  			login.lblErrorConexion.setVisible(false);
+	  			login.lblLoadingImage.setVisible(true);
+	  			login.lblErrorMessage.setVisible(false);
         		Thread t1 = new Thread() {
         			@Override
         			public void run() {
         				try {
-	        				if(consulta.verificarAdmin(login.txtUser.getText(), String.valueOf(login.txtPassword.getPassword()))) {
-	        	        			System.out.println("Logeado dentro del sistema.");
+        					if (consulta.verificarAdministrador(login.txtUser.getText(), String.valueOf(login.txtPassword.getPassword()))) {
 	        	        			login.lblErrorImage.setVisible(false);
 	        	        			login.lblErrorMessage.setVisible(false);
 	        	        			login.downPanelUser.setBackground(Color.GREEN);
@@ -166,24 +166,22 @@ public class ControladorLogin {
 	        						e.printStackTrace();
 	        					}
 	        	        			new ControladorAdministracion(login.txtUser.getText());
-	        	        			//Consulta consulta = new Consulta();
-	        	        			//consulta.addRegistroVenta_batch();
 	        	        			login.setVisible(false);
 	        	        		} else {
 	        	        			System.out.println("No existe / mala contrasena");
 	        	        			login.lblConectando.setVisible(false);
-	               	  			login.lblLoadingImage.setVisible(false);
+	               	  				login.lblLoadingImage.setVisible(false);
 	        	        			login.lblErrorImage.setVisible(true);
 	        	        			login.lblErrorMessage.setVisible(true);
 	        	        			login.downPanelUser.setBackground(Color.RED);
 	        	        			login.downPanelPassword.setBackground(Color.RED);
-	        	 				try {
-	        						mostrarAlerta(false);
-	        					} catch (HeadlessException e) {
-	        						e.printStackTrace();
-	        					} catch (IOException e) {
-	        						e.printStackTrace();
-	        					}
+		        	 				try {
+		        						mostrarAlerta(false);
+		        					} catch (HeadlessException e) {
+		        						e.printStackTrace();
+		        					} catch (IOException e) {
+		        						e.printStackTrace();
+		        					}
 	        	        		}
         				} catch (Exception e) {
         					login.lblErrorConexion.setVisible(true);
