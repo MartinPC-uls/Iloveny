@@ -27,6 +27,20 @@ public class Utils {
 		String string = _field.getString(in);
 		return string;
 	}
+	public static String readStringIntoObjectInObject(String field, String subfield, String in, String fromJSONString) {
+		JSONObject json = new JSONObject(fromJSONString);
+		JSONObject _field = json.getJSONObject(field);
+		JSONObject _subfield = _field.getJSONObject(subfield);
+		String string = _subfield.getString(in);
+		return string;
+	}
+	public static int readIntegerIntoObjectInObject(String field, String subfield, String in, String fromJSONString) {
+		JSONObject json = new JSONObject(fromJSONString);
+		JSONObject _field = json.getJSONObject(field);
+		JSONObject _subfield = _field.getJSONObject(subfield);
+		int value = _subfield.getInt(in);
+		return value;
+	}
 	public static int readIntegerIntoAnArrayInObject(String array, int object_index, String in, String fromJSONString) {
 		JSONObject json = new JSONObject(fromJSONString);
 		JSONArray _array = json.getJSONArray(array);

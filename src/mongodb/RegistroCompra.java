@@ -1,32 +1,36 @@
 package mongodb;
 
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
 public class RegistroCompra {
 
-	@BsonProperty("nombreprov")
-	private String nombreprov;
-	@BsonProperty("usuario")
+	private int id;
 	private String usuario;
-	@BsonProperty("unidadesadquiridas")
+	private String nombreprov;
 	private int unidadesadquiridas;
-	@BsonProperty("costounitario")
 	private int costounitario;
-	@BsonProperty("fechapedida")
-	private String fechapedida; // pasar a Date
-	@BsonProperty("fecharecibo")
-	private String fecharecibo; // pasar a Date
+	// TODO
+	// pasar fechas a formato Date
+	private String fechapedida;
+	private String fecharecibo;
+	private ArticuloRegistroCompra articulo;
+	private Medida medidas;
 	
-	public RegistroCompra(String nombreprov, String usuario, int unidadesadquiridas, int costounitario, String fechapedida, String fecharecibo) {
+	public RegistroCompra(int id, String nombreprov, String usuario, int unidadesadquiridas, int costounitario, String fechapedida, String fecharecibo,
+			ArticuloRegistroCompra articulo, Medida medidas) {
+		this.id = id;
 		this.nombreprov = nombreprov;
 		this.usuario = usuario;
 		this.unidadesadquiridas = unidadesadquiridas;
 		this.costounitario = costounitario;
 		this.fechapedida = fechapedida;
 		this.fecharecibo = fecharecibo;
+		this.articulo = articulo;
+		this.medidas = medidas;
 	}
 	
 	// getters
+	public int get_id() {
+		return id;
+	}
 	public String get_nombreprov() {
 		return nombreprov;
 	}
@@ -45,8 +49,17 @@ public class RegistroCompra {
 	public String get_fecharecibo() {
 		return fecharecibo;
 	}
+	public ArticuloRegistroCompra get_articulo() {
+		return articulo;
+	}
+	public Medida get_medidas() {
+		return medidas;
+	}
 	
 	// setters
+	public void set_id(int id) {
+		this.id = id;
+	}
 	public void set_nombreprov(String nombreprov) {
 		this.nombreprov = nombreprov;
 	}
@@ -64,6 +77,12 @@ public class RegistroCompra {
 	}
 	public void set_fecharecibo(String fecharecibo) {
 		this.fecharecibo = fecharecibo;
+	}
+	public void set_articulo(ArticuloRegistroCompra articulo) {
+		this.articulo = articulo;
+	}
+	public void set_medidas(Medida medidas) {
+		this.medidas = medidas;
 	}
 	
 }

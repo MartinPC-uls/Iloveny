@@ -3,9 +3,6 @@ package mongodb;
 import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.Document;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -75,60 +72,192 @@ public class Consulta extends Utils {
 	        String ciudad = readStringInObject("direccion", "ciudad", json);
 	        String comuna = readStringInObject("direccion", "comuna", json);
 	        String nombreregion = readStringInObject("direccion", "nombreregion", json);
-	        // registroventa ...
 	        
 	        direccion = new Direccion(calle, numerodomicilio, ciudad, comuna, nombreregion);
 	        return new Usuario(rut, nombreusuario, apellidos, telefono, email, direccion);
 	    }
 	}
-	
-	public RegistroVenta getRegistroVenta(String rut, int object_index) {
+	public void addUsuario(Usuario usuario) {
 		try (MongoClient mongoClient = MongoClients.create(uri)) {
-	        MongoDatabase database = mongoClient.getDatabase(db);
-	        MongoCollection<Document> collection = database.getCollection(Iloveny.USUARIO.toString());
-	        Document doc = collection.find(eq("_id", rut)).first();
-	        String json = doc.toJson();
-	        
-	        // TODO
-	        // fechaventa : Date
-	        String fechaventa = readStringIntoAnArrayInObject("registroventa", object_index, "fechaventa", json);
-	        // fechaventa : Date
-	        int cantidadvendida = readIntegerIntoAnArrayInObject("registroventa", object_index, "cantidadvendida", json);
-	        ArticuloRegistroVenta articulo;
-	        String descripcion = readStringIntoAnArrayIntoAnObjectInObject("registroventa", object_index, "articulo",
-	        		"descripcion", json);
-	        String nombretipo = readStringIntoAnArrayIntoAnObjectInObject("registroventa", object_index, "articulo",
-	        		"nombretipo", json);
-	        String nombremarca = readStringIntoAnArrayIntoAnObjectInObject("registroventa", object_index, "articulo",
-	        		"nombremarca", json);
-	        int preciounitario = readIntegerIntoAnArrayIntoAnObjectInObject("registroventa", object_index, "articulo",
-	        		"preciounitario", json);
-	        
-	        articulo = new ArticuloRegistroVenta(descripcion, nombretipo, nombremarca, preciounitario);
-	        
-	        return new RegistroVenta(fechaventa, cantidadvendida, articulo);
+		        MongoDatabase database = mongoClient.getDatabase(db);
+		        MongoCollection<Document> collection = database.getCollection(Iloveny.USUARIO.toString());
+		        
+		        Direccion direccion = usuario.get_direccion();
+		        
+		        Document doc = new Document()
+			        .append("_id", usuario.get__id())
+			        .append("nombreusuario", usuario.get_nombreusuario())
+			        .append("apellidos", usuario.get_apellidos())
+			        .append("telefono", usuario.get_telefono())
+			        .append("email", usuario.get_email())
+			        .append("direccion", new Document()
+			       		 .append("calle", direccion.get_calle())
+			       		 .append("numerodomicilio", direccion.get_numerodomicilio())
+			       		 .append("ciudad", direccion.get_ciudad())
+			       		 .append("comuna", direccion.get_comuna())
+			       		 .append("nombreregion", direccion.get_nombreregion()));
+		        collection.insertOne(doc);
+		}
+	}
+	public void addArticulo(Articulo articulo, Medida medidas) {
+		try (MongoClient mongoClient = MongoClients.create(uri)) {
+		        MongoDatabase database = mongoClient.getDatabase(db);
+		        MongoCollection<Document> collection = database.getCollection(Iloveny.ARTICULO.toString());
+		        
+		        if (medidas.get_alto() == 0 && medidas.get_ancho() == 0 && medidas.get_largo() == 0) {
+		       	 Document doc = new Document()
+		       			 .append("_id", articulo.get__id())
+		       			 .append("nombretipo", articulo.get_nombretipo())
+		       			 .append("nombremarca", articulo.get_nombremarca())
+		       			 .append("descripcion", articulo.get_descripcion())
+		       			 .append("stock", articulo.get_stock())
+		       			 .append("preciounitario", articulo.get_preciounitario())
+		       			 .append("medida", new Document()
+		       					 .append("medidaespecifica", medidas.get_medidaespecifica()));
+		       	 collection.insertOne(doc);
+		        } else {
+		       	 Document doc = new Document()
+		       			 .append("_id", articulo.get__id())
+		       			 .append("nombretipo", articulo.get_nombretipo())
+		       			 .append("nombremarca", articulo.get_nombremarca())
+		       			 .append("descripcion", articulo.get_descripcion())
+		       			 .append("stock", articulo.get_stock())
+		       			 .append("preciounitario", articulo.get_preciounitario())
+		       			 .append("medida", new Document()
+		       					 .append("alto", medidas.get_alto())
+		       					 .append("ancho", medidas.get_ancho())
+		       					 .append("largo", medidas.get_largo()));
+		       	 collection.insertOne(doc);
+		        }
 		}
 	}
 	
-	public RegistroCompra getRegistroCompra(String idArticulo, int object_index) {
+	public void addRegistroCompra(RegistroCompra registroCompra) {
+		try (MongoClient mongoClient = MongoClients.create(uri)) {
+		        MongoDatabase database = mongoClient.getDatabase(db);
+		        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROCOMPRA.toString());
+		        
+		        ArticuloRegistroCompra articulo = registroCompra.get_articulo();
+		        
+		        Document doc = new Document()
+		       		 .append("_id", registroCompra.get_id())
+		       		 .append("usuario", registroCompra.get_usuario())
+		       		 .append("nombreprov", registroCompra.get_nombreprov())
+		       		 .append("unidadesadquiridas", registroCompra.get_unidadesadquiridas())
+		       		 .append("costounitario", registroCompra.get_costounitario())
+		       		 .append("fechapedida", registroCompra.get_fechapedida())
+		       		 .append("fecharecibo", registroCompra.get_fecharecibo())
+		       		 .append("articulo", new Document()
+		       				 .append("nombretipo", articulo.get_nombretipo())
+		       				 .append("nombremarca", articulo.get_nombremarca())
+		       				 .append("stock", articulo.get_stock())
+		       				 .append("preciounitario", articulo.get_preciounitario())
+		       				 .append("descripcion", articulo.get_descripcion()));
+		        if (registroCompra.get_medidas().get_alto() == 0 && registroCompra.get_medidas().get_ancho() == 0 
+		       		 && registroCompra.get_medidas().get_largo() == 0) {
+		       	 doc.append("medidas", new Document()
+		       			 .append("alto", registroCompra.get_medidas().get_alto())
+		       			 .append("ancho", registroCompra.get_medidas().get_ancho())
+		       			 .append("largo", registroCompra.get_medidas().get_largo()));
+		        } else {
+		       	 doc.append("medidas", new Document()
+		       			 .append("medidaespecifica", registroCompra.get_medidas().get_medidaespecifica()));
+		        }
+		        collection.insertOne(doc);
+		}
+	}
+	
+	public void addRegistroVenta(RegistroVenta registroVenta) {
+		try (MongoClient mongoClient = MongoClients.create(uri)) {
+		        MongoDatabase database = mongoClient.getDatabase(db);
+		        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROVENTA.toString());
+		        
+		        Document doc = new Document()
+		       		 .append("_id", registroVenta.get_id())
+		       		 .append("fechaventa", registroVenta.get_fechaventa())
+		       		 .append("cantidadvendida", registroVenta.get_cantidadvendida())
+		       		 .append("usuario", new Document()
+		       				 .append("usuario", registroVenta.get_usuario().get__id())
+		       				 .append("nombreusuario", registroVenta.get_usuario().get_nombreusuario())
+		       				 .append("apellidos", registroVenta.get_usuario().get_apellidos())
+		       				 .append("telefono", registroVenta.get_usuario().get_telefono())
+		       				 .append("email", registroVenta.get_usuario().get_email())
+		       				 .append("direccion", new Document()
+		       						 .append("calle", registroVenta.get_usuario().get_direccion().get_calle())
+		       						 .append("numerodomicilio", registroVenta.get_usuario().get_direccion().get_numerodomicilio())
+		       						 .append("nombreregion", registroVenta.get_usuario().get_direccion().get_nombreregion())
+		       						 .append("ciudad", registroVenta.get_usuario().get_direccion().get_ciudad())))
+		       		 .append("articulo", new Document()
+		       				 .append("nombremarca", registroVenta.get_articulo().get_nombremarca())
+		       				 .append("nombretipo", registroVenta.get_articulo().get_nombretipo())
+		       				 .append("descripcion", registroVenta.get_articulo().get_descripcion())
+		       				 .append("preciounitario", registroVenta.get_articulo().get_preciounitario()));
+		        collection.insertOne(doc);
+		}
+	}
+	
+	public RegistroVenta getRegistroVenta(int id) {
 		try (MongoClient mongoClient = MongoClients.create(uri)) {
 	        MongoDatabase database = mongoClient.getDatabase(db);
-	        MongoCollection<Document> collection = database.getCollection(Iloveny.ARTICULO.toString());
+	        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROVENTA.toString());
+	        Document doc = collection.find(eq("_id", id)).first();
+	        String json = doc.toJson();
+	        
+	        String fechaventa = readString("fechaventa", json);
+	        int cantidadvendida = readInteger("cantidadvendida", json);
+	        Usuario usuario;
+	        String rut = readStringInObject("usuario", "rut", json);
+	        usuario = new Usuario(rut, null, null, null, null, null);
+	        
+	        ArticuloRegistroVenta articulo;
+	        String nombremarca = readStringInObject("articulo", "nombremarca", json);
+	        String nombretipo = readStringInObject("articulo", "nombretipo", json);
+	        String descripcion = readStringInObject("articulo", "descripcion", json);
+	        int preciounitario = readIntegerInObject("articulo", "preciounitario", json);
+	        articulo = new ArticuloRegistroVenta(descripcion, nombretipo, nombremarca, preciounitario);
+	        
+	        return new RegistroVenta(id, fechaventa, cantidadvendida, usuario, articulo);
+		}
+	}
+	
+	public RegistroCompra getRegistroCompra(String idArticulo) {
+		try (MongoClient mongoClient = MongoClients.create(uri)) {
+	        MongoDatabase database = mongoClient.getDatabase(db);
+	        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROCOMPRA.toString());
 	        Document doc = collection.find(eq("_id", idArticulo)).first();
 	        String json = doc.toJson();
 	        
-	        String nombreprov = readStringIntoAnArrayInObject("registrocompra", object_index, "nombreprov", json);
-	        String usuario = readStringIntoAnArrayInObject("registrocompra", object_index, "usuario", json);
-	        int unidadesadquiridas = readIntegerIntoAnArrayInObject("registrocompra", object_index, "unidadesadquiridas", json);
-	        int costounitario = readIntegerIntoAnArrayInObject("registrocompra", object_index, "costounitario", json);
-	        String fechapedida = readStringIntoAnArrayInObject("registrocompra", object_index, "fechapedida", json);
-	        String fecharecibo = readStringIntoAnArrayInObject("registrocompra", object_index, "fecharecibo", json);
+	        int id = readInteger("_id", json);
+	        String usuario = readString("usuario", json);
+	        String nombreprov = readString("nombreprov", json);
+	        int unidadesadquiridas = readInteger("unidadesadquiridas", json);
+	        int costounitario = readInteger("costounitario", json);
+	        String fechapedida = readString("fechapedida", json);
+	        String fecharecibo = readString("fecharecibo", json);
+	        ArticuloRegistroCompra articulo;
+	        String nombretipo = readStringInObject("articulo", "nombretipo", json);
+	        String nombremarca = readStringInObject("articulo", "nombremarca", json);
+	        int stock = readIntegerInObject("articulo", "stock", json);
+	        int preciounitario = readIntegerInObject("articulo", "preciounitario", json);
+	        String descripcion = readStringInObject("articulo", "descripcion", json);
+	        articulo = new ArticuloRegistroCompra(nombretipo, nombremarca, stock, preciounitario, descripcion);
 	        
-	        return new RegistroCompra(nombreprov, usuario, unidadesadquiridas, costounitario, fechapedida, fecharecibo);
+	        Medida medidas = null;
+	        try {
+	       	 int alto = readIntegerInObject("medidas", "alto", json);
+	       	 int ancho = readIntegerInObject("medidas", "ancho", json);
+	       	 int largo = readIntegerInObject("medidas", "largo", json);
+	       	 medidas = new Medida(alto, ancho, largo);
+	        } catch (Exception e) {
+	       	 String medidaespecifica = readStringInObject("medidas", "medidaespecifica", json);
+	       	 medidas = new Medida(medidaespecifica);
+	        }
+	        
+	        return new RegistroCompra(id, nombreprov, usuario, unidadesadquiridas, costounitario, fechapedida, fecharecibo, articulo, medidas);
 		}
 	}
 	
-	public int getNumRegistroVenta(String rut) {
+	/*public int getNumRegistroVenta(String rut) {
 		try (MongoClient mongoClient = MongoClients.create(uri)) {
 	        MongoDatabase database = mongoClient.getDatabase(db);
 	        MongoCollection<Document> collection = database.getCollection(Iloveny.USUARIO.toString());
@@ -154,7 +283,7 @@ public class Consulta extends Utils {
 	        
 	        return array.length();
 		}
-	}
+	}*/
 	
 	
 	

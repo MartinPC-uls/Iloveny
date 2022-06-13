@@ -3,9 +3,6 @@ package mongodb;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
 public class Usuario {
-
-	private static final String password = new DataBase().password;
-	private static final String uri = new DataBase().uri;
 	
 	@BsonProperty("_id")
 	private String _id;

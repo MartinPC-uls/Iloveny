@@ -1,18 +1,11 @@
 package mongodb;
 
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
 public class Direccion {
 
-	@BsonProperty("calle")
 	private String calle;
-	@BsonProperty("numerodomicilio")
 	private int numerodomicilio;
-	@BsonProperty("ciudad")
 	private String ciudad;
-	@BsonProperty("comuna")
 	private String comuna;
-	@BsonProperty("nombreregion")
 	private String nombreregion;
 	
 	public Direccion(String calle, int numerodomicilio, String ciudad, String comuna, String nombreregion) {

@@ -4,7 +4,9 @@ public enum Iloveny {
 
 	ADMINISTRADOR("Administrador"),
 	ARTICULO("articulo"),
-	USUARIO("usuario");
+	USUARIO("usuario"),
+	REGISTROCOMPRA("registrocompra"),
+	REGISTROVENTA("registroventa");
 
 	private String string;
 	

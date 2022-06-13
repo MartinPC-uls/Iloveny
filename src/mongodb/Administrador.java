@@ -1,7 +1,5 @@
 package mongodb;
 
-//import org.bson.types.ObjectId;
-
 public class Administrador {
 
 	//private ObjectId _id;
