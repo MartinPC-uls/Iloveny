@@ -22,7 +22,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import a.Modelo.Consulta;
+
+import mongodb.ArticuloID;
+import mongodb.Consulta;
+
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
@@ -37,7 +40,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private static final long serialVersionUID = -1178501338264937978L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
-	public Consulta consulta = new Consulta();
 	
 	private JLabel lblAlertaArticulo;
 	private JComboBox articuloCB;
@@ -48,7 +50,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private JTextField fechaReciboTextField;
 	private JLabel lblAlertaFechaRecibo;
 	private JLabel lblAlertaCostoUnitario;
-	private JComboBox proveedorCB;
 	private JLabel lblAlertaProveedor;
 	private JPanel lineaFechaPedida;
 	private JPanel lineaUnidadesAdquiridas;
@@ -62,6 +63,9 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private int idCompraAntiguo;
 	private int unidadesAdquiridasAntigua;
 	private int stock;
+	private JLabel lblProveedor;
+	private JTextField txtEjProveedor;
+	private JPanel lineaFechaRecibo_1;
 	
 	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -74,7 +78,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lblAlertaProveedor = new JLabel("");
 		lblAlertaProveedor.setVisible(false);
 		lblAlertaProveedor.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaProveedor.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaProveedor.setIcon(new ImageIcon(AgregarRegistroCompraPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaProveedor.setBounds(604, 177, 30, 27);
 		add(lblAlertaProveedor);
 		
@@ -355,24 +359,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lblAlertaArticulo.setBounds(98, 174, 30, 27);
 		add(lblAlertaArticulo);
 		
-		JLabel lblProveedor = new JLabel("Proveedor");
-		lblProveedor.setForeground(Color.WHITE);
-		lblProveedor.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblProveedor.setBounds(383, 155, 62, 14);
-		add(lblProveedor);
-		
-		DefaultComboBoxModel modelo2 = crearModeloComboBoxProveedor();
-		proveedorCB = new JComboBox(new Object[]{});
-		proveedorCB.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				verificarProveedor();
-			}
-		});
-		proveedorCB.setModel(modelo2);
-		proveedorCB.setBounds(383, 180, 214, 21);
-		add(proveedorCB);
-		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnVolver.setBorder(null);
@@ -384,9 +370,44 @@ public class AgregarRegistroCompraPanel extends JPanel {
 				paneles[0].setBounds(929, 39, 732, 558);
 			}
 		});
-		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
+		btnVolver.setIcon(new ImageIcon(AgregarArticuloPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		lblProveedor = new JLabel("Proveedor");
+		lblProveedor.setForeground(Color.WHITE);
+		lblProveedor.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblProveedor.setBounds(383, 164, 106, 14);
+		add(lblProveedor);
+		
+		txtEjProveedor = new JTextField();
+		txtEjProveedor.setText("EJ: Proveedor1");
+		txtEjProveedor.setOpaque(false);
+		txtEjProveedor.setForeground(new Color(170, 170, 170));
+		txtEjProveedor.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtEjProveedor.setCaretColor(Color.WHITE);
+		txtEjProveedor.setBorder(null);
+		txtEjProveedor.setBackground(new Color(51, 51, 51));
+		txtEjProveedor.setBounds(383, 177, 214, 21);
+		add(txtEjProveedor);
+		
+		lineaFechaRecibo_1 = new JPanel();
+		lineaFechaRecibo_1.setPreferredSize(new Dimension(0, 3));
+		lineaFechaRecibo_1.setBackground(Color.WHITE);
+		lineaFechaRecibo_1.setBounds(383, 201, 214, 3);
+		add(lineaFechaRecibo_1);
+		GroupLayout gl_lineaFechaRecibo_1 = new GroupLayout(lineaFechaRecibo_1);
+		gl_lineaFechaRecibo_1.setHorizontalGroup(
+			gl_lineaFechaRecibo_1.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaFechaRecibo_1.setVerticalGroup(
+			gl_lineaFechaRecibo_1.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaFechaRecibo_1.setLayout(gl_lineaFechaRecibo_1);
 		
 		if (modo == 2) {
 			setElementos(elementoSeleccionado);
@@ -397,14 +418,14 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		unidadesAdquiridasAntigua = Integer.parseInt(elementoSeleccionado.get(3));
 		idCompraAntiguo = Integer.parseInt(elementoSeleccionado.get(7));
 		setIndiceElementoSeleccionado(articuloCB, elementoSeleccionado.get(0));
-		setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
-		idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
+		//setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
+		//idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
 		cambiarColorTextFieldsBlanco();
 		fechaPedidaTextField.setText(elementoSeleccionado.get(5));
 		fechaReciboTextField.setText(elementoSeleccionado.get(6));
 		unidadesAdquiridasTextField.setText(elementoSeleccionado.get(3));
 		costoUnitarioTextField.setText(elementoSeleccionado.get(4));
-		this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
+		// TODO this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 	}
 	
 	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
@@ -426,44 +447,22 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private boolean verificarProveedor() {
-		if(proveedorCB.getSelectedIndex() == 0) {
+		/*if(proveedorCB.getSelectedIndex() == 0) {
 			lblAlertaProveedor.setVisible(true);
 			return false;
 		}
-		lblAlertaProveedor.setVisible(false);
-		return true;
-	}
-
-	private DefaultComboBoxModel crearModeloComboBoxProveedor() {
-		ArrayList<?> proveedores = consulta.getProveedor();
-		if(proveedores.size()>0) {
-			existenRutsSinDireccion = true;
-			String[] listaProveedores = new String[proveedores.size()+1];
-			listaProveedores[0] = "Seleccione...";
-			for(int i=1; i<=proveedores.size();i++) {
-				listaProveedores[i] = proveedores.get(i-1).toString();
-				StringBuilder builder = new StringBuilder(listaProveedores[i]);
-				for (int j = 0; j < builder.toString().length(); j++) {
-					if (builder.charAt(j) == '[' || builder.charAt(j) == ']' || builder.charAt(j) == ',') {
-						builder.deleteCharAt(j);
-					}
-				}
-				listaProveedores[i] = builder.toString();
-			}
-			return new DefaultComboBoxModel(listaProveedores);
-		}else {
-			lblAlertaProveedor.setVisible(true);
-			return new DefaultComboBoxModel(new String[] {"No hay proveedores"});
-		}
+		lblAlertaProveedor.setVisible(false);*/
+		return true; // momentaneo
 	}
 	
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
-		ArrayList<?> articulo = consulta.getDescripcionArticulosConStock();
+		Consulta consulta = new Consulta();
+		ArrayList<ArticuloID> articulo = consulta.getDescripcionArticulosConStock();
 		if(articulo.size()>0) {
 			String[] listaArticulos = new String[articulo.size()+1];
 			listaArticulos[0] = "Seleccione...";
 			for(int i=1; i<=articulo.size();i++) {
-				listaArticulos[i] = articulo.get(i-1).toString();
+				listaArticulos[i] = articulo.get(i-1).descripcion;
 			}
 			return new DefaultComboBoxModel(listaArticulos);
 		}else {
@@ -477,19 +476,20 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private void agregarDatosTablaRegistroCompra() {
+		// TODO
 		if (modo == 1) {
-			int stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
+			/*int stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
 			consulta.addRegistroCompra(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), nombreAdmin,
 					Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString())),
 					Integer.parseInt(unidadesAdquiridasTextField.getText()), Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(),
 					fechaReciboTextField.getText());
-			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));
+			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));*/
 		} else if(modo == 2) {
-			consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
+			/*consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
 					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(), fechaReciboTextField.getText(),
 					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), idCompraAntiguo);
 			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), getNewStock(stock,
-					Integer.parseInt(unidadesAdquiridasTextField.getText()), unidadesAdquiridasAntigua));
+					Integer.parseInt(unidadesAdquiridasTextField.getText()), unidadesAdquiridasAntigua));*/
 		}
 	}
 	

@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import a.Modelo.Consulta;
 import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -39,7 +38,6 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JTextField apellidosTextField;
 	private JTextField numTelefonoTextField;
 	private JTextField emailTextField;
-	private Consulta consulta = new Consulta();
 	private JLabel lblAlertaRUT;
 	private JLabel lblAlertaNombre;
 	private JLabel lblAlertaNumTel;
@@ -53,6 +51,11 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
 	private String rutAntiguo;
+	private JTextField calleTextField;
+	private JTextField numeroDomicilioTextField;
+	private JTextField ciudadTextField;
+	private JTextField comunaTextField;
+	private JTextField regionTextField;
 
 	public AgregarUsuarioPanel(int modo, JComponent[] paneles,JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modoPanel = modo;
@@ -71,13 +74,13 @@ public class AgregarUsuarioPanel extends JPanel {
 		JLabel lblRut = new JLabel("RUT");
 		lblRut.setFont(new Font("Roboto Light", Font.PLAIN, 11));
 		lblRut.setForeground(Color.WHITE);
-		lblRut.setBounds(136, 140, 62, 14);
+		lblRut.setBounds(135, 77, 62, 14);
 		add(lblRut);
 		
 		lineaRut = new JPanel();
 		lineaRut.setPreferredSize(new Dimension(0, 3));
 		lineaRut.setBackground(Color.WHITE);
-		lineaRut.setBounds(136, 177, 214, 3);
+		lineaRut.setBounds(135, 114, 214, 3);
 		add(lineaRut);
 		GroupLayout gl_lineaRut = new GroupLayout(lineaRut);
 		gl_lineaRut.setHorizontalGroup(
@@ -112,20 +115,20 @@ public class AgregarUsuarioPanel extends JPanel {
 		rutTextField.setCaretColor(Color.WHITE);
 		rutTextField.setBorder(null);
 		rutTextField.setBackground(new Color(51, 51, 51));
-		rutTextField.setBounds(136, 153, 214, 21);
+		rutTextField.setBounds(135, 90, 214, 21);
 		eventoCambiarJTextField(rutTextField, rutTextField.getText(), 30);
 		add(rutTextField);
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setForeground(Color.WHITE);
 		lblNombre.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblNombre.setBounds(136, 191, 62, 14);
+		lblNombre.setBounds(135, 128, 62, 14);
 		add(lblNombre);
 		
 		lineaNombre = new JPanel();
 		lineaNombre.setPreferredSize(new Dimension(0, 3));
 		lineaNombre.setBackground(Color.WHITE);
-		lineaNombre.setBounds(136, 228, 214, 3);
+		lineaNombre.setBounds(135, 165, 214, 3);
 		add(lineaNombre);
 		GroupLayout gl_lineaNombre = new GroupLayout(lineaNombre);
 		gl_lineaNombre.setHorizontalGroup(
@@ -160,20 +163,20 @@ public class AgregarUsuarioPanel extends JPanel {
 		nombreTextField.setCaretColor(Color.WHITE);
 		nombreTextField.setBorder(null);
 		nombreTextField.setBackground(new Color(51, 51, 51));
-		nombreTextField.setBounds(136, 204, 214, 21);
+		nombreTextField.setBounds(135, 141, 214, 21);
 		eventoCambiarJTextField(nombreTextField, nombreTextField.getText(),20);
 		add(nombreTextField);
 		
 		JLabel lblApellidos = new JLabel("Apellidos");
 		lblApellidos.setForeground(Color.WHITE);
 		lblApellidos.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblApellidos.setBounds(381, 191, 62, 14);
+		lblApellidos.setBounds(380, 128, 62, 14);
 		add(lblApellidos);
 		
 		lineaApellidos = new JPanel();
 		lineaApellidos.setPreferredSize(new Dimension(0, 3));
 		lineaApellidos.setBackground(Color.WHITE);
-		lineaApellidos.setBounds(381, 228, 214, 3);
+		lineaApellidos.setBounds(380, 165, 214, 3);
 		add(lineaApellidos);
 		GroupLayout gl_lineaApellidos = new GroupLayout(lineaApellidos);
 		gl_lineaApellidos.setHorizontalGroup(
@@ -208,20 +211,20 @@ public class AgregarUsuarioPanel extends JPanel {
 		apellidosTextField.setCaretColor(Color.WHITE);
 		apellidosTextField.setBorder(null);
 		apellidosTextField.setBackground(new Color(51, 51, 51));
-		apellidosTextField.setBounds(381, 204, 214, 21);
+		apellidosTextField.setBounds(380, 141, 214, 21);
 		eventoCambiarJTextField(apellidosTextField, apellidosTextField.getText(), 50);
 		add(apellidosTextField);
 		
 		JLabel lblNumeroTelefonico = new JLabel("Numero Telefonico");
 		lblNumeroTelefonico.setForeground(Color.WHITE);
 		lblNumeroTelefonico.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblNumeroTelefonico.setBounds(136, 247, 94, 14);
+		lblNumeroTelefonico.setBounds(135, 184, 94, 14);
 		add(lblNumeroTelefonico);
 		
 		lineaNumTel = new JPanel();
 		lineaNumTel.setPreferredSize(new Dimension(0, 3));
 		lineaNumTel.setBackground(Color.WHITE);
-		lineaNumTel.setBounds(136, 284, 214, 3);
+		lineaNumTel.setBounds(135, 221, 214, 3);
 		add(lineaNumTel);
 		GroupLayout gl_lineaNumTel = new GroupLayout(lineaNumTel);
 		gl_lineaNumTel.setHorizontalGroup(
@@ -256,20 +259,20 @@ public class AgregarUsuarioPanel extends JPanel {
 		numTelefonoTextField.setCaretColor(Color.WHITE);
 		numTelefonoTextField.setBorder(null);
 		numTelefonoTextField.setBackground(new Color(51, 51, 51));
-		numTelefonoTextField.setBounds(136, 260, 214, 21);
+		numTelefonoTextField.setBounds(135, 197, 214, 21);
 		eventoCambiarJTextField(numTelefonoTextField, numTelefonoTextField.getText(), 25);
 		add(numTelefonoTextField);
 		
 		JLabel lblEmail = new JLabel("Email");
 		lblEmail.setForeground(Color.WHITE);
 		lblEmail.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblEmail.setBounds(381, 247, 62, 14);
+		lblEmail.setBounds(380, 184, 62, 14);
 		add(lblEmail);
 		
 		lineaEmail = new JPanel();
 		lineaEmail.setPreferredSize(new Dimension(0, 3));
 		lineaEmail.setBackground(Color.WHITE);
-		lineaEmail.setBounds(381, 284, 214, 3);
+		lineaEmail.setBounds(380, 221, 214, 3);
 		add(lineaEmail);
 		GroupLayout gl_lineaEmail = new GroupLayout(lineaEmail);
 		gl_lineaEmail.setHorizontalGroup(
@@ -304,7 +307,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		emailTextField.setCaretColor(Color.WHITE);
 		emailTextField.setBorder(null);
 		emailTextField.setBackground(new Color(51, 51, 51));
-		emailTextField.setBounds(381, 260, 214, 21);
+		emailTextField.setBounds(380, 197, 214, 21);
 		eventoCambiarJTextField(emailTextField, emailTextField.getText(), 50);
 		add(emailTextField);
 		
@@ -337,7 +340,7 @@ public class AgregarUsuarioPanel extends JPanel {
 				paneles[0].setBounds(929, 39, 732, 558);
 			}
 		});
-		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
+		btnVolver.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
 		
@@ -346,7 +349,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaRUT.setToolTipText("Hay un error de formato");
 		lblAlertaRUT.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaRUT.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaRUT.setBounds(96, 153, 30, 27);
+		lblAlertaRUT.setBounds(95, 90, 30, 27);
 		add(lblAlertaRUT);
 		
 		lblAlertaNombre = new JLabel("");
@@ -354,7 +357,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaNombre.setToolTipText("Hay un error de formato");
 		lblAlertaNombre.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaNombre.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaNombre.setBounds(96, 204, 30, 27);
+		lblAlertaNombre.setBounds(95, 141, 30, 27);
 		add(lblAlertaNombre);
 		
 		lblAlertaNumTel = new JLabel("");
@@ -362,7 +365,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaNumTel.setToolTipText("Hay un error de formato");
 		lblAlertaNumTel.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaNumTel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaNumTel.setBounds(96, 260, 30, 27);
+		lblAlertaNumTel.setBounds(95, 197, 30, 27);
 		add(lblAlertaNumTel);
 		
 		lblAlertaEmail = new JLabel("");
@@ -370,7 +373,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaEmail.setToolTipText("Hay un error de formato");
 		lblAlertaEmail.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaEmail.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaEmail.setBounds(602, 260, 30, 27);
+		lblAlertaEmail.setBounds(601, 197, 30, 27);
 		add(lblAlertaEmail);
 		
 		lblAlertaApellidos = new JLabel("");
@@ -378,8 +381,183 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaApellidos.setToolTipText("Hay un error de formato");
 		lblAlertaApellidos.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaApellidos.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaApellidos.setBounds(602, 204, 30, 27);
+		lblAlertaApellidos.setBounds(601, 141, 30, 27);
 		add(lblAlertaApellidos);
+		
+		JLabel lblCalle = new JLabel("Calle");
+		lblCalle.setForeground(Color.WHITE);
+		lblCalle.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblCalle.setBounds(135, 235, 62, 14);
+		add(lblCalle);
+		
+		JPanel lineaCalle = new JPanel();
+		lineaCalle.setPreferredSize(new Dimension(0, 3));
+		lineaCalle.setBackground(Color.WHITE);
+		lineaCalle.setBounds(135, 272, 214, 3);
+		add(lineaCalle);
+		GroupLayout gl_lineaCalle = new GroupLayout(lineaCalle);
+		gl_lineaCalle.setHorizontalGroup(
+			gl_lineaCalle.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaCalle.setVerticalGroup(
+			gl_lineaCalle.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaCalle.setLayout(gl_lineaCalle);
+		
+		calleTextField = new JTextField();
+		calleTextField.setText("EJ: Ulriksen");
+		calleTextField.setOpaque(false);
+		calleTextField.setForeground(new Color(170, 170, 170));
+		calleTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		calleTextField.setCaretColor(Color.WHITE);
+		calleTextField.setBorder(null);
+		calleTextField.setBackground(new Color(51, 51, 51));
+		calleTextField.setBounds(135, 248, 214, 21);
+		add(calleTextField);
+		
+		JLabel lblNumeroDomicilio = new JLabel("Numero domicilio");
+		lblNumeroDomicilio.setForeground(Color.WHITE);
+		lblNumeroDomicilio.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblNumeroDomicilio.setBounds(380, 235, 214, 14);
+		add(lblNumeroDomicilio);
+		
+		JPanel lineaNumeroDomicilio = new JPanel();
+		lineaNumeroDomicilio.setPreferredSize(new Dimension(0, 3));
+		lineaNumeroDomicilio.setBackground(Color.WHITE);
+		lineaNumeroDomicilio.setBounds(380, 272, 214, 3);
+		add(lineaNumeroDomicilio);
+		GroupLayout gl_lineaNumeroDomicilio = new GroupLayout(lineaNumeroDomicilio);
+		gl_lineaNumeroDomicilio.setHorizontalGroup(
+			gl_lineaNumeroDomicilio.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaNumeroDomicilio.setVerticalGroup(
+			gl_lineaNumeroDomicilio.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaNumeroDomicilio.setLayout(gl_lineaNumeroDomicilio);
+		
+		numeroDomicilioTextField = new JTextField();
+		numeroDomicilioTextField.setText("EJ: 1234");
+		numeroDomicilioTextField.setOpaque(false);
+		numeroDomicilioTextField.setForeground(new Color(170, 170, 170));
+		numeroDomicilioTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		numeroDomicilioTextField.setCaretColor(Color.WHITE);
+		numeroDomicilioTextField.setBorder(null);
+		numeroDomicilioTextField.setBackground(new Color(51, 51, 51));
+		numeroDomicilioTextField.setBounds(380, 248, 214, 21);
+		add(numeroDomicilioTextField);
+		
+		JLabel lblCiudad = new JLabel("Ciudad");
+		lblCiudad.setForeground(Color.WHITE);
+		lblCiudad.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblCiudad.setBounds(135, 286, 62, 14);
+		add(lblCiudad);
+		
+		JPanel lineaCiudad = new JPanel();
+		lineaCiudad.setPreferredSize(new Dimension(0, 3));
+		lineaCiudad.setBackground(Color.WHITE);
+		lineaCiudad.setBounds(135, 323, 214, 3);
+		add(lineaCiudad);
+		GroupLayout gl_lineaCiudad = new GroupLayout(lineaCiudad);
+		gl_lineaCiudad.setHorizontalGroup(
+			gl_lineaCiudad.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaCiudad.setVerticalGroup(
+			gl_lineaCiudad.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaCiudad.setLayout(gl_lineaCiudad);
+		
+		ciudadTextField = new JTextField();
+		ciudadTextField.setText("EJ: La Serena");
+		ciudadTextField.setOpaque(false);
+		ciudadTextField.setForeground(new Color(170, 170, 170));
+		ciudadTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		ciudadTextField.setCaretColor(Color.WHITE);
+		ciudadTextField.setBorder(null);
+		ciudadTextField.setBackground(new Color(51, 51, 51));
+		ciudadTextField.setBounds(135, 299, 214, 21);
+		add(ciudadTextField);
+		
+		JLabel lblComuna = new JLabel("Comuna");
+		lblComuna.setForeground(Color.WHITE);
+		lblComuna.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblComuna.setBounds(380, 286, 62, 14);
+		add(lblComuna);
+		
+		JPanel lineaComuna = new JPanel();
+		lineaComuna.setPreferredSize(new Dimension(0, 3));
+		lineaComuna.setBackground(Color.WHITE);
+		lineaComuna.setBounds(380, 323, 214, 3);
+		add(lineaComuna);
+		GroupLayout gl_lineaComuna = new GroupLayout(lineaComuna);
+		gl_lineaComuna.setHorizontalGroup(
+			gl_lineaComuna.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaComuna.setVerticalGroup(
+			gl_lineaComuna.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaComuna.setLayout(gl_lineaComuna);
+		
+		comunaTextField = new JTextField();
+		comunaTextField.setText("EJ: La Serena");
+		comunaTextField.setOpaque(false);
+		comunaTextField.setForeground(new Color(170, 170, 170));
+		comunaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		comunaTextField.setCaretColor(Color.WHITE);
+		comunaTextField.setBorder(null);
+		comunaTextField.setBackground(new Color(51, 51, 51));
+		comunaTextField.setBounds(380, 299, 214, 21);
+		add(comunaTextField);
+		
+		JLabel lblRegion = new JLabel("Regi\u00F3n");
+		lblRegion.setForeground(Color.WHITE);
+		lblRegion.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblRegion.setBounds(135, 337, 62, 14);
+		add(lblRegion);
+		
+		JPanel lineaRegion = new JPanel();
+		lineaRegion.setPreferredSize(new Dimension(0, 3));
+		lineaRegion.setBackground(Color.WHITE);
+		lineaRegion.setBounds(135, 374, 214, 3);
+		add(lineaRegion);
+		GroupLayout gl_lineaRegion = new GroupLayout(lineaRegion);
+		gl_lineaRegion.setHorizontalGroup(
+			gl_lineaRegion.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaRegion.setVerticalGroup(
+			gl_lineaRegion.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaRegion.setLayout(gl_lineaRegion);
+		
+		regionTextField = new JTextField();
+		regionTextField.setText("EJ: Coquimbo");
+		regionTextField.setOpaque(false);
+		regionTextField.setForeground(new Color(170, 170, 170));
+		regionTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		regionTextField.setCaretColor(Color.WHITE);
+		regionTextField.setBorder(null);
+		regionTextField.setBackground(new Color(51, 51, 51));
+		regionTextField.setBounds(135, 350, 214, 21);
+		add(regionTextField);
 		
 		if (modo == 2) {
 			btnAgregarUsuario.setText("MODIFICAR USUARIO");
@@ -407,10 +585,9 @@ public class AgregarUsuarioPanel extends JPanel {
 
 	private void agregarDatosTablaUsuario() {
 		if (modoPanel == 1) {
-    		consulta.addUsuario(nombreTextField.getText(),apellidosTextField.getText(),rutTextField.getText(),numTelefonoTextField.getText(),emailTextField.getText());    		
-		} else if (modoPanel == 2){
-			consulta.updtUsuario(rutTextField.getText(), rutAntiguo, nombreTextField.getText(), apellidosTextField.getText(),
-					numTelefonoTextField.getText(), emailTextField.getText());
+			// TODO addUsuario    		
+		} else if (modoPanel == 2) {
+			// TODO updtUsuario
 		}
 	}
 

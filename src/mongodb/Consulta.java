@@ -1,12 +1,21 @@
 package mongodb;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.gt;
+
+import java.util.ArrayList;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
 
 public class Consulta extends Utils {
 
@@ -254,6 +263,33 @@ public class Consulta extends Utils {
 	        }
 	        
 	        return new RegistroCompra(id, nombreprov, usuario, unidadesadquiridas, costounitario, fechapedida, fecharecibo, articulo, medidas);
+		}
+	}
+	
+	public ArrayList<ArticuloID> getDescripcionArticulosConStock() {
+		try (MongoClient mongoClient = MongoClients.create(uri)) {
+		        MongoDatabase database = mongoClient.getDatabase(db);
+		        MongoCollection<Document> collection = database.getCollection(Iloveny.ARTICULO.toString());
+		        
+		        Bson projectionFields = Projections.fields(Projections.include("descripcion", "preciounitario"));
+		        
+		        MongoCursor<Document> cursor = collection.find(gt("stock", 0))
+		       		 .projection(projectionFields)
+		       		 .sort(Sorts.ascending("stock")).iterator();
+		        
+		        ArrayList<ArticuloID> articulos = new ArrayList<ArticuloID>();
+		        
+		        try {
+		       	 while (cursor.hasNext()) {
+		       		 String json = cursor.next().toJson();
+		       		 int id = readInteger("_id", json);
+		       		 String descripcion = readString("descripcion", json);
+		       		 articulos.add(new ArticuloID(id, descripcion));
+		       	 }
+		        } finally {
+		       	 cursor.close();
+		        }
+		        return articulos;
 		}
 	}
 	

@@ -1,28 +1,17 @@
 package mongodb;
 
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
 public class Articulo {
 	
-	@BsonProperty("_id")
 	private int _id;
-	@BsonProperty("descripcion")
 	private String descripcion;
-	@BsonProperty("nombretipo")
 	private String nombretipo;
-	@BsonProperty("nombremarca")
 	private String nombremarca;
-	@BsonProperty("stock")
 	private int stock;
-	@BsonProperty("preciounitario")
 	private int preciounitario;
-	@BsonProperty("medida")
 	private Medida medida;
-	/*@BsonProperty("registroventa")
-	private RegistroVenta registroventa;*/
 	
 	public Articulo(int _id, String descripcion, String nombretipo, String nombremarca, int stock, int preciounitario,
-			Medida medida/*, RegistroVenta registroventa*/) {
+			Medida medida) {
 		this._id = _id;
 		this.descripcion = descripcion;
 		this.nombretipo = nombretipo;
@@ -30,7 +19,6 @@ public class Articulo {
 		this.stock = stock;
 		this.preciounitario = preciounitario;
 		this.medida = medida;
-		//this.registroventa = registroventa;
 	}
 	
 	// getters
@@ -55,9 +43,6 @@ public class Articulo {
 	public Medida get_medida() {
 		return medida;
 	}
-	/*public RegistroVenta registroventa() {
-		return registroventa;
-	}*/
 	
 	// setters
 	public void set__id(int _id) {
@@ -81,8 +66,5 @@ public class Articulo {
 	public void set_medida(Medida medida) {
 		this.medida = medida;
 	}
-	/*public void set_registroventa(RegistroVenta registroventa) {
-		this.registroventa = registroventa;
-	}*/
 	
 }

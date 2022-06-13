@@ -53,7 +53,6 @@ public class Administracion extends JFrame {
 
 	//public JFrame frame;
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
-//	public Consulta consulta = new Consulta();
 	public DefaultTableModel modeloTabla;
 	public ArrayList<ArrayList<String>> elementosTabla;
 	public String nombreAdmin;
@@ -83,15 +82,9 @@ public class Administracion extends JFrame {
 	private JButton btnActualizar;
 	private JLayeredPane funcionesLayeredPane;
 	public AgregarUsuarioPanel agregarUsuarioPanel;
-	public AgregarDireccionPanel agregarDireccionPanel;
 	public AgregarArticuloPanel agregarArticuloPanel;
-	public AgregarMedidaGeneralPanel agregarMedidaGeneralPanel;
-	public AgregarMedidaEspecificaPanel agregarMedidaEspecificaPanel;
 	public AgregarRegistroVentaPanel agregarRegistroVentaPanel;
-	public AgregarMarcaPanel agregarMarcaPanel;
 	public AgregarRegistroCompraPanel agregarRegistroCompraPanel;
-	public AgregarTipoObjetoPanel agregarTipoObjetoPanel;
-	public AgregarProveedorPanel agregarProveedorPanel;
 	private JPanel panelPrincipal;
 	private JButton btnRegistroCompra;
 
@@ -134,40 +127,16 @@ public class Administracion extends JFrame {
 						cambiarPanel(agregarUsuarioPanel);
 						break;
 					case 2:
-						agregarDireccionPanel = new AgregarDireccionPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
-						cambiarPanel(agregarDireccionPanel);
-						break;
-					case 3:
 						agregarArticuloPanel = new AgregarArticuloPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarArticuloPanel);
 						break;
-					case 4:
-						agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
-						cambiarPanel(agregarMedidaGeneralPanel);
-						break;
-					case 5:
-						agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
-						cambiarPanel(agregarMedidaEspecificaPanel);
-						break;
-					case 6:
+					case 3:
 						agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
 						cambiarPanel(agregarRegistroVentaPanel);
 						break;
-					case 7:
+					case 4:
 						agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, elementoSeleccionado);
 						cambiarPanel(agregarRegistroCompraPanel);
-						break;
-					case 8:
-						agregarMarcaPanel = new AgregarMarcaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
-						cambiarPanel(agregarMarcaPanel);
-						break;
-					case 9:
-						agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
-						cambiarPanel(agregarTipoObjetoPanel);
-						break;
-					case 10:
-						agregarProveedorPanel = new AgregarProveedorPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
-						cambiarPanel(agregarProveedorPanel);
 						break;
 					default:
 					
@@ -207,40 +176,16 @@ public class Administracion extends JFrame {
 					cambiarPanel(agregarUsuarioPanel);
 					break;
 				case 2:
-					agregarDireccionPanel = new AgregarDireccionPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
-					cambiarPanel(agregarDireccionPanel);
-					break;
-				case 3:
 					agregarArticuloPanel = new AgregarArticuloPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarArticuloPanel);
 					break;
-				case 4:
-					agregarMedidaGeneralPanel = new AgregarMedidaGeneralPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
-					cambiarPanel(agregarMedidaGeneralPanel);
-					break;
-				case 5:
-					agregarMedidaEspecificaPanel = new AgregarMedidaEspecificaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
-					cambiarPanel(agregarMedidaEspecificaPanel);
-					break;
-				case 6:
+				case 3:
 					agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
 					cambiarPanel(agregarRegistroVentaPanel);
 					break;
-				case 7:
+				case 4:
 					agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, null);
 					cambiarPanel(agregarRegistroCompraPanel);
-					break;
-				case 8:
-					agregarMarcaPanel = new AgregarMarcaPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
-					cambiarPanel(agregarMarcaPanel);
-					break;
-				case 9:
-					agregarTipoObjetoPanel = new AgregarTipoObjetoPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
-					cambiarPanel(agregarTipoObjetoPanel);
-					break;
-				case 10:
-					agregarProveedorPanel = new AgregarProveedorPanel(1, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, null);
-					cambiarPanel(agregarProveedorPanel);
 					break;
 				default:
 				
@@ -627,8 +572,8 @@ public class Administracion extends JFrame {
 		btnArticulos.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		btnArticulos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(modo != 3) {
-					modo = 3;
+				if(modo != 2) {
+					modo = 2;
 					columnaPK = 0;
 					eliminarDatosTabla();
 					lblTitulo.setText("Articulos");
@@ -665,8 +610,8 @@ public class Administracion extends JFrame {
 		btnRegistroVenta.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegistroVenta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(modo != 6) {
-					modo = 6;
+				if(modo != 3) {
+					modo = 3;
 					columnaPK = 4;
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro venta");
@@ -703,8 +648,8 @@ public class Administracion extends JFrame {
 		btnRegistroCompra.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnRegistroCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(modo != 7) {
-					modo = 7;
+				if(modo != 4) {
+					modo = 4;
 					columnaPK = 0;
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro compra");

@@ -22,7 +22,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import a.Modelo.Consulta;
+
+import mongodb.ArticuloID;
+import mongodb.Consulta;
+
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
@@ -37,10 +40,8 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private static final long serialVersionUID = -5223254028468888947L;
 	public int modo;
 	public boolean existenRutsSinDireccion;
-	public Consulta consulta = new Consulta();
 	
 	private JLabel lblAlertaRut;
-	private JComboBox rutCB;
 	private JTextField fechaTextField;
 	private JLabel lblAlertaFecha;
 	private JTextField cantidadVendidaTextField;
@@ -54,6 +55,9 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private static int stock;
 	private int idVenta;
 	private int cantidadAntigua;
+	private JTextField txtEj;
+	private JPanel lineaFecha_1;
+	private JLabel lblRut;
 	
 	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -65,7 +69,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		lblAlertaArticulo = new JLabel("");
 		lblAlertaArticulo.setVisible(false);
 		lblAlertaArticulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaArticulo.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaArticulo.setIcon(new ImageIcon(AgregarRegistroVentaPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaArticulo.setBounds(604, 177, 30, 27);
 		add(lblAlertaArticulo);
 		
@@ -76,23 +80,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		lblAgregarUsuario.setBounds(138, 11, 459, 55);
 		add(lblAgregarUsuario);
 		
-		JLabel lblRut = new JLabel("RUT");
-		lblRut.setForeground(Color.WHITE);
-		lblRut.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRut.setBounds(138, 155, 62, 14);
-		add(lblRut);
-		
-		DefaultComboBoxModel modelo = crearModeloComboBoxRut();
-		rutCB = new JComboBox(new String[] {});
-		rutCB.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				verificarCB(rutCB,lblAlertaRut);
-			}
-		});
-		rutCB.setModel(modelo);
-		rutCB.setBounds(138, 180, 214, 21);
-		add(rutCB);
+		//DefaultComboBoxModel modelo = crearModeloComboBoxRut();
 		
 		JLabel lblFecha = new JLabel("Fecha");
 		lblFecha.setForeground(Color.WHITE);
@@ -263,9 +251,45 @@ public class AgregarRegistroVentaPanel extends JPanel {
 				paneles[0].setBounds(929, 39, 732, 558);
 			}
 		});
-		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
+		btnVolver.setIcon(new ImageIcon(AgregarArticuloPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
+		
+		txtEj = new JTextField();
+		txtEj.setToolTipText("");
+		txtEj.setText("EJ: 12.345.678-9");
+		txtEj.setOpaque(false);
+		txtEj.setForeground(new Color(170, 170, 170));
+		txtEj.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		txtEj.setCaretColor(Color.WHITE);
+		txtEj.setBorder(null);
+		txtEj.setBackground(new Color(51, 51, 51));
+		txtEj.setBounds(138, 177, 214, 21);
+		add(txtEj);
+		
+		lineaFecha_1 = new JPanel();
+		lineaFecha_1.setPreferredSize(new Dimension(0, 3));
+		lineaFecha_1.setBackground(Color.WHITE);
+		lineaFecha_1.setBounds(138, 201, 214, 3);
+		add(lineaFecha_1);
+		GroupLayout gl_lineaFecha_1 = new GroupLayout(lineaFecha_1);
+		gl_lineaFecha_1.setHorizontalGroup(
+			gl_lineaFecha_1.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaFecha_1.setVerticalGroup(
+			gl_lineaFecha_1.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaFecha_1.setLayout(gl_lineaFecha_1);
+		
+		lblRut = new JLabel("Rut");
+		lblRut.setForeground(Color.WHITE);
+		lblRut.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblRut.setBounds(138, 164, 106, 14);
+		add(lblRut);
 		
 		if (modo == 2) {
 			btnAgregarRegistroVenta.setText("MODIFICAR REGISTRO VENTA");
@@ -289,7 +313,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		fechaTextField.setText(elementoSeleccionado.get(2));
 		cantidadVendidaTextField.setText(elementoSeleccionado.get(3));
 		setIndiceElementoSeleccionado(articuloCB, obtenerIdEnString(articuloCB.getSelectedItem().toString()));
-		setIndiceElementoSeleccionado(rutCB, elementoSeleccionado.get(1));
+		//setIndiceElementoSeleccionado(rutCB, elementoSeleccionado.get(1));
 		for (int i = 0; i < articuloCB.getItemCount(); i++) {
 			if (articuloCB.getItemAt(i).toString().contains(elementoSeleccionado.get(0))) {
 				articuloCB.setSelectedIndex(i);
@@ -307,31 +331,17 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	        }
 	}
 	
-	private DefaultComboBoxModel crearModeloComboBoxRut() {
-		ArrayList<?> ruts = consulta.getRuts();
-		if(ruts.size()>0) {
-			String[] listaRuts = new String[ruts.size()+1];
-			listaRuts[0] = "Seleccione...";
-			for(int i=1; i<=ruts.size();i++) {
-				listaRuts[i] = ruts.get(i-1).toString();
-			}
-			return new DefaultComboBoxModel(listaRuts);
-		}else {
-			lblAlertaRut.setVisible(true);
-			return new DefaultComboBoxModel(new String[] {"No existen ruts"});
-		}
-	}
-	
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
-		ArrayList<?> articulo = consulta.getDescripcionArticulosConStock();
-		if(articulo.size()>0) {
+		Consulta consulta = new Consulta();
+		ArrayList<ArticuloID> articulo = consulta.getDescripcionArticulosConStock();
+		if (articulo.size() > 0) {
 			String[] listaArticulos = new String[articulo.size()+1];
 			listaArticulos[0] = "Seleccione...";
-			for(int i=1; i<=articulo.size();i++) {
-				listaArticulos[i] = articulo.get(i-1).toString();
+			for (int i = 1; i <= articulo.size(); i++) {
+				listaArticulos[i] = articulo.get(i-1).descripcion;
 			}
 			return new DefaultComboBoxModel(listaArticulos);
-		}else {
+		} else {
 			lblAlertaRut.setVisible(true);
 			return new DefaultComboBoxModel(new String[] {"No existen articulos"});
 		}
@@ -355,13 +365,14 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	
 	private void agregarDatosTablaRegistroVenta() {
 		if (modo == 1) {
-			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
-			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
+			// TODO
+//			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
+//			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
 		} else if(modo == 2) {
-			consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText(),
-					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
-			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())),
-					getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())));
+//			consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText(),
+//					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
+//			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())),
+//					getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())));
 		}
 	}
 	
@@ -377,13 +388,15 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
-		if (verificarCantidadVendida() && verificarCB(rutCB,lblAlertaRut) && verificarCB(articuloCB,lblAlertaArticulo) && verificarFecha() &&
+		// TODO
+//		stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
+		/*if (verificarCantidadVendida() && verificarCB(rutCB,lblAlertaRut) && verificarCB(articuloCB,lblAlertaArticulo) && verificarFecha() &&
 				verificarStock(stock)) {
 			return true;
 		} else {
 			return false;
-		}
+		}*/
+		return true; // momentaneo
 	}
 	
 	private boolean verificarStock(int stock) {

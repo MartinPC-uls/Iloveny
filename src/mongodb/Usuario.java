@@ -1,33 +1,21 @@
 package mongodb;
 
-import org.bson.codecs.pojo.annotations.BsonProperty;
-
 public class Usuario {
 	
-	@BsonProperty("_id")
 	private String _id;
-	@BsonProperty("nombreusuario")
 	private String nombreusuario;
-	@BsonProperty("apellidos")
 	private String apellidos;
-	@BsonProperty("telefono")
 	private String telefono;
-	@BsonProperty("email")
 	private String email;
-	@BsonProperty("direccion")
 	private Direccion direccion;
-	/*@BsonProperty("registroventa")
-	private RegistroVenta registroventa;*/
 	
-	public Usuario(String _id, String nombreusuario, String apellidos, String telefono, String email, Direccion direccion/*,
-			RegistroVenta registroventa*/) {
+	public Usuario(String _id, String nombreusuario, String apellidos, String telefono, String email, Direccion direccion) {
 		this._id = _id;
 		this.nombreusuario = nombreusuario;
 		this.apellidos = apellidos;
 		this.telefono = telefono;
 		this.email = email;
 		this.direccion = direccion;
-		//this.registroventa = registroventa;
 	}
 	
 	// getters
@@ -49,9 +37,6 @@ public class Usuario {
 	public Direccion get_direccion() {
 		return direccion;
 	}
-	/*public RegistroVenta get_registroventa() {
-		return registroventa;
-	}*/
 	
 	// setters
 	public void set__id(String _id) {
@@ -72,8 +57,5 @@ public class Usuario {
 	public void set_direccion(Direccion direccion) {
 		this.direccion = direccion;
 	}
-	/*public void set_registroventa(RegistroVenta registroventa) {
-		this.registroventa = registroventa;
-	}*/
 	
 }

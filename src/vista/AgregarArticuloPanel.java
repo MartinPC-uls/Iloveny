@@ -19,13 +19,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import a.Modelo.Consulta;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JRadioButton;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class AgregarArticuloPanel extends JPanel {
 
@@ -33,26 +39,36 @@ public class AgregarArticuloPanel extends JPanel {
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	ArrayList<String> elementoSeleccionado;
-	public Consulta consulta = new Consulta();
 	
 	private JLabel lblAlertaMarca;
-	private JComboBox MarcaCB;
 	private JTextField descripcionTextField;
 	private JLabel lblAlertaDescripcion;
 	private JTextField stockTextField;
 	private JTextField precioTextField;
 	private JLabel lblAlertaPrecioUnitario;
 	private JLabel lblAlertaStock;
-	private JComboBox tipoObjetoCB;
 	private JLabel lblAlertaTipoObjeto;
 	private JPanel lineaDescripcion;
 	private JPanel lineaStock;
 	private JPanel lineaPrecioUnitario;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
-	private JTextField txtRutaImg;
-	private JPanel lineaRutaImg;
-	public JLabel lblAlertaURL;
+	private JTextField marcaTextField;
+	private JPanel lineaMarca;
+	private JTextField tipoObjetoTextField;
+	private JPanel lineaTipoObjeto;
+	private JLabel lblAlto;
+	private JTextField altoTextField;
+	private JPanel lineaAlto;
+	private JLabel lblAncho;
+	private JTextField anchoTextField;
+	private JPanel lineaAncho;
+	private JLabel lblLargo;
+	private JTextField largoTextField;
+	private JPanel lineaLargo;
+	private JTextField medidaTextField;
+	private JLabel lblMedida;
+	private JPanel lineaMedida;
 	
 	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -65,7 +81,7 @@ public class AgregarArticuloPanel extends JPanel {
 		lblAlertaTipoObjeto = new JLabel("");
 		lblAlertaTipoObjeto.setVisible(false);
 		lblAlertaTipoObjeto.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaTipoObjeto.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaTipoObjeto.setIcon(new ImageIcon(AgregarArticuloPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaTipoObjeto.setBounds(604, 177, 30, 27);
 		add(lblAlertaTipoObjeto);
 		
@@ -79,26 +95,13 @@ public class AgregarArticuloPanel extends JPanel {
 		JLabel lblMarca = new JLabel("Marca");
 		lblMarca.setForeground(Color.WHITE);
 		lblMarca.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblMarca.setBounds(138, 155, 62, 14);
+		lblMarca.setBounds(137, 158, 62, 14);
 		add(lblMarca);
-		
-		//TODO
-		DefaultComboBoxModel modeloMarca = crearModeloComboBoxMarca();
-		MarcaCB = new JComboBox(new Object[]{});
-		MarcaCB.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				verificarMarca();
-			}
-		});
-		MarcaCB.setModel(modeloMarca);
-		MarcaCB.setBounds(138, 180, 214, 21);
-		add(MarcaCB);
 		
 		JLabel lblStock = new JLabel("Stock");
 		lblStock.setForeground(Color.WHITE);
 		lblStock.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblStock.setBounds(383, 260, 106, 14);
+		lblStock.setBounds(137, 263, 106, 14);
 		add(lblStock);
 		
 		stockTextField = new JTextField();
@@ -121,14 +124,14 @@ public class AgregarArticuloPanel extends JPanel {
 		stockTextField.setCaretColor(Color.WHITE);
 		stockTextField.setBorder(null);
 		stockTextField.setBackground(new Color(51, 51, 51));
-		stockTextField.setBounds(383, 270, 47, 21);
+		stockTextField.setBounds(137, 273, 47, 21);
 		eventoCambiarJTextField(stockTextField, stockTextField.getText(), 50);
 		add(stockTextField);
 		
 		lineaStock = new JPanel();
 		lineaStock.setPreferredSize(new Dimension(0, 3));
 		lineaStock.setBackground(Color.WHITE);
-		lineaStock.setBounds(383, 294, 47, 3);
+		lineaStock.setBounds(137, 297, 47, 3);
 		add(lineaStock);
 		GroupLayout gl_lineaStock = new GroupLayout(lineaStock);
 		gl_lineaStock.setHorizontalGroup(
@@ -267,20 +270,12 @@ public class AgregarArticuloPanel extends JPanel {
 		lblAlertaDescripcion.setBounds(99, 225, 30, 27);
 		add(lblAlertaDescripcion);
 		
-		lblAlertaURL = new JLabel("");
-		lblAlertaURL.setVisible(false);
-		lblAlertaURL.setToolTipText("Hay un error de formato");
-		lblAlertaURL.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
-		lblAlertaURL.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaURL.setBounds(99, 270, 30, 27);
-		add(lblAlertaURL);
-		
 		lblAlertaStock = new JLabel("");
 		lblAlertaStock.setVisible(false);
 		lblAlertaStock.setToolTipText("Hay un error de formato");
 		lblAlertaStock.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaStock.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAlertaStock.setBounds(431, 270, 30, 27);
+		lblAlertaStock.setBounds(99, 273, 30, 27);
 		add(lblAlertaStock);
 		
 		lblAlertaPrecioUnitario = new JLabel("");
@@ -302,20 +297,8 @@ public class AgregarArticuloPanel extends JPanel {
 		JLabel lblTipoObjeto = new JLabel("Tipo de objeto");
 		lblTipoObjeto.setForeground(Color.WHITE);
 		lblTipoObjeto.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblTipoObjeto.setBounds(383, 155, 134, 14);
+		lblTipoObjeto.setBounds(383, 158, 134, 14);
 		add(lblTipoObjeto);
-		
-		DefaultComboBoxModel modeloTipo = crearModeloComboBoxTipos();
-		tipoObjetoCB = new JComboBox(new Object[]{});
-		tipoObjetoCB.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				verificarTipoObjeto();
-			}
-		});
-		tipoObjetoCB.setModel(modeloTipo);
-		tipoObjetoCB.setBounds(383, 180, 214, 21);
-		add(tipoObjetoCB);
 		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -328,65 +311,278 @@ public class AgregarArticuloPanel extends JPanel {
 				paneles[0].setBounds(929, 39, 732, 558);
 			}
 		});
-		btnVolver.setIcon(new ImageIcon(AgregarDireccionPanel.class.getResource("/imagenes/volver-white.png")));
+		btnVolver.setIcon(new ImageIcon(AgregarArticuloPanel.class.getResource("/imagenes/volver-white.png")));
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
 		
-		JLabel lblRutaImagen = new JLabel("Ruta imagen");
-		lblRutaImagen.setForeground(Color.WHITE);
-		lblRutaImagen.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblRutaImagen.setBounds(138, 260, 106, 14);
-		add(lblRutaImagen);
+		marcaTextField = new JTextField();
+		marcaTextField.setToolTipText("");
+		marcaTextField.setText("EJ: Anillo de Onyx");
+		marcaTextField.setOpaque(false);
+		marcaTextField.setForeground(new Color(170, 170, 170));
+		marcaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		marcaTextField.setCaretColor(Color.WHITE);
+		marcaTextField.setBorder(null);
+		marcaTextField.setBackground(new Color(51, 51, 51));
+		marcaTextField.setBounds(138, 174, 214, 21);
+		add(marcaTextField);
 		
-		txtRutaImg = new JTextField();
-		txtRutaImg.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent e) {
-				verificarURL();
+		lineaMarca = new JPanel();
+		lineaMarca.setPreferredSize(new Dimension(0, 3));
+		lineaMarca.setBackground(Color.WHITE);
+		lineaMarca.setBounds(138, 198, 214, 3);
+		add(lineaMarca);
+		GroupLayout gl_lineaMarca = new GroupLayout(lineaMarca);
+		gl_lineaMarca.setHorizontalGroup(
+			gl_lineaMarca.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaMarca.setVerticalGroup(
+			gl_lineaMarca.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaMarca.setLayout(gl_lineaMarca);
+		
+		tipoObjetoTextField = new JTextField();
+		tipoObjetoTextField.setText("EJ: 2000");
+		tipoObjetoTextField.setOpaque(false);
+		tipoObjetoTextField.setForeground(new Color(170, 170, 170));
+		tipoObjetoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		tipoObjetoTextField.setCaretColor(Color.WHITE);
+		tipoObjetoTextField.setBorder(null);
+		tipoObjetoTextField.setBackground(new Color(51, 51, 51));
+		tipoObjetoTextField.setBounds(383, 174, 214, 21);
+		add(tipoObjetoTextField);
+		
+		lineaTipoObjeto = new JPanel();
+		lineaTipoObjeto.setPreferredSize(new Dimension(0, 3));
+		lineaTipoObjeto.setBackground(Color.WHITE);
+		lineaTipoObjeto.setBounds(383, 198, 214, 3);
+		add(lineaTipoObjeto);
+		GroupLayout gl_lineaTipoObjeto = new GroupLayout(lineaTipoObjeto);
+		gl_lineaTipoObjeto.setHorizontalGroup(
+			gl_lineaTipoObjeto.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 214, Short.MAX_VALUE)
+				.addGap(0, 214, Short.MAX_VALUE)
+		);
+		gl_lineaTipoObjeto.setVerticalGroup(
+			gl_lineaTipoObjeto.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaTipoObjeto.setLayout(gl_lineaTipoObjeto);
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		JRadioButton cbMedidaEspecifica = new JRadioButton("Medida especifica");
+		cbMedidaEspecifica.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisibleMedidaEspecifica(true);
 			}
 		});
-		txtRutaImg.setText("EJ: https://imgur.com/(codigo)");
-		txtRutaImg.setOpaque(false);
-		txtRutaImg.setForeground(new Color(170, 170, 170));
-		txtRutaImg.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtRutaImg.setCaretColor(Color.WHITE);
-		txtRutaImg.setBorder(null);
-		txtRutaImg.setBackground(new Color(51, 51, 51));
-		txtRutaImg.setBounds(138, 273, 214, 21);
+		cbMedidaEspecifica.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		cbMedidaEspecifica.setForeground(Color.WHITE);
+		cbMedidaEspecifica.setBackground(new Color(51, 51, 51));
+		cbMedidaEspecifica.setBounds(231, 321, 121, 23);
+		group.add(cbMedidaEspecifica);
 		
-		add(txtRutaImg);
 		
-		lineaRutaImg = new JPanel();
-		lineaRutaImg.setPreferredSize(new Dimension(0, 3));
-		lineaRutaImg.setBackground(Color.WHITE);
-		lineaRutaImg.setBounds(138, 294, 214, 3);
-		add(lineaRutaImg);
-		GroupLayout gl_lineaRutaImg = new GroupLayout(lineaRutaImg);
-		gl_lineaRutaImg.setHorizontalGroup(
-			gl_lineaRutaImg.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 214, Short.MAX_VALUE)
-				.addGap(0, 214, Short.MAX_VALUE)
+		JRadioButton cbMedidaGeneral = new JRadioButton("Medida general");
+		cbMedidaGeneral.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisibleMedidaEspecifica(false);
+			}
+		});
+		cbMedidaGeneral.setForeground(Color.WHITE);
+		cbMedidaGeneral.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		cbMedidaGeneral.setBackground(new Color(51, 51, 51));
+		cbMedidaGeneral.setBounds(380, 321, 109, 23);
+		group.add(cbMedidaGeneral);
+		
+		add(cbMedidaEspecifica);
+		add(cbMedidaGeneral);
+		
+		lblAlto = new JLabel("Alto");
+		lblAlto.setForeground(Color.WHITE);
+		lblAlto.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblAlto.setBounds(286, 376, 106, 14);
+		lblAlto.setVisible(false);
+		add(lblAlto);
+		
+		altoTextField = new JTextField();
+		altoTextField.setText("EJ: 2");
+		altoTextField.setOpaque(false);
+		altoTextField.setForeground(new Color(170, 170, 170));
+		altoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		altoTextField.setCaretColor(Color.WHITE);
+		altoTextField.setBorder(null);
+		altoTextField.setBackground(new Color(51, 51, 51));
+		altoTextField.setBounds(286, 386, 47, 21);
+		altoTextField.setVisible(false);
+		add(altoTextField);
+		
+		lineaAlto = new JPanel();
+		lineaAlto.setPreferredSize(new Dimension(0, 3));
+		lineaAlto.setBackground(Color.WHITE);
+		lineaAlto.setBounds(286, 410, 47, 3);
+		lineaAlto.setVisible(false);
+		add(lineaAlto);
+		GroupLayout gl_lineaAlto = new GroupLayout(lineaAlto);
+		gl_lineaAlto.setHorizontalGroup(
+			gl_lineaAlto.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 47, Short.MAX_VALUE)
+				.addGap(0, 47, Short.MAX_VALUE)
 		);
-		gl_lineaRutaImg.setVerticalGroup(
-			gl_lineaRutaImg.createParallelGroup(Alignment.LEADING)
+		gl_lineaAlto.setVerticalGroup(
+			gl_lineaAlto.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaRutaImg.setLayout(gl_lineaRutaImg);
+		lineaAlto.setLayout(gl_lineaAlto);
+		
+		lblAncho = new JLabel("Ancho");
+		lblAncho.setForeground(Color.WHITE);
+		lblAncho.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblAncho.setBounds(345, 376, 106, 14);
+		lblAncho.setVisible(false);
+		add(lblAncho);
+		
+		anchoTextField = new JTextField();
+		anchoTextField.setText("EJ: 5");
+		anchoTextField.setOpaque(false);
+		anchoTextField.setForeground(new Color(170, 170, 170));
+		anchoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		anchoTextField.setCaretColor(Color.WHITE);
+		anchoTextField.setBorder(null);
+		anchoTextField.setBackground(new Color(51, 51, 51));
+		anchoTextField.setBounds(345, 386, 47, 21);
+		anchoTextField.setVisible(false);
+		add(anchoTextField);
+		
+		lineaAncho = new JPanel();
+		lineaAncho.setPreferredSize(new Dimension(0, 3));
+		lineaAncho.setBackground(Color.WHITE);
+		lineaAncho.setBounds(345, 410, 47, 3);
+		lineaAncho.setVisible(false);
+		add(lineaAncho);
+		GroupLayout gl_lineaAncho = new GroupLayout(lineaAncho);
+		gl_lineaAncho.setHorizontalGroup(
+			gl_lineaAncho.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 47, Short.MAX_VALUE)
+				.addGap(0, 47, Short.MAX_VALUE)
+		);
+		gl_lineaAncho.setVerticalGroup(
+			gl_lineaAncho.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaAncho.setLayout(gl_lineaAncho);
+		
+		lblLargo = new JLabel("Largo");
+		lblLargo.setForeground(Color.WHITE);
+		lblLargo.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblLargo.setBounds(402, 376, 106, 14);
+		lblLargo.setVisible(false);
+		add(lblLargo);
+		
+		largoTextField = new JTextField();
+		largoTextField.setText("EJ: 7");
+		largoTextField.setOpaque(false);
+		largoTextField.setForeground(new Color(170, 170, 170));
+		largoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		largoTextField.setCaretColor(Color.WHITE);
+		largoTextField.setBorder(null);
+		largoTextField.setBackground(new Color(51, 51, 51));
+		largoTextField.setBounds(402, 386, 47, 21);
+		largoTextField.setVisible(false);
+		add(largoTextField);
+		
+		lineaLargo = new JPanel();
+		lineaLargo.setPreferredSize(new Dimension(0, 3));
+		lineaLargo.setBackground(Color.WHITE);
+		lineaLargo.setBounds(402, 410, 47, 3);
+		lineaLargo.setVisible(false);
+		add(lineaLargo);
+		GroupLayout gl_lineaLargo = new GroupLayout(lineaLargo);
+		gl_lineaLargo.setHorizontalGroup(
+			gl_lineaLargo.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 47, Short.MAX_VALUE)
+				.addGap(0, 47, Short.MAX_VALUE)
+		);
+		gl_lineaLargo.setVerticalGroup(
+			gl_lineaLargo.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaLargo.setLayout(gl_lineaLargo);
+		
+		medidaTextField = new JTextField();
+		medidaTextField.setText("EJ: L");
+		medidaTextField.setOpaque(false);
+		medidaTextField.setForeground(new Color(170, 170, 170));
+		medidaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		medidaTextField.setCaretColor(Color.WHITE);
+		medidaTextField.setBorder(null);
+		medidaTextField.setBackground(new Color(51, 51, 51));
+		medidaTextField.setBounds(345, 386, 47, 21);
+		medidaTextField.setVisible(false);
+		add(medidaTextField);
+		
+		lblMedida = new JLabel("Medida");
+		lblMedida.setForeground(Color.WHITE);
+		lblMedida.setFont(new Font("Roboto Light", Font.PLAIN, 11));
+		lblMedida.setBounds(345, 376, 106, 14);
+		lblMedida.setVisible(false);
+		add(lblMedida);
+		
+		lineaMedida = new JPanel();
+		lineaMedida.setPreferredSize(new Dimension(0, 3));
+		lineaMedida.setBackground(Color.WHITE);
+		lineaMedida.setBounds(345, 410, 47, 3);
+		lineaMedida.setVisible(false);
+		add(lineaMedida);
+		GroupLayout gl_lineaMedida = new GroupLayout(lineaMedida);
+		gl_lineaMedida.setHorizontalGroup(
+			gl_lineaMedida.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 47, Short.MAX_VALUE)
+				.addGap(0, 47, Short.MAX_VALUE)
+		);
+		gl_lineaMedida.setVerticalGroup(
+			gl_lineaMedida.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 3, Short.MAX_VALUE)
+				.addGap(0, 3, Short.MAX_VALUE)
+		);
+		lineaMedida.setLayout(gl_lineaMedida);
 		
 		if (modo == 2) {
 			setElementos(elementoSeleccionado);
 		}
 	}
 	
+	private void setVisibleMedidaEspecifica(boolean value) {
+			// show/hide MedidaEspecifica
+			lblAlto.setVisible(value);
+			lblAncho.setVisible(value);
+			lblLargo.setVisible(value);
+			altoTextField.setVisible(value);
+			anchoTextField.setVisible(value);
+			largoTextField.setVisible(value);
+			lineaAlto.setVisible(value);
+			lineaAncho.setVisible(value);
+			lineaLargo.setVisible(value);
+			// hide/show MedidaGeneral
+			lineaMedida.setVisible(!value);
+			lblMedida.setVisible(!value);
+			medidaTextField.setVisible(!value);
+	}
+	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
 		cambiarColorTextFieldsBlanco();
-		setIndiceElementoSeleccionado(tipoObjetoCB, elementoSeleccionado.get(1));
-		setIndiceElementoSeleccionado(MarcaCB, elementoSeleccionado.get(2));
 		stockTextField.setText(elementoSeleccionado.get(3));
 		precioTextField.setText(elementoSeleccionado.get(4));
 		descripcionTextField.setText(elementoSeleccionado.get(5));
-		txtRutaImg.setText(elementoSeleccionado.get(6));
 	}
 	
 	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
@@ -408,20 +604,11 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private boolean verificarTipoObjeto() {
-		if(tipoObjetoCB.getSelectedIndex() == 0) {
-			lblAlertaTipoObjeto.setVisible(true);
+		if(!tipoObjetoTextField.getText().matches("[a-zA-Z0-9Ò— ]{1,50}")|| tipoObjetoTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaTipoObjeto, lblAlertaTipoObjeto);
 			return false;
 		}
-		lblAlertaTipoObjeto.setVisible(false);
-		return true;
-	}
-
-	private boolean verificarURL() {
-		if(!txtRutaImg.getText().matches("https://imgur\\.com/[a-zA-Z0-9:]{1,30}")) {
-			setErroneo(lineaRutaImg, lblAlertaURL);
-			return false;
-		}
-		setAcertado(lineaRutaImg, lblAlertaURL);
+		setAcertado(lineaTipoObjeto, lblAlertaTipoObjeto);
 		return true;
 	}
 
@@ -429,44 +616,11 @@ public class AgregarArticuloPanel extends JPanel {
 		agregarDatosTablaArticulo();
 	}
 	
-	private DefaultComboBoxModel crearModeloComboBoxTipos() {
-		ArrayList<?> elementosObtenidos = consulta.getNombresTipoObjeto();
-		if(elementosObtenidos.size()>0) {
-			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
-			listaStringElementosAdquiridos[0] = "Seleccione...";
-			for(int i=1; i<=elementosObtenidos.size();i++) {
-				listaStringElementosAdquiridos[i] = elementosObtenidos.get(i-1).toString();
-			}
-			return new DefaultComboBoxModel(listaStringElementosAdquiridos);
-		}else {
-			lblAlertaTipoObjeto.setVisible(true);
-			return new DefaultComboBoxModel(new String[] {"No existen tipos"});
-		}
-	}
-	
-	private DefaultComboBoxModel crearModeloComboBoxMarca() {
-		ArrayList<?> elementosObtenidos = consulta.getNombresMarca();
-		if(elementosObtenidos.size()>0) {
-			String[] listaStringElementosAdquiridos = new String[elementosObtenidos.size()+1];
-			listaStringElementosAdquiridos[0] = "Seleccione...";
-			for(int i=1; i<=elementosObtenidos.size();i++) {
-				listaStringElementosAdquiridos[i] = elementosObtenidos.get(i-1).toString();
-			}
-			return new DefaultComboBoxModel(listaStringElementosAdquiridos);
-		}else {
-			lblAlertaTipoObjeto.setVisible(true);
-			return new DefaultComboBoxModel(new String[] {"No existen marcas"});
-		}
-	}
-	
 	private void agregarDatosTablaArticulo() {
 		if (modo == 1) {
-			consulta.addArticulo(Integer.parseInt(obtenerIdEnString(tipoObjetoCB.getSelectedItem().toString())),Integer.parseInt(obtenerIdEnString(MarcaCB.getSelectedItem().toString())), Integer.parseInt(stockTextField.getText()),
-					descripcionTextField.getText(), txtRutaImg.getText(), Integer.parseInt(precioTextField.getText()));
+			// TODO addArticulo
 		}else {
-			consulta.updtArticulo(Integer.parseInt(obtenerIdEnString(tipoObjetoCB.getSelectedItem().toString())), Integer.parseInt(obtenerIdEnString(MarcaCB.getSelectedItem().toString())), Integer.parseInt(stockTextField.getText()),
-					Integer.parseInt(precioTextField.getText()), Integer.parseInt(elementoSeleccionado.get(0)), descripcionTextField.getText(),
-					txtRutaImg.getText());
+			// TODO updtArticulo
 		}
 	}
 
@@ -496,11 +650,11 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private boolean verificarMarca() {
-		if(MarcaCB.getSelectedIndex() == 0) {
-			lblAlertaMarca.setVisible(true);
+		if(!marcaTextField.getText().matches("[a-zA-Z0-9Ò— ]{1,50}")|| marcaTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaMarca, lblAlertaMarca);
 			return false;
 		}
-		lblAlertaMarca.setVisible(false);
+		setAcertado(lineaMarca, lblAlertaMarca);
 		return true;
 	}
 
