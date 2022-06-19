@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -22,21 +21,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import mongodb.Articulo;
 import mongodb.ArticuloID;
 import mongodb.ArticuloRegistroVenta;
 import mongodb.Consulta;
-import mongodb.RegistroCompra;
 import mongodb.RegistroVenta;
 import mongodb.Usuario;
-
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -51,21 +45,21 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private JLabel lblAlertaFecha;
 	private JTextField cantidadVendidaTextField;
 	private JLabel lblAlertaCantidadVendida;
-	private JComboBox articuloCB;
+	private JComboBox<?> articuloCB;
 	private JLabel lblAlertaArticulo;
 	private JPanel lineaFecha;
 	private JPanel lineaCantidadVendida;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
-	private static int stock;
-	private int idVenta;
 	private int cantidadAntigua;
 	private JTextField rutTextField;
 	private JPanel lineaRut;
 	private JLabel lblRut;
 	private String _id;
+	@SuppressWarnings("rawtypes")
 	private DefaultComboBoxModel modelo2;
 	
+	@SuppressWarnings("unchecked")
 	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String _id) {
 		this._id = _id;
 		this.modo = modo;

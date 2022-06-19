@@ -2,16 +2,13 @@ package vista;
 
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-
 import mongodb.Consulta;
 import mongodb.Direccion;
 import mongodb.Usuario;
-
 import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -23,7 +20,6 @@ import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
@@ -56,13 +52,12 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JPanel lineaApellidos;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
-	private String rutAntiguo;
 	private JTextField calleTextField;
 	private JTextField numeroDomicilioTextField;
 	private JTextField ciudadTextField;
 	private JTextField comunaTextField;
 	private JTextField regionTextField;
-	private String _id;
+	String _id;
 	private JPanel lineaCalle;
 	private JPanel lineaNumeroDomicilio;
 	private JPanel lineaCiudad;

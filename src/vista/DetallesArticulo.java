@@ -2,7 +2,6 @@ package vista;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
 import mongodb.Articulo;
 import mongodb.Consulta;
 
