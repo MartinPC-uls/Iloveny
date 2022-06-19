@@ -2,7 +2,7 @@ package mongodb;
 
 public class Articulo {
 	
-	private int _id;
+	//private int _id;
 	private String descripcion;
 	private String nombretipo;
 	private String nombremarca;
@@ -10,9 +10,9 @@ public class Articulo {
 	private int preciounitario;
 	private Medida medida;
 	
-	public Articulo(int _id, String descripcion, String nombretipo, String nombremarca, int stock, int preciounitario,
+	public Articulo(/*int _id,*/ String descripcion, String nombretipo, String nombremarca, int stock, int preciounitario,
 			Medida medida) {
-		this._id = _id;
+		//this._id = _id;
 		this.descripcion = descripcion;
 		this.nombretipo = nombretipo;
 		this.nombremarca = nombremarca;
@@ -22,9 +22,9 @@ public class Articulo {
 	}
 	
 	// getters
-	public int get__id() {
+	/*public int get__id() {
 		return _id;
-	}
+	}*/
 	public String get_descripcion() {
 		return descripcion;
 	}
@@ -45,9 +45,9 @@ public class Articulo {
 	}
 	
 	// setters
-	public void set__id(int _id) {
+	/*public void set__id(int _id) {
 		this._id = _id;
-	}
+	}*/
 	public void set_descripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}

@@ -23,8 +23,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import mongodb.Articulo;
 import mongodb.ArticuloID;
+import mongodb.ArticuloRegistroVenta;
 import mongodb.Consulta;
+import mongodb.RegistroCompra;
+import mongodb.RegistroVenta;
+import mongodb.Usuario;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
@@ -55,7 +60,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private static int stock;
 	private int idVenta;
 	private int cantidadAntigua;
-	private JTextField txtEj;
+	private JTextField rutTextField;
 	private JPanel lineaFecha_1;
 	private JLabel lblRut;
 	
@@ -230,6 +235,11 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo2 = crearModeloComboBoxArticulo();
 		articuloCB =  new JComboBox(new Object[]{});
+		articuloCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setArticuloSeleccionado(articuloCB.getSelectedIndex());
+			}
+		});
 		articuloCB.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -255,17 +265,17 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		btnVolver.setBounds(0, 510, 68, 48);
 		add(btnVolver);
 		
-		txtEj = new JTextField();
-		txtEj.setToolTipText("");
-		txtEj.setText("EJ: 12.345.678-9");
-		txtEj.setOpaque(false);
-		txtEj.setForeground(new Color(170, 170, 170));
-		txtEj.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtEj.setCaretColor(Color.WHITE);
-		txtEj.setBorder(null);
-		txtEj.setBackground(new Color(51, 51, 51));
-		txtEj.setBounds(138, 177, 214, 21);
-		add(txtEj);
+		rutTextField = new JTextField();
+		rutTextField.setToolTipText("");
+		rutTextField.setText("EJ: 12.345.678-9");
+		rutTextField.setOpaque(false);
+		rutTextField.setForeground(new Color(170, 170, 170));
+		rutTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		rutTextField.setCaretColor(Color.WHITE);
+		rutTextField.setBorder(null);
+		rutTextField.setBackground(new Color(51, 51, 51));
+		rutTextField.setBounds(138, 177, 214, 21);
+		add(rutTextField);
 		
 		lineaFecha_1 = new JPanel();
 		lineaFecha_1.setPreferredSize(new Dimension(0, 3));
@@ -331,14 +341,27 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	        }
 	}
 	
+	Articulo articulo = null;
+	private void setArticuloSeleccionado(int index) {
+		Consulta consulta = new Consulta();
+		String id = ids[index];
+		
+		System.out.println("id: " + id);
+		articulo = consulta.getArticulo(id);
+	}
+	
+	static String[] ids;
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
 		Consulta consulta = new Consulta();
 		ArrayList<ArticuloID> articulo = consulta.getDescripcionArticulosConStock();
+		ids = new String[articulo.size()+1];
+		ids[0] = "0";
 		if (articulo.size() > 0) {
 			String[] listaArticulos = new String[articulo.size()+1];
 			listaArticulos[0] = "Seleccione...";
 			for (int i = 1; i <= articulo.size(); i++) {
 				listaArticulos[i] = articulo.get(i-1).descripcion;
+				ids[i] = articulo.get(i-1).objectId;
 			}
 			return new DefaultComboBoxModel(listaArticulos);
 		} else {
@@ -348,7 +371,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 
 	private void agregarDatos() {
-		agregarDatosTablaRegistroVenta();
+		agregarRegistroVenta();
 	}
 	
 	private String obtenerIdEnString(String opcionSeleccionada) {
@@ -363,11 +386,18 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		return id;
 	}
 	
-	private void agregarDatosTablaRegistroVenta() {
+	private void agregarRegistroVenta() {
+		Consulta consulta = new Consulta();
+		RegistroVenta registroVenta;
+		String fechaventa = fechaTextField.getText();
+		int cantidadvendida = Integer.parseInt(cantidadVendidaTextField.getText());
+		Usuario usuario = consulta.getUsuario(rutTextField.getText());
+		Articulo articulo = this.articulo;
+		ArticuloRegistroVenta articuloRegistroVenta = new ArticuloRegistroVenta(articulo.get_descripcion(), articulo.get_nombretipo(),
+				articulo.get_nombremarca(), articulo.get_preciounitario());
+		registroVenta = new RegistroVenta(fechaventa, cantidadvendida, usuario, articuloRegistroVenta);
 		if (modo == 1) {
-			// TODO
-//			consulta.addRegistroVenta(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText());
-//			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock-Integer.parseInt(cantidadVendidaTextField.getText()));
+			consulta.addRegistroVenta(registroVenta);
 		} else if(modo == 2) {
 //			consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText(),
 //					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);

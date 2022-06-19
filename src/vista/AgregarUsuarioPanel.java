@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+
+import mongodb.Consulta;
+import mongodb.Direccion;
+import mongodb.Usuario;
+
 import java.awt.Dimension;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -580,14 +585,29 @@ public class AgregarUsuarioPanel extends JPanel {
 	}
 	
 	private void agregarDatos() {
-		agregarDatosTablaUsuario();
+		agregarUsuario();
 	}
 
-	private void agregarDatosTablaUsuario() {
+	private void agregarUsuario() {
+		Consulta consulta = new Consulta();
+		Usuario usuario;
+		String _id = rutTextField.getText();
+		String nombreusuario = nombreTextField.getText();
+		String apellidos = apellidosTextField.getText();
+		String telefono = numTelefonoTextField.getText();
+		String email = emailTextField.getText();
+		Direccion direccion;
+		String calle = calleTextField.getText();
+		int numerodomicilio = Integer.parseInt(numeroDomicilioTextField.getText());
+		String ciudad = ciudadTextField.getText();
+		String comuna = comunaTextField.getText();
+		String nombreregion = regionTextField.getText();
+		direccion = new Direccion(calle, numerodomicilio, ciudad, comuna, nombreregion);
+		usuario = new Usuario(_id, nombreusuario, apellidos, telefono, email, direccion);
 		if (modoPanel == 1) {
-			// TODO addUsuario    		
+			consulta.addUsuario(usuario);
 		} else if (modoPanel == 2) {
-			// TODO updtUsuario
+			consulta.updtUsuario(_id, usuario);
 		}
 	}
 

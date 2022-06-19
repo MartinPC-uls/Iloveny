@@ -2,6 +2,7 @@ package mongodb;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,6 +11,12 @@ public class Utils {
 	public static String readString(String field, String fromJSONString) {
 		JSONObject json = new JSONObject(fromJSONString);
 		field = json.getString(field);
+		return field;
+	}
+	public static String readObjectId(String field, String fromJSONString) {
+		JSONObject json = new JSONObject(fromJSONString);
+		JSONObject id = (JSONObject)json.get(field);
+		field = id.get("$oid").toString();
 		return field;
 	}
 	public static int readInteger(String field, String fromJSONString) {

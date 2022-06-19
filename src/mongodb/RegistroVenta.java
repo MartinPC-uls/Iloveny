@@ -2,14 +2,14 @@ package mongodb;
 
 public class RegistroVenta {
 	
-	private int id;
+	//private int id;
 	private String fechaventa; // probablemente cambiar despues a Date
 	private int cantidadvendida;
 	private Usuario usuario;
 	private ArticuloRegistroVenta articulo;
 	
-	public RegistroVenta(int id, String fechaventa, int cantidadvendida, Usuario usuario, ArticuloRegistroVenta articulo) {
-		this.id = id;
+	public RegistroVenta(String fechaventa, int cantidadvendida, Usuario usuario, ArticuloRegistroVenta articulo) {
+		//this.id = id;
 		this.fechaventa = fechaventa;
 		this.cantidadvendida = cantidadvendida;
 		this.usuario = usuario;
@@ -17,9 +17,9 @@ public class RegistroVenta {
 	}
 	
 	// getters
-	public int get_id() {
+	/*public int get_id() {
 		return id;
-	}
+	}*/
 	public String get_fechaventa() {
 		return fechaventa;
 	}
@@ -34,9 +34,9 @@ public class RegistroVenta {
 	}
 	
 	// setters
-	public void set_id(int id) {
+	/*public void set_id(int id) {
 		this.id = id;
-	}
+	}*/
 	public void set_fechaventa(String fechaventa) {
 		this.fechaventa = fechaventa;
 	}

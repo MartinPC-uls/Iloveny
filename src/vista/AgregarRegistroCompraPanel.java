@@ -23,8 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import mongodb.Articulo;
 import mongodb.ArticuloID;
 import mongodb.Consulta;
+import mongodb.RegistroCompra;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.DefaultComboBoxModel;
@@ -41,6 +43,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	public int modo;
 	public boolean existenRutsSinDireccion;
 	
+	ArrayList<ArticuloID> articulos = new ArrayList<ArticuloID>();
 	private JLabel lblAlertaArticulo;
 	private JComboBox articuloCB;
 	private JTextField fechaPedidaTextField;
@@ -64,7 +67,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private int unidadesAdquiridasAntigua;
 	private int stock;
 	private JLabel lblProveedor;
-	private JTextField txtEjProveedor;
+	private JTextField proveedorTextField;
 	private JPanel lineaFechaRecibo_1;
 	
 	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, ArrayList<String> elementoSeleccionado) {
@@ -145,6 +148,11 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		
 		DefaultComboBoxModel modelo = crearModeloComboBoxArticulo();
 		articuloCB = new JComboBox(new String[] {});
+		articuloCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setArticuloSeleccionado(articuloCB.getSelectedIndex());
+			}
+		});
 		articuloCB.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent e) {
@@ -380,16 +388,16 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lblProveedor.setBounds(383, 164, 106, 14);
 		add(lblProveedor);
 		
-		txtEjProveedor = new JTextField();
-		txtEjProveedor.setText("EJ: Proveedor1");
-		txtEjProveedor.setOpaque(false);
-		txtEjProveedor.setForeground(new Color(170, 170, 170));
-		txtEjProveedor.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtEjProveedor.setCaretColor(Color.WHITE);
-		txtEjProveedor.setBorder(null);
-		txtEjProveedor.setBackground(new Color(51, 51, 51));
-		txtEjProveedor.setBounds(383, 177, 214, 21);
-		add(txtEjProveedor);
+		proveedorTextField = new JTextField();
+		proveedorTextField.setText("EJ: Proveedor1");
+		proveedorTextField.setOpaque(false);
+		proveedorTextField.setForeground(new Color(170, 170, 170));
+		proveedorTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		proveedorTextField.setCaretColor(Color.WHITE);
+		proveedorTextField.setBorder(null);
+		proveedorTextField.setBackground(new Color(51, 51, 51));
+		proveedorTextField.setBounds(383, 177, 214, 21);
+		add(proveedorTextField);
 		
 		lineaFechaRecibo_1 = new JPanel();
 		lineaFechaRecibo_1.setPreferredSize(new Dimension(0, 3));
@@ -455,14 +463,19 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		return true; // momentaneo
 	}
 	
+	String[] ids;
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
 		Consulta consulta = new Consulta();
 		ArrayList<ArticuloID> articulo = consulta.getDescripcionArticulosConStock();
 		if(articulo.size()>0) {
 			String[] listaArticulos = new String[articulo.size()+1];
+			ids = new String[articulo.size()+1];
 			listaArticulos[0] = "Seleccione...";
+			ids[0] = "0";
 			for(int i=1; i<=articulo.size();i++) {
+				articulos.add(articulo.get(i-1));
 				listaArticulos[i] = articulo.get(i-1).descripcion;
+				ids[i] = articulo.get(i-1).objectId;
 			}
 			return new DefaultComboBoxModel(listaArticulos);
 		}else {
@@ -472,18 +485,30 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 
 	private void agregarDatos() {
-		agregarDatosTablaRegistroCompra();
+		agregarRegistroCompra();
 	}
 	
-	private void agregarDatosTablaRegistroCompra() {
-		// TODO
+	static Articulo articulo = null;
+	private void setArticuloSeleccionado(int index) {
+		Consulta consulta = new Consulta();
+		String id = ids[index];
+		System.out.println("id: " + id);
+		articulo = consulta.getArticulo(id);
+	}
+	
+	private void agregarRegistroCompra() {
+		Consulta consulta = new Consulta();
+		RegistroCompra registroCompra;
+		String usuario = "admin";
+		String nombreprov = proveedorTextField.getText();
+		int unidadesadquiridas = Integer.parseInt(unidadesAdquiridasTextField.getText());
+		int costounitario = Integer.parseInt(costoUnitarioTextField.getText());
+		String fechapedida = fechaPedidaTextField.getText();
+		String fecharecibo = fechaReciboTextField.getText();
+		registroCompra = new RegistroCompra(nombreprov, usuario, unidadesadquiridas, costounitario, fechapedida, fecharecibo, articulo);
 		if (modo == 1) {
-			/*int stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
-			consulta.addRegistroCompra(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), nombreAdmin,
-					Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString())),
-					Integer.parseInt(unidadesAdquiridasTextField.getText()), Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(),
-					fechaReciboTextField.getText());
-			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), stock+Integer.parseInt(unidadesAdquiridasTextField.getText()));*/
+			consulta.addRegistroCompra(registroCompra);
+			// TODO Actualizar stock de los articulos
 		} else if(modo == 2) {
 			/*consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
 					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(), fechaReciboTextField.getText(),

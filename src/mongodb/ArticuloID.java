@@ -1,12 +1,14 @@
 package mongodb;
 
+import org.bson.types.ObjectId;
+
 public class ArticuloID {
 
-	public int id;
+	public String objectId;
 	public String descripcion;
 	
-	public ArticuloID(int id, String descripcion) {
-		this.id = id;
+	public ArticuloID(String objectId, String descripcion) {
+		this.objectId = objectId;
 		this.descripcion = descripcion;
 	}
 	

@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Point;
 
 import javax.swing.JTable;
 import javax.swing.RowSorter;
@@ -28,6 +29,12 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import mongodb.Consulta;
+import tablas.Articulos;
+import tablas.RegistrosCompras;
+import tablas.RegistrosVentas;
+import tablas.Usuarios;
 
 import javax.swing.JLabel;
 import javax.swing.DefaultComboBoxModel;
@@ -48,6 +55,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.ScrollPaneConstants;
 
 public class Administracion extends JFrame {
 
@@ -55,6 +63,10 @@ public class Administracion extends JFrame {
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
 	public DefaultTableModel modeloTabla;
 	public ArrayList<ArrayList<String>> elementosTabla;
+	public ArrayList<Usuarios> elementosTablaUsuarios;
+	public ArrayList<Articulos> elementosTablaArticulos;
+	public ArrayList<RegistrosCompras> elementosTablaRegistrosCompras;
+	public ArrayList<RegistrosVentas> elementosTablaRegistrosVentas; 
 	public String nombreAdmin;
 	
 	private int xMouse;
@@ -221,9 +233,36 @@ public class Administracion extends JFrame {
 				new Object[][] {
 				},
 				new String[] {
-					"Nombre", "Apellidos", "Rut", "Telefonos", "Email"
+					"Rut", "Nombre", "Apellidos", "Telefono", "Email"
 				}
 		));
+		tabla.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				JTable table = (JTable)mouseEvent.getSource();
+				Point point = mouseEvent.getPoint();
+				int row = table.rowAtPoint(point);
+				if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+					switch (modo) {
+						case 1:
+							String value1 = tabla.getValueAt(row, 0).toString();
+							new DetallesUsuario(value1);
+							break;
+						case 2:
+							String value2 = tabla.getValueAt(row, 5).toString();
+							new DetallesArticulo(value2);
+							break;
+						case 3:
+							String value3 = tabla.getValueAt(row, 3).toString();
+							new DetallesRegistroVenta(value3);
+							break;
+						case 4:
+							String value4 = tabla.getValueAt(row, 6).toString();
+							new DetallesRegistroCompra(value4);
+							break;
+					}
+				}
+			}
+		});
 		iniciarTabla();
 		rellenarTabla();
 		btnActualizar = new JButton("");
@@ -249,7 +288,7 @@ public class Administracion extends JFrame {
 		lblTitulo.setBounds(10, 0, 711, 55);
 		panelPrincipal.add(lblTitulo);
 		
-		filtroCB = new JComboBox(new String[] {"Seleccione...","Nombre", "Apellidos", "Rut", "Telefonos", "Email"});
+		filtroCB = new JComboBox(new String[] {"Seleccione...", "Rut", "Nombre", "Apellidos", "Telefono", "Email"});
 		filtroCB.setFont(new Font("Roboto Light", Font.PLAIN, 15));
 		filtroCB.setName("");
 		filtroCB.setForeground(Color.BLACK);
@@ -289,80 +328,25 @@ public class Administracion extends JFrame {
 	}
 
 	private void eliminarFilaTabla() {
+		Consulta consulta = new Consulta();
 		int row = tabla.getSelectedRow();
 		if(row>-1) {
 			String value = tabla.getValueAt(row, columnaPK).toString();
 			int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
 			if (JOptionPane.YES_OPTION == confirm) {
 				switch(modo) {
-					case 1:						
-//						consulta.delDireccion(value);
-//						consulta.delRegistroVentaRut(value);
-//						consulta.delUsuario(value);
+					case 1:
+						consulta.delUsuario(tabla.getValueAt(row, 0).toString());
 						break;
 					case 2:
-//						consulta.delDireccion(value);
+						consulta.delArticulo(tabla.getValueAt(row, 5).toString());
 						break;
 					case 3:
-//						consulta.delMedidaE(Integer.parseInt(value));
-//						consulta.delMedidaG(Integer.parseInt(value));
-//						consulta.delRegistroCompraIdArticulo(Integer.parseInt(value));
-//						consulta.delRegistroVentaIdArticulo(Integer.parseInt(value));
-//						consulta.delArticulo(Integer.parseInt(value));
+						consulta.delRegistroVenta(tabla.getValueAt(row, 3).toString());
 						break;
 					case 4:
-//						consulta.delMedidaG(Integer.parseInt(value));
+						consulta.delRegistroCompra(tabla.getValueAt(row, 6).toString());
 						break;
-					case 5:
-//						consulta.delMedidaE(Integer.parseInt(value));
-						break;
-					case 6:
-						int cantidadComprada = Integer.parseInt(tabla.getValueAt(row, 3).toString());
-						int reAjustarStockC = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (restar el stock en: "+cantidadComprada+" unidades)");
-						if(JOptionPane.YES_OPTION == reAjustarStockC) {
-							int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
-//							int stockActual = consulta.getArticuloStock(idArticulo);
-//							if(stockActual-cantidadComprada>=0) {
-//								consulta.updtStockArticulo(idArticulo,stockActual-cantidadComprada);
-//							}else {
-//								Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
-//								JOptionPane.showMessageDialog(null, "No fue posible dado que el stock es menor que la cantidad comprada","Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
-//							}
-						}
-//						consulta.delRegistroVenta(Integer.parseInt(value));
-						break;
-					case 7:
-						int cantidadVendida = Integer.parseInt(tabla.getValueAt(row, 3).toString());
-						int reAjustarStockV = JOptionPane.showConfirmDialog(null, "¿Desea re-ajustar el stock del objeto? (aumentar el stock en: "+cantidadVendida+" unidades)");
-						if(JOptionPane.YES_OPTION == reAjustarStockV) {
-							int idArticulo = Integer.parseInt(tabla.getValueAt(row, 0).toString());
-//							int stockActual = consulta.getArticuloStock(idArticulo);
-//							consulta.updtStockArticulo(idArticulo,stockActual+cantidadVendida);
-						}
-//						consulta.delRegistroCompra(Integer.parseInt(value));
-						break;
-					case 8:
-//						ArrayList idsArticulosMarca = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
-//						for (int i = 0; i < idsArticulosMarca.size(); i++) {
-//							consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
-//							consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosMarca.get(i).toString()));
-//						}
-//						consulta.delArticuloSegunMarca(Integer.parseInt(value));
-//						consulta.delMarca(Integer.parseInt(value));
-						break;
-					case 9:
-//						ArrayList idsArticulosTipoObj = consulta.getidArticulosSegunMarca(Integer.parseInt(value));
-//						for (int i = 0; i < idsArticulosTipoObj.size(); i++) {
-//							consulta.delRegistroCompraIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
-//							consulta.delRegistroVentaIdArticulo(Integer.parseInt(idsArticulosTipoObj.get(i).toString()));
-//						}
-//						consulta.delArticuloSegunMarca(Integer.parseInt(value));
-//						consulta.delMarca(Integer.parseInt(value));
-						break;
-					case 10:
-//						consulta.delProveedor(Integer.parseInt(value));
-						break;
-					default:
 				}
 				eliminarDatosTabla();
 				repintarTabla();
@@ -518,6 +502,8 @@ public class Administracion extends JFrame {
 	public void construirPanelMenu() {
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setViewportBorder(null);
 		scrollPane.setBounds(-1, 196, 202, 416);
@@ -546,7 +532,7 @@ public class Administracion extends JFrame {
 							new Object[][] {
 							},
 							new String[] {
-								"Rut", "Nombre", "Apellidos", "Rut", "Telefono", "Email"
+									"Rut", "Nombre", "Apellidos", "Telefono", "Email"
 							}
 					));
 					repintarTabla();
@@ -578,14 +564,14 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Articulos");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID", "Tipo", "Marca", "Descripcion",
-							"Stock", "Precio unitario"});
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Tipo", "Marca",
+							"Descripcion", "Stock", "Precio Unitario", "ID"});
 					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
 							new String[] {
-								"ID", "Tipo", "Marca", "Descripcion", "Stock", "Precio unitario"
+								"Tipo", "Marca", "Descripcion", "Stock", "Precio Unitario", "ID"
 							}
 					));
 					repintarTabla();
@@ -616,13 +602,13 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro venta");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","ID", "Fecha venta", "Cantidad vendida", "Rut"});
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Fecha", "Cantidad Vendida", "Rut", "ID"});
 					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
 							new String[] {
-									"ID", "Fecha venta", "Cantidad vendida", "Rut"
+									"Fecha", "Cantidad Vendida", "Rut", "ID"
 							}
 					));
 					repintarTabla();
@@ -654,14 +640,14 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro compra");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "ID", "Usuario", "Proveedor",
-							"Unidades adquiridas", "Costo unitario", "Fecha pedida", "Fecha recibo"});
+					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Usuario", "Nombre Proveedor",
+							"Unidades Adquiridas", "Costo Unitario", "Fecha Pedida", "Fecha Recibo", "ID"});
 					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
 							new String[] {
-									"ID", "Usuario", "Proveedor", "Unidades adquiridas", "Costo unitario", "Fecha pedida", "Fecha recibo"
+									"Usuario", "Nombre Proveedor", "Unidades Adquiridas", "Costo Unitario", "Fecha Pedida", "Fecha Recibo", "ID"
 							}
 					));
 					repintarTabla();
@@ -696,47 +682,63 @@ public class Administracion extends JFrame {
 	}
 	
 	public void rellenarTabla() {
+		Consulta consulta = new Consulta();
 		elementosTabla = new ArrayList<ArrayList<String>>();
 		switch(modo) {
 		case 1:
-//			elementosTabla = consulta.getUsuarios("nombreusuario");
+			elementosTablaUsuarios = consulta.getUsuarios();
+			Vector elementos1 = new Vector();
+			for (int i = 0; i < elementosTablaUsuarios.size(); i++) {
+				elementos1 = new Vector();
+				elementos1.add(elementosTablaUsuarios.get(i).get_Rut());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Nombre());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Apellidos());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Telefono());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Email());
+				modeloTabla.addRow(elementos1);
+			}
 			break;
 		case 2:
-//			elementosTabla = consulta.getDirecciones();
+			elementosTablaArticulos = consulta.getArticulos();
+			Vector elementos2 = new Vector();
+			for (int i = 0; i < elementosTablaArticulos.size(); i++) {
+				elementos2 = new Vector();
+				elementos2.add(elementosTablaArticulos.get(i).get_Tipo());
+				elementos2.add(elementosTablaArticulos.get(i).get_Marca());
+				elementos2.add(elementosTablaArticulos.get(i).get_Descripcion());
+				elementos2.add(elementosTablaArticulos.get(i).get_Stock());
+				elementos2.add(elementosTablaArticulos.get(i).get_PrecioUnitario());
+				elementos2.add(elementosTablaArticulos.get(i).get_ID());
+				modeloTabla.addRow(elementos2);
+			}
 			break;
 		case 3:
-//			elementosTabla = consulta.getListaArticulo("idarticulo");
+			elementosTablaRegistrosVentas = consulta.getRegistrosVentas();
+			Vector elementos3 = new Vector();
+			for (int i = 0; i < elementosTablaRegistrosVentas.size(); i++) {
+				elementos3 = new Vector();
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Fecha());
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_CantidadVendida());
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Rut());
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_ID());
+				modeloTabla.addRow(elementos3);
+			}
 			break;
 		case 4:
-//			elementosTabla = consulta.getListaMedidaG("idarticulo");
-			break;
-		case 5:
-//			elementosTabla = consulta.getListaMedidaE("idarticulo");
-			break;
-		case 6:
-//			elementosTabla = consulta.getRegistrosVenta("idventa");
-			break;
-		case 7:
-//			elementosTabla = consulta.getRegistrosCompra("idcompra");
-			break;
-		case 8:
-//			elementosTabla = consulta.getMarca();
-			break;
-		case 9:
-//			elementosTabla = consulta.getTipoObjeto();
-			break;
-		case 10:
-//			elementosTabla = consulta.getProveedor();
-			break;
-		default:	
-		}
-		Vector elementos = new Vector();
-		for (int i = 0; i < elementosTabla.size(); i++) {
-			elementos = new Vector();
-			for (int j = 0; j < elementosTabla.get(i).size(); j++) {
-				elementos.add(elementosTabla.get(i).get(j));
+			elementosTablaRegistrosCompras = consulta.getRegistrosCompras();
+			Vector elementos4 = new Vector();
+			for (int i = 0; i < elementosTablaRegistrosCompras.size(); i++) {
+				elementos4 = new Vector();
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_Usuario());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_NombreProveedor());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_UnidadesAdquiridas());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_CostoUnitario());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaPedida());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaRecibo());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_ID());
+				modeloTabla.addRow(elementos4);
 			}
-			modeloTabla.addRow(elementos);
+			break;
 		}
 	}
 	

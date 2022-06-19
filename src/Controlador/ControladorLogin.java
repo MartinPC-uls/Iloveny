@@ -184,6 +184,7 @@ public class ControladorLogin {
 		        					}
 	        	        		}
         				} catch (Exception e) {
+        					e.printStackTrace();
         					login.lblErrorConexion.setVisible(true);
         					login.lblConectando.setVisible(false);
                	  			login.lblLoadingImage.setVisible(false);

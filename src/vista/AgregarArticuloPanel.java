@@ -29,6 +29,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeListener;
+
+import mongodb.Articulo;
+import mongodb.Consulta;
+import mongodb.Medida;
+
 import javax.swing.event.ChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -69,6 +74,8 @@ public class AgregarArticuloPanel extends JPanel {
 	private JTextField medidaTextField;
 	private JLabel lblMedida;
 	private JPanel lineaMedida;
+	
+	private String tipo_medidas = "";
 	
 	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
 		this.modo = modo;
@@ -412,7 +419,7 @@ public class AgregarArticuloPanel extends JPanel {
 		add(lblAlto);
 		
 		altoTextField = new JTextField();
-		altoTextField.setText("EJ: 2");
+		altoTextField.setText("0");
 		altoTextField.setOpaque(false);
 		altoTextField.setForeground(new Color(170, 170, 170));
 		altoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -450,7 +457,7 @@ public class AgregarArticuloPanel extends JPanel {
 		add(lblAncho);
 		
 		anchoTextField = new JTextField();
-		anchoTextField.setText("EJ: 5");
+		anchoTextField.setText("0");
 		anchoTextField.setOpaque(false);
 		anchoTextField.setForeground(new Color(170, 170, 170));
 		anchoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -488,7 +495,7 @@ public class AgregarArticuloPanel extends JPanel {
 		add(lblLargo);
 		
 		largoTextField = new JTextField();
-		largoTextField.setText("EJ: 7");
+		largoTextField.setText("0");
 		largoTextField.setOpaque(false);
 		largoTextField.setForeground(new Color(170, 170, 170));
 		largoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -519,7 +526,7 @@ public class AgregarArticuloPanel extends JPanel {
 		lineaLargo.setLayout(gl_lineaLargo);
 		
 		medidaTextField = new JTextField();
-		medidaTextField.setText("EJ: L");
+		medidaTextField.setText("");
 		medidaTextField.setOpaque(false);
 		medidaTextField.setForeground(new Color(170, 170, 170));
 		medidaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -576,6 +583,12 @@ public class AgregarArticuloPanel extends JPanel {
 			lineaMedida.setVisible(!value);
 			lblMedida.setVisible(!value);
 			medidaTextField.setVisible(!value);
+			
+			if (value) {
+				tipo_medidas = "Medida Especifica";
+			} else {
+				tipo_medidas = "Medida General";
+			}
 	}
 	
 	private void setElementos(ArrayList<String> elementoSeleccionado) {
@@ -613,14 +626,23 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 
 	private void agregarDatos() {
-		agregarDatosTablaArticulo();
+		agregarArticulo();
 	}
 	
-	private void agregarDatosTablaArticulo() {
+	private void agregarArticulo() {
+		Consulta consulta = new Consulta();
+		Medida medidas = null;
+		if (tipo_medidas.equalsIgnoreCase("Medida Especifica")) {
+			medidas = new Medida(Integer.parseInt(altoTextField.getText()), Integer.parseInt(anchoTextField.getText()), Integer.parseInt(largoTextField.getText()));
+		} else if (tipo_medidas.equalsIgnoreCase("Medida General")) {
+			medidas = new Medida(medidaTextField.getText());
+		}
+		Articulo articulo = new Articulo(descripcionTextField.getText(), tipoObjetoTextField.getText(), marcaTextField.getText(), 
+				Integer.parseInt(stockTextField.getText()), Integer.parseInt(precioTextField.getText()), medidas);
 		if (modo == 1) {
-			// TODO addArticulo
+			consulta.addArticulo(articulo);
 		}else {
-			// TODO updtArticulo
+			//consulta.updt
 		}
 	}
 
