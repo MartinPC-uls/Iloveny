@@ -12,6 +12,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -27,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -49,6 +52,7 @@ import java.awt.Dimension;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
@@ -84,8 +88,6 @@ public class Administracion extends JFrame {
 	private JLabel lblX;
 	private JLabel lblTitulo;
 	private JTextField buscadorTextField;
-	@SuppressWarnings("rawtypes")
-	private JComboBox filtroCB;
 	private JScrollPane tablaScrollPane;
 	private JTable tabla;
 	private JButton btnModificar;
@@ -99,6 +101,7 @@ public class Administracion extends JFrame {
 	public AgregarRegistroCompraPanel agregarRegistroCompraPanel;
 	private JPanel panelPrincipal;
 	private JButton btnRegistroCompra;
+	private TableRowSorter<TableModel> sorter;
 
 	public Administracion(String nombreAdmin) {
 		this.nombreAdmin = nombreAdmin;
@@ -266,8 +269,10 @@ public class Administracion extends JFrame {
 				}
 			}
 		});
+		
 		iniciarTabla();
 		rellenarTabla();
+		
 		btnActualizar = new JButton("");
 		btnActualizar.setToolTipText("Refrezcar");
 		btnActualizar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -291,14 +296,6 @@ public class Administracion extends JFrame {
 		lblTitulo.setBounds(10, 0, 711, 55);
 		panelPrincipal.add(lblTitulo);
 		
-		filtroCB = new JComboBox(new String[] {"Seleccione...", "Rut", "Nombre", "Apellidos", "Telefono", "Email"});
-		filtroCB.setFont(new Font("Roboto Light", Font.PLAIN, 15));
-		filtroCB.setName("");
-		filtroCB.setForeground(Color.BLACK);
-		filtroCB.setBorder(null);
-		filtroCB.setBounds(315, 67, 137, 41);
-		panelPrincipal.add(filtroCB);
-		
 		buscadorTextField = new JTextField();
 		buscadorTextField.addKeyListener(new KeyAdapter() {
 			@Override
@@ -320,12 +317,6 @@ public class Administracion extends JFrame {
 		lblIconoLupa.setIcon(new ImageIcon(Administracion.class.getResource("/imagenes/lupa-white.png")));
 		lblIconoLupa.setBounds(10, 67, 45, 45);
 		panelPrincipal.add(lblIconoLupa);
-		
-		JLabel lblComboBox = new JLabel("Buscar por:");
-		lblComboBox.setFont(new Font("Roboto Light", Font.PLAIN, 11));
-		lblComboBox.setForeground(Color.WHITE);
-		lblComboBox.setBounds(316, 52, 69, 14);
-		panelPrincipal.add(lblComboBox);
 		
 		panelPrincipal.add(tablaScrollPane);
 	}
@@ -361,70 +352,157 @@ public class Administracion extends JFrame {
 	}
 
 	private void realizarBusqueda() {
-		if(filtroCB.getSelectedIndex() != 0) {
-			eliminarDatosTabla();
-			elementosTabla = new ArrayList<ArrayList<String>>();
-			switch(modo) {
-			 case 1:
-				String[] columnas1 = {"nada","nombreusuario","apellidos","rut","telefono","email"};
-	 			boolean[] isInteger1 = {false,false,false,false,false,false};
-//				elementosTabla = consulta.getListaUsuarioBusqueda(columnas1[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger1[filtroCB.getSelectedIndex()]);
-				break;
-			case 2:
-				String[] columnas2 = {"nada","rut","nombreregion","numerodomicilio","calle","ciudad","comuna"};
-	 			boolean[] isInteger2 = {false,false,false,true,false,false,false};
-//				elementosTabla = consulta.getListaDireccionBusqueda(columnas2[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger2[filtroCB.getSelectedIndex()]);
-				break;
-			case 3:
-				String[] columnas3 = {"nada","idarticulo","nombretipo","nombremarca","stock","preciounitario","descripcion","rutaimg"};
-	 			boolean[] isInteger3 = {false,true,false,false,true,true,false,false};
-//				elementosTabla = consulta.getListaArticuloBusqueda(columnas3[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger3[filtroCB.getSelectedIndex()]);
-				break;
-			case 4:
-				String[] columnas4 = {"nada","medidageneral.idarticulo","nombretipo","alto","ancho","largo"};
-	 			boolean[] isInteger4 = {false,true,false,true,true,true};
-//				elementosTabla = consulta.getListaMedidaGBusqueda(columnas4[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger4[filtroCB.getSelectedIndex()]);
-				break;
-			case 5:
-				String[] columnas5 = {"nada","medidaespecifica.idarticulo","nombretipo","medida"};
-	 			boolean[] isInteger5 = {false,true,false,false};
-//				elementosTabla = consulta.getListaMedidaEBusqueda(columnas5[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger5[filtroCB.getSelectedIndex()]);
-				break;
-			case 6:
-				String[] columnas6 = {"nada","registroventa.idarticulo","rut","fechaventa","cantidadvendida","idventa"};
-	 			boolean[] isInteger6 = {false,true,false,true,true,true};
-//				elementosTabla = consulta.getRegistrosVentaBusqueda(columnas6[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger6[filtroCB.getSelectedIndex()]);
-				break;
-			case 7:
-				String[] columnas7 = {"nada","registrocompra.idarticulo","usuario","nombreprov","unidadesadquiridas","costounitario","fechapedida","fecharecibo","idcompra"};
-	 			boolean[] isInteger7 = {false,true,false,false,true,true,true,true,true};
-//				elementosTabla = consulta.getRegistrosCompraBusqueda(columnas7[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger7[filtroCB.getSelectedIndex()]);
-				break;
-			case 8:
-				String[] columnas8 = {"nada","idmarca","nombremarca"};
-	 			boolean[] isInteger8 = {false,true,false};
-//				elementosTabla = consulta.getMarcaBusqueda(columnas8[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger8[filtroCB.getSelectedIndex()]);
-				break;
-			case 9:
-				String[] columnas9 = {"nada","idtipoobj","nombretipo"};
-	 			boolean[] isInteger9 = {false,true,false};
-//				elementosTabla = consulta.getTipoObjetoBusqueda(columnas9[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger9[filtroCB.getSelectedIndex()]);
-				break;
-			case 10:
-				String[] columnas10 = {"nada","idprov","nombreprov"};
-	 			boolean[] isInteger10 = {false,true,false};
-//				elementosTabla = consulta.getProveedorBusqueda(columnas10[filtroCB.getSelectedIndex()], buscadorTextField.getText(),isInteger10[filtroCB.getSelectedIndex()]);
-				break;
-			default:
+		String busqueda = buscadorTextField.getText();
+		switch(modo) {
+		 case 1:
+			boolean byColumn1 = false;
+			int c_index1 = 0;
+			if (busqueda.contains("Rut: ")) {
+				busqueda = busqueda.replace("Rut: ", "");
+				byColumn1 = true;
+				c_index1 = 0;
+			} else if (busqueda.contains("Nombre: ")) {
+				busqueda = busqueda.replace("Nombre: ", "");
+				byColumn1 = true;
+				c_index1 = 1;
+			} else if (busqueda.contains("Apellidos: ")) {
+				busqueda = busqueda.replace("Apellidos: ", "");
+				byColumn1 = true;
+				c_index1 = 2;
+			} else if (busqueda.contains("Telefono: ")) {
+				busqueda = busqueda.replace("Telefono: ", "");
+				byColumn1 = true;
+				c_index1 = 3;
+			} else if (busqueda.contains("Email: ")) {
+				busqueda = busqueda.replace("Email: ", "");
+				byColumn1 = true;
+				c_index1 = 4;
 			}
-			Vector elementos = new Vector();
-			for (int i = 0; i < elementosTabla.size(); i++) {
-				elementos = new Vector();
-				for (int j = 0; j < elementosTabla.get(i).size(); j++) {
-					elementos.add(elementosTabla.get(i).get(j));
-				}
-				modeloTabla.addRow(elementos);
+			if (busqueda.trim().length() == 0) {
+				sorter.setRowFilter(null);
+			} else {
+				if (busqueda.toCharArray()[0] == '+') {
+				StringBuilder strb = new StringBuilder(busqueda);
+				strb.deleteCharAt(0);
+				busqueda = strb.toString();
 			}
+				if (!byColumn1)
+					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda));
+				else
+					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, c_index1));
+			}
+			break;
+		case 2:
+			boolean byColumn2 = false;
+			int c_index2 = 0;
+			if (busqueda.contains("Tipo: ")) {
+				busqueda = busqueda.replace("Tipo: ", "");
+				byColumn2 = true;
+				c_index2 = 0;
+			} else if (busqueda.contains("Marca: ")) {
+				busqueda = busqueda.replace("Marca: ", "");
+				byColumn2 = true;
+				c_index2 = 1;
+			} else if (busqueda.contains("Descripcion: ")) {
+				busqueda = busqueda.replace("Descripcion: ", "");
+				byColumn2 = true;
+				c_index2 = 2;
+			} else if (busqueda.contains("Stock: ")) {
+				busqueda = busqueda.replace("Stock: ", "");
+				byColumn2 = true;
+				c_index2 = 3;
+			} else if (busqueda.contains("Precio Unitario: ")) {
+				busqueda = busqueda.replace("Precio Unitario: ", "");
+				byColumn2 = true;
+				c_index2 = 4;
+			}
+ 			if (busqueda.trim().length() == 0) {
+ 				sorter.setRowFilter(null);
+ 			} else {
+ 				if (busqueda.toCharArray()[0] == '+') {
+ 					StringBuilder strb = new StringBuilder(busqueda);
+ 					strb.deleteCharAt(0);
+ 					busqueda = strb.toString();
+ 				}
+ 				if (!byColumn2)
+ 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, 0, 1, 2, 3, 4));
+ 				else {
+ 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, c_index2));
+ 				}
+ 			}
+			break;
+		case 3:
+			boolean byColumn3 = false;
+			int c_index3 = 0;
+			if (busqueda.contains("Fecha: ")) {
+				busqueda = busqueda.replace("Fecha: ", "");
+				byColumn3 = true;
+				c_index3 = 0;
+			} else if (busqueda.contains("Cantidad Vendida: ")) {
+				busqueda = busqueda.replace("Cantidad Vendida: ", "");
+				byColumn3 = true;
+				c_index3 = 1;
+			} else if (busqueda.contains("Rut: ")) {
+				busqueda = busqueda.replace("Rut: ", "");
+				byColumn3 = true;
+				c_index3 = 2;
+			}
+ 			if (busqueda.trim().length() == 0) {
+ 				sorter.setRowFilter(null);
+ 			} else {
+ 				if (busqueda.toCharArray()[0] == '+') {
+ 					StringBuilder strb = new StringBuilder(busqueda);
+ 					strb.deleteCharAt(0);
+ 					busqueda = strb.toString();
+ 				}
+ 				if (!byColumn3)
+ 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, 0, 1, 2));
+ 				else
+ 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, c_index3));
+ 			}
+			break;
+		case 4:
+			boolean byColumn4 = false;
+			int c_index4 = 0;
+			if (busqueda.contains("Usuario: ")) {
+				busqueda = busqueda.replace("Usuario: ", "");
+				byColumn4 = true;
+				c_index4 = 0;
+			} else if (busqueda.contains("Nombre Proveedor: ")) {
+				busqueda = busqueda.replace("Nombre Proveedor: ", "");
+				byColumn4 = true;
+				c_index4 = 1;
+			} else if (busqueda.contains("Unidades Adquiridas: ")) {
+				busqueda = busqueda.replace("Unidades Adquiridas: ", "");
+				byColumn4 = true;
+				c_index4 = 2;
+			} else if (busqueda.contains("Costo Unitario: ")) {
+				busqueda = busqueda.replace("Costo Unitario: ", "");
+				byColumn4 = true;
+				c_index4 = 3;
+			} else if (busqueda.contains("Fecha Pedida: ")) {
+				busqueda = busqueda.replace("Fecha Pedida: ", "");
+				byColumn4 = true;
+				c_index4 = 4;
+			} else if (busqueda.contains("Fecha Recibo: ")) {
+				busqueda = busqueda.replace("Fecha Recibo: ", "");
+				byColumn4 = true;
+				c_index4 = 5;
+			}
+ 			if (busqueda.trim().length() == 0) {
+ 				sorter.setRowFilter(null);
+ 			} else {
+ 				if (busqueda.toCharArray()[0] == '+') {
+ 					StringBuilder strb = new StringBuilder(busqueda);
+ 					strb.deleteCharAt(0);
+ 					busqueda = strb.toString();
+ 				}
+ 				if (!byColumn4)
+ 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, 0, 1, 2, 3, 4, 5));
+ 				else
+ 					sorter.setRowFilter(RowFilter.regexFilter("(?i)" + busqueda, c_index4));
+ 			}
+			break;
 		}
 	}
 
@@ -436,13 +514,13 @@ public class Administracion extends JFrame {
 			if(espacioParaColumna*tabla.getColumnCount()<711) {
 				espacioParaColumna+=(711-espacioParaColumna*tabla.getColumnCount());
 			}
-		}else {
+		} else {
 			espacioParaColumna = 150;
 		}
 		for(int i = 0; i<tabla.getColumnCount(); i++) {
 			tabla.getColumnModel().getColumn(i).setPreferredWidth(espacioParaColumna);
 			tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
-			TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla.getModel());
+			sorter = new TableRowSorter<TableModel>(tabla.getModel());
 			tabla.setRowSorter(sorter);
 			List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
 			sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -467,7 +545,7 @@ public class Administracion extends JFrame {
 		tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
 		tabla.getTableHeader().setBackground(new Color(51,51,51));
 		
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tabla.getModel());
+		sorter = new TableRowSorter<TableModel>(tabla.getModel());
 		tabla.setRowSorter(sorter);
 		
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>(100);
@@ -529,7 +607,6 @@ public class Administracion extends JFrame {
 					lblTitulo.setText("Usuarios");
 					buscadorTextField.setText("");
 					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","Rut", "Nombre", "Apellidos", "Telefono", "Email"});
-					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -539,7 +616,6 @@ public class Administracion extends JFrame {
 					));
 					repintarTabla();
 					rellenarTabla();
-					filtroCB.setSelectedIndex(0);
 				}
 				if(!panelPrincipal.isVisible()) {
 					reacomodarPaneles();
@@ -568,7 +644,6 @@ public class Administracion extends JFrame {
 					buscadorTextField.setText("");
 					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Tipo", "Marca",
 							"Descripcion", "Stock", "Precio Unitario", "ID"});
-					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -578,7 +653,6 @@ public class Administracion extends JFrame {
 					));
 					repintarTabla();
 					rellenarTabla();
-					filtroCB.setSelectedIndex(0);
 				}
 				if(!panelPrincipal.isVisible()) {
 					reacomodarPaneles();
@@ -605,7 +679,6 @@ public class Administracion extends JFrame {
 					lblTitulo.setText("Registro venta");
 					buscadorTextField.setText("");
 					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Fecha", "Cantidad Vendida", "Rut", "ID"});
-					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -615,7 +688,6 @@ public class Administracion extends JFrame {
 					));
 					repintarTabla();
 					rellenarTabla();
-					filtroCB.setSelectedIndex(0);
 				}
 				if(!panelPrincipal.isVisible()) {
 					reacomodarPaneles();
@@ -644,7 +716,6 @@ public class Administracion extends JFrame {
 					buscadorTextField.setText("");
 					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Usuario", "Nombre Proveedor",
 							"Unidades Adquiridas", "Costo Unitario", "Fecha Pedida", "Fecha Recibo", "ID"});
-					filtroCB.setModel(model);
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -654,7 +725,6 @@ public class Administracion extends JFrame {
 					));
 					repintarTabla();
 					rellenarTabla();
-					filtroCB.setSelectedIndex(0);
 				}
 				if(!panelPrincipal.isVisible()) {
 					reacomodarPaneles();
