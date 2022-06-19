@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.Color;
+import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -61,8 +62,21 @@ public class AgregarUsuarioPanel extends JPanel {
 	private JTextField ciudadTextField;
 	private JTextField comunaTextField;
 	private JTextField regionTextField;
-
-	public AgregarUsuarioPanel(int modo, JComponent[] paneles,JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
+	private String _id;
+	private JPanel lineaCalle;
+	private JPanel lineaNumeroDomicilio;
+	private JPanel lineaCiudad;
+	private JPanel lineaComuna;
+	private JPanel lineaRegion;
+	
+	private JLabel lblAlertaCalle;
+	private JLabel lblAlertaNumeroDomicilio;
+	private JLabel lblAlertaCiudad;
+	private JLabel lblAlertaComuna;
+	private JLabel lblAlertaRegion;
+	
+	public AgregarUsuarioPanel(int modo, JComponent[] paneles,JButton btnRefrezcar, String _id) {
+		this._id = _id;
 		this.modoPanel = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);
@@ -108,11 +122,11 @@ public class AgregarUsuarioPanel extends JPanel {
 			}
 		});
 		rutTextField.addFocusListener(new FocusAdapter() {
-        	@Override
-        	public void focusLost(FocusEvent e) {
-        		verificarRut();
-        	}
-        });
+	        	@Override
+	        	public void focusLost(FocusEvent e) {
+	        		verificarRut();
+	        	}
+		});
 		rutTextField.setText("EJ: 12.345.678-9");
 		rutTextField.setOpaque(false);
 		rutTextField.setForeground(new Color(170, 170, 170));
@@ -357,6 +371,46 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblAlertaRUT.setBounds(95, 90, 30, 27);
 		add(lblAlertaRUT);
 		
+		lblAlertaCalle = new JLabel("");
+		lblAlertaCalle.setVisible(false);
+		lblAlertaCalle.setToolTipText("Hay un error de formato");
+		lblAlertaCalle.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaCalle.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaCalle.setBounds(95, 248, 30, 27);
+		add(lblAlertaCalle);
+		
+		lblAlertaNumeroDomicilio = new JLabel("");
+		lblAlertaNumeroDomicilio.setVisible(false);
+		lblAlertaNumeroDomicilio.setToolTipText("Hay un error de formato");
+		lblAlertaNumeroDomicilio.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaNumeroDomicilio.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaNumeroDomicilio.setBounds(601, 248, 30, 27);
+		add(lblAlertaNumeroDomicilio);
+		
+		lblAlertaCiudad = new JLabel("");
+		lblAlertaCiudad.setVisible(false);
+		lblAlertaCiudad.setToolTipText("Hay un error de formato");
+		lblAlertaCiudad.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaCiudad.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaCiudad.setBounds(95, 299, 30, 27);
+		add(lblAlertaCiudad);
+		
+		lblAlertaComuna = new JLabel("");
+		lblAlertaComuna.setVisible(false);
+		lblAlertaComuna.setToolTipText("Hay un error de formato");
+		lblAlertaComuna.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaComuna.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaComuna.setBounds(601, 299, 30, 27);
+		add(lblAlertaComuna);
+		
+		lblAlertaRegion = new JLabel("");
+		lblAlertaRegion.setVisible(false);
+		lblAlertaRegion.setToolTipText("Hay un error de formato");
+		lblAlertaRegion.setIcon(new ImageIcon(AgregarUsuarioPanel.class.getResource("/imagenes/alert-icon-white.png")));
+		lblAlertaRegion.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAlertaRegion.setBounds(95, 350, 30, 27);
+		add(lblAlertaRegion);
+		
 		lblAlertaNombre = new JLabel("");
 		lblAlertaNombre.setVisible(false);
 		lblAlertaNombre.setToolTipText("Hay un error de formato");
@@ -395,7 +449,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblCalle.setBounds(135, 235, 62, 14);
 		add(lblCalle);
 		
-		JPanel lineaCalle = new JPanel();
+		lineaCalle = new JPanel();
 		lineaCalle.setPreferredSize(new Dimension(0, 3));
 		lineaCalle.setBackground(Color.WHITE);
 		lineaCalle.setBounds(135, 272, 214, 3);
@@ -414,6 +468,18 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaCalle.setLayout(gl_lineaCalle);
 		
 		calleTextField = new JTextField();
+		calleTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarCalle();
+			}
+		});
+		calleTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCalle();
+			}
+		});
 		calleTextField.setText("EJ: Ulriksen");
 		calleTextField.setOpaque(false);
 		calleTextField.setForeground(new Color(170, 170, 170));
@@ -422,6 +488,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		calleTextField.setBorder(null);
 		calleTextField.setBackground(new Color(51, 51, 51));
 		calleTextField.setBounds(135, 248, 214, 21);
+		eventoCambiarJTextField(calleTextField, calleTextField.getText(), 50);
 		add(calleTextField);
 		
 		JLabel lblNumeroDomicilio = new JLabel("Numero domicilio");
@@ -430,7 +497,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblNumeroDomicilio.setBounds(380, 235, 214, 14);
 		add(lblNumeroDomicilio);
 		
-		JPanel lineaNumeroDomicilio = new JPanel();
+		lineaNumeroDomicilio = new JPanel();
 		lineaNumeroDomicilio.setPreferredSize(new Dimension(0, 3));
 		lineaNumeroDomicilio.setBackground(Color.WHITE);
 		lineaNumeroDomicilio.setBounds(380, 272, 214, 3);
@@ -449,6 +516,18 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaNumeroDomicilio.setLayout(gl_lineaNumeroDomicilio);
 		
 		numeroDomicilioTextField = new JTextField();
+		numeroDomicilioTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarNumeroDomicilio();
+			}
+		});
+		numeroDomicilioTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarNumeroDomicilio();
+			}
+		});
 		numeroDomicilioTextField.setText("EJ: 1234");
 		numeroDomicilioTextField.setOpaque(false);
 		numeroDomicilioTextField.setForeground(new Color(170, 170, 170));
@@ -457,6 +536,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		numeroDomicilioTextField.setBorder(null);
 		numeroDomicilioTextField.setBackground(new Color(51, 51, 51));
 		numeroDomicilioTextField.setBounds(380, 248, 214, 21);
+		eventoCambiarJTextField(numeroDomicilioTextField, numeroDomicilioTextField.getText(), 50);
 		add(numeroDomicilioTextField);
 		
 		JLabel lblCiudad = new JLabel("Ciudad");
@@ -465,7 +545,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblCiudad.setBounds(135, 286, 62, 14);
 		add(lblCiudad);
 		
-		JPanel lineaCiudad = new JPanel();
+		lineaCiudad = new JPanel();
 		lineaCiudad.setPreferredSize(new Dimension(0, 3));
 		lineaCiudad.setBackground(Color.WHITE);
 		lineaCiudad.setBounds(135, 323, 214, 3);
@@ -484,6 +564,18 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaCiudad.setLayout(gl_lineaCiudad);
 		
 		ciudadTextField = new JTextField();
+		ciudadTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarCiudad();
+			}
+		});
+		ciudadTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarCiudad();
+			}
+		});
 		ciudadTextField.setText("EJ: La Serena");
 		ciudadTextField.setOpaque(false);
 		ciudadTextField.setForeground(new Color(170, 170, 170));
@@ -492,6 +584,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		ciudadTextField.setBorder(null);
 		ciudadTextField.setBackground(new Color(51, 51, 51));
 		ciudadTextField.setBounds(135, 299, 214, 21);
+		eventoCambiarJTextField(ciudadTextField, ciudadTextField.getText(), 50);
 		add(ciudadTextField);
 		
 		JLabel lblComuna = new JLabel("Comuna");
@@ -500,7 +593,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblComuna.setBounds(380, 286, 62, 14);
 		add(lblComuna);
 		
-		JPanel lineaComuna = new JPanel();
+		lineaComuna = new JPanel();
 		lineaComuna.setPreferredSize(new Dimension(0, 3));
 		lineaComuna.setBackground(Color.WHITE);
 		lineaComuna.setBounds(380, 323, 214, 3);
@@ -519,6 +612,18 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaComuna.setLayout(gl_lineaComuna);
 		
 		comunaTextField = new JTextField();
+		comunaTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarComuna();
+			}
+		});
+		comunaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarComuna();
+			}
+		});
 		comunaTextField.setText("EJ: La Serena");
 		comunaTextField.setOpaque(false);
 		comunaTextField.setForeground(new Color(170, 170, 170));
@@ -527,6 +632,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		comunaTextField.setBorder(null);
 		comunaTextField.setBackground(new Color(51, 51, 51));
 		comunaTextField.setBounds(380, 299, 214, 21);
+		eventoCambiarJTextField(comunaTextField, comunaTextField.getText(), 50);
 		add(comunaTextField);
 		
 		JLabel lblRegion = new JLabel("Regi\u00F3n");
@@ -535,7 +641,7 @@ public class AgregarUsuarioPanel extends JPanel {
 		lblRegion.setBounds(135, 337, 62, 14);
 		add(lblRegion);
 		
-		JPanel lineaRegion = new JPanel();
+		lineaRegion = new JPanel();
 		lineaRegion.setPreferredSize(new Dimension(0, 3));
 		lineaRegion.setBackground(Color.WHITE);
 		lineaRegion.setBounds(135, 374, 214, 3);
@@ -554,6 +660,18 @@ public class AgregarUsuarioPanel extends JPanel {
 		lineaRegion.setLayout(gl_lineaRegion);
 		
 		regionTextField = new JTextField();
+		regionTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarRegion();
+			}
+		});
+		regionTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarRegion();
+			}
+		});
 		regionTextField.setText("EJ: Coquimbo");
 		regionTextField.setOpaque(false);
 		regionTextField.setForeground(new Color(170, 170, 170));
@@ -562,30 +680,45 @@ public class AgregarUsuarioPanel extends JPanel {
 		regionTextField.setBorder(null);
 		regionTextField.setBackground(new Color(51, 51, 51));
 		regionTextField.setBounds(135, 350, 214, 21);
+		eventoCambiarJTextField(regionTextField, regionTextField.getText(), 50);
 		add(regionTextField);
 		
 		if (modo == 2) {
-			btnAgregarUsuario.setText("MODIFICAR USUARIO");
-			setElementos(elementoSeleccionado);
+			btnAgregarUsuario.setText("EDITAR USUARIO");
+			setElementos(_id);
 		}
 	}
 	
-	private void setElementos(ArrayList<String> elementoSeleccionado) {
-		nombreTextField.setForeground(Color.WHITE);
-		nombreTextField.setText(elementoSeleccionado.get(0));
-		apellidosTextField.setForeground(Color.WHITE);
-		apellidosTextField.setText(elementoSeleccionado.get(1));
-		rutTextField.setForeground(Color.WHITE);
-		rutTextField.setText(elementoSeleccionado.get(2));
-		rutAntiguo = elementoSeleccionado.get(2);
-		numTelefonoTextField.setForeground(Color.WHITE);
-		numTelefonoTextField.setText(elementoSeleccionado.get(3));
-		emailTextField.setForeground(Color.WHITE);
-		emailTextField.setText(elementoSeleccionado.get(4));
+	Usuario usuario;
+	private void setElementos(String _id) {
+		Consulta consulta = new Consulta();
+		usuario = consulta.getUsuario(_id);
+		rutTextField.setText(usuario.get__id());
+		rutTextField.setEnabled(false);
+		nombreTextField.setText(usuario.get_nombreusuario());
+		apellidosTextField.setText(usuario.get_apellidos());
+		numTelefonoTextField.setText(usuario.get_telefono());
+		emailTextField.setText(usuario.get_email());
+		calleTextField.setText(usuario.get_direccion().get_calle());
+		numeroDomicilioTextField.setText(String.valueOf(usuario.get_direccion().get_numerodomicilio()));
+		ciudadTextField.setText(usuario.get_direccion().get_ciudad());
+		comunaTextField.setText(usuario.get_direccion().get_comuna());
+		regionTextField.setText(usuario.get_direccion().get_nombreregion());
+		
+		cambiarColorTextFieldsBlanco();
 	}
 	
 	private void agregarDatos() {
 		agregarUsuario();
+	}
+	
+	private void cambiarColorTextFieldsBlanco() {
+		Component[] componentes = this.getComponents();
+	        for(int i = 0; i<componentes.length;i++) {
+	       	 if(componentes[i].getClass().equals(JTextField.class)) {
+	       		 componentes[i].setForeground(Color.WHITE);
+	       	 }
+	        }
 	}
 
 	private void agregarUsuario() {
@@ -612,7 +745,8 @@ public class AgregarUsuarioPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		if(verificarRut() && verificarNombre() && verificarApellidos() && verificarNumeroTelefonico() && verificarEmail()) {
+		if(verificarRut() && verificarNombre() && verificarApellidos() && verificarNumeroTelefonico() && verificarEmail() && verificarCalle() && 
+				verificarNumeroDomicilio() && verificarCiudad() && verificarComuna() && verificarRegion()) {
 			return true;
 		}else {
 			return false;	
@@ -647,7 +781,7 @@ public class AgregarUsuarioPanel extends JPanel {
 	}
 	
 	private boolean verificarApellidos() {
-		if(!apellidosTextField.getText().matches("[a-zA-Z ]{1,50}") || apellidosTextField.getText().charAt(0) == ' ') {
+		if(!apellidosTextField.getText().matches("[a-zA-ZñÑ ]{1,50}") || apellidosTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaApellidos, lblAlertaApellidos);
 			return false;
 		}
@@ -663,12 +797,53 @@ public class AgregarUsuarioPanel extends JPanel {
 		setAcertado(lineaNombre, lblAlertaNombre);
 		return true;
 	}
-
-	private boolean verificarRut() {
-		if(rutTextField.getText().charAt(0) == '0') {
-			setErroneo(lineaRut, lblAlertaRUT);
+	
+	private boolean verificarCalle() {
+		if(!calleTextField.getText().matches("[a-zA-Z0-9ñÑ ]{1,50}") || calleTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaCalle, lblAlertaCalle);
 			return false;
 		}
+		setAcertado(lineaCalle, lblAlertaCalle);
+		return true;
+	}
+	
+	private boolean verificarNumeroDomicilio() {
+		if(!numeroDomicilioTextField.getText().matches("[0-9]{1,20}")) {
+			setErroneo(lineaNumeroDomicilio, lblAlertaNumeroDomicilio);
+			return false;
+		}
+		setAcertado(lineaNumeroDomicilio, lblAlertaNumeroDomicilio);
+		return true;
+	}
+	
+	private boolean verificarCiudad() {
+		if(!ciudadTextField.getText().matches("[a-zA-Z0-9ñÑ ]{1,50}") || ciudadTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaCiudad, lblAlertaCiudad);
+			return false;
+		}
+		setAcertado(lineaCiudad, lblAlertaCiudad);
+		return true;
+	}
+	
+	private boolean verificarComuna() {
+		if(!comunaTextField.getText().matches("[a-zA-Z0-9ñÑ ]{1,50}") || comunaTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaComuna, lblAlertaComuna);
+			return false;
+		}
+		setAcertado(lineaComuna, lblAlertaComuna);
+		return true;
+	}
+	
+	private boolean verificarRegion() {
+		if(!regionTextField.getText().matches("[a-zA-Z0-9ñÑ ]{1,50}") || regionTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaRegion, lblAlertaRegion);
+			return false;
+		}
+		setAcertado(lineaRegion, lblAlertaRegion);
+		return true;
+	}
+
+	private boolean verificarRut() {
 		if(rutTextField.getText().matches("[0-9]{1,2}[.][1-9][0-9]{2}[.][1-9][0-9]{2}[-]([0-9]|(k|K))")) {
 			setAcertado(lineaRut,lblAlertaRUT);
 			return true;

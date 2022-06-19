@@ -61,10 +61,13 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private int idVenta;
 	private int cantidadAntigua;
 	private JTextField rutTextField;
-	private JPanel lineaFecha_1;
+	private JPanel lineaRut;
 	private JLabel lblRut;
+	private String _id;
+	private DefaultComboBoxModel modelo2;
 	
-	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
+	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String _id) {
+		this._id = _id;
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);
@@ -77,6 +80,8 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		lblAlertaArticulo.setIcon(new ImageIcon(AgregarRegistroVentaPanel.class.getResource("/imagenes/alert-icon-white.png")));
 		lblAlertaArticulo.setBounds(604, 177, 30, 27);
 		add(lblAlertaArticulo);
+		if (modo == 2)
+			lblAlertaArticulo.setVisible(false);
 		
 		JLabel lblAgregarUsuario = new JLabel("Agregar Registro Venta");
 		lblAgregarUsuario.setHorizontalAlignment(SwingConstants.CENTER);
@@ -233,7 +238,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		lblArticulo.setBounds(383, 155, 144, 14);
 		add(lblArticulo);
 		
-		DefaultComboBoxModel modelo2 = crearModeloComboBoxArticulo();
+		modelo2 = crearModeloComboBoxArticulo();
 		articuloCB =  new JComboBox(new Object[]{});
 		articuloCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -266,6 +271,18 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		add(btnVolver);
 		
 		rutTextField = new JTextField();
+		rutTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarRut();
+			}
+		});
+		rutTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarRut();
+			}
+		});
 		rutTextField.setToolTipText("");
 		rutTextField.setText("EJ: 12.345.678-9");
 		rutTextField.setOpaque(false);
@@ -275,25 +292,26 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		rutTextField.setBorder(null);
 		rutTextField.setBackground(new Color(51, 51, 51));
 		rutTextField.setBounds(138, 177, 214, 21);
+		eventoCambiarJTextField(rutTextField, rutTextField.getText(), 40);
 		add(rutTextField);
 		
-		lineaFecha_1 = new JPanel();
-		lineaFecha_1.setPreferredSize(new Dimension(0, 3));
-		lineaFecha_1.setBackground(Color.WHITE);
-		lineaFecha_1.setBounds(138, 201, 214, 3);
-		add(lineaFecha_1);
-		GroupLayout gl_lineaFecha_1 = new GroupLayout(lineaFecha_1);
-		gl_lineaFecha_1.setHorizontalGroup(
-			gl_lineaFecha_1.createParallelGroup(Alignment.LEADING)
+		lineaRut = new JPanel();
+		lineaRut.setPreferredSize(new Dimension(0, 3));
+		lineaRut.setBackground(Color.WHITE);
+		lineaRut.setBounds(138, 201, 214, 3);
+		add(lineaRut);
+		GroupLayout gl_lineaRut = new GroupLayout(lineaRut);
+		gl_lineaRut.setHorizontalGroup(
+			gl_lineaRut.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaFecha_1.setVerticalGroup(
-			gl_lineaFecha_1.createParallelGroup(Alignment.LEADING)
+		gl_lineaRut.setVerticalGroup(
+			gl_lineaRut.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaFecha_1.setLayout(gl_lineaFecha_1);
+		lineaRut.setLayout(gl_lineaRut);
 		
 		lblRut = new JLabel("Rut");
 		lblRut.setForeground(Color.WHITE);
@@ -302,8 +320,8 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		add(lblRut);
 		
 		if (modo == 2) {
-			btnAgregarRegistroVenta.setText("MODIFICAR REGISTRO VENTA");
-			setElementos(elementoSeleccionado);
+			btnAgregarRegistroVenta.setText("EDITAR REGISTRO VENTA");
+			setElementos(_id);
 		}
 	}
 	
@@ -316,20 +334,23 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	        }
 	    } 
 	
-	private void setElementos(ArrayList<String> elementoSeleccionado) {
-		cantidadAntigua = Integer.parseInt(elementoSeleccionado.get(3));
-		idVenta = Integer.parseInt(elementoSeleccionado.get(4));
+	ArticuloRegistroVenta articuloRegistroVenta;
+	private void setElementos(String _id) {
+		Consulta consulta = new Consulta();
+		RegistroVenta registroVenta = consulta.getRegistroVenta(_id);
+		
 		cambiarColorTextFieldsBlanco();
-		fechaTextField.setText(elementoSeleccionado.get(2));
-		cantidadVendidaTextField.setText(elementoSeleccionado.get(3));
-		setIndiceElementoSeleccionado(articuloCB, obtenerIdEnString(articuloCB.getSelectedItem().toString()));
-		//setIndiceElementoSeleccionado(rutCB, elementoSeleccionado.get(1));
-		for (int i = 0; i < articuloCB.getItemCount(); i++) {
-			if (articuloCB.getItemAt(i).toString().contains(elementoSeleccionado.get(0))) {
-				articuloCB.setSelectedIndex(i);
-				break;
-			}
-		}
+		
+		rutTextField.setText(registroVenta.get_usuario().get__id());
+		fechaTextField.setText(registroVenta.get_fechaventa());
+		cantidadVendidaTextField.setText(String.valueOf(registroVenta.get_cantidadvendida()));
+		
+		articuloRegistroVenta = registroVenta.get_articulo();
+		String nombreTipo = articuloRegistroVenta.get_nombretipo();
+		String descripcion = articuloRegistroVenta.get_descripcion();
+		String marca = articuloRegistroVenta.get_nombremarca();
+		modelo2 = new DefaultComboBoxModel(new String[] {nombreTipo + " " + descripcion + ", " + marca});
+		articuloCB.setModel(modelo2);
 	}
 	
 	private void cambiarColorTextFieldsBlanco() {
@@ -360,7 +381,10 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			String[] listaArticulos = new String[articulo.size()+1];
 			listaArticulos[0] = "Seleccione...";
 			for (int i = 1; i <= articulo.size(); i++) {
-				listaArticulos[i] = articulo.get(i-1).descripcion;
+				String nombretipo = articulo.get(i-1).nombretipo;
+				String descripcion = articulo.get(i-1).descripcion;
+				String nombremarca = articulo.get(i-1).nombremarca;
+				listaArticulos[i] = nombretipo + " " + descripcion + ", " + nombremarca;
 				ids[i] = articulo.get(i-1).objectId;
 			}
 			return new DefaultComboBoxModel(listaArticulos);
@@ -393,16 +417,16 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		int cantidadvendida = Integer.parseInt(cantidadVendidaTextField.getText());
 		Usuario usuario = consulta.getUsuario(rutTextField.getText());
 		Articulo articulo = this.articulo;
-		ArticuloRegistroVenta articuloRegistroVenta = new ArticuloRegistroVenta(articulo.get_descripcion(), articulo.get_nombretipo(),
-				articulo.get_nombremarca(), articulo.get_preciounitario());
-		registroVenta = new RegistroVenta(fechaventa, cantidadvendida, usuario, articuloRegistroVenta);
 		if (modo == 1) {
+			ArticuloRegistroVenta articuloRegistroVenta = new ArticuloRegistroVenta(articulo.get_descripcion(), articulo.get_nombretipo(),
+					articulo.get_nombremarca(), articulo.get_preciounitario());
+			registroVenta = new RegistroVenta(fechaventa, cantidadvendida, usuario, articuloRegistroVenta);
 			consulta.addRegistroVenta(registroVenta);
-		} else if(modo == 2) {
-//			consulta.updtRegistroVenta(Integer.parseInt(cantidadVendidaTextField.getText()), fechaTextField.getText(),
-//					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), rutCB.getSelectedItem().toString(), idVenta);
-//			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())),
-//					getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())));
+		} else if (modo == 2) {
+			ArticuloRegistroVenta newArticuloRegistroVenta = new ArticuloRegistroVenta(articuloRegistroVenta.get_descripcion(),
+					articuloRegistroVenta.get_nombretipo(), articuloRegistroVenta.get_nombremarca(), articuloRegistroVenta.get_preciounitario());
+			registroVenta = new RegistroVenta(fechaventa, cantidadvendida, usuario, newArticuloRegistroVenta);
+			consulta.updtRegistroVenta(_id, registroVenta);
 		}
 	}
 	
@@ -418,15 +442,20 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 
 	private boolean isTodoCorrecto() {
-		// TODO
-//		stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
-		/*if (verificarCantidadVendida() && verificarCB(rutCB,lblAlertaRut) && verificarCB(articuloCB,lblAlertaArticulo) && verificarFecha() &&
-				verificarStock(stock)) {
+		if (verificarCantidadVendida() && verificarFecha() && verificarRut()) {
 			return true;
 		} else {
 			return false;
-		}*/
-		return true; // momentaneo
+		}
+	}
+	
+	private boolean verificarRut() {
+		if(rutTextField.getText().matches("[0-9]{1,2}[.][1-9][0-9]{2}[.][1-9][0-9]{2}[-]([0-9]|(k|K))")) {
+			setAcertado(lineaRut,lblAlertaRut);
+			return true;
+		}
+		setErroneo(lineaRut, lblAlertaRut);
+		return false;
 	}
 	
 	private boolean verificarStock(int stock) {
@@ -466,7 +495,9 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	private boolean verificarFecha() {
-		if(!fechaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
+		if(!fechaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$") && 
+				!fechaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1]) "
+						+ "([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")) {
 			setErroneo(lineaFecha, lblAlertaFecha);
 			return false;
 		}

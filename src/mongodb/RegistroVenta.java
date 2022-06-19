@@ -3,7 +3,7 @@ package mongodb;
 public class RegistroVenta {
 	
 	//private int id;
-	private String fechaventa; // probablemente cambiar despues a Date
+	private String fechaventa;
 	private int cantidadvendida;
 	private Usuario usuario;
 	private ArticuloRegistroVenta articulo;

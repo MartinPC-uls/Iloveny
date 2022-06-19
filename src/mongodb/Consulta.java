@@ -135,30 +135,30 @@ public class Consulta extends Utils {
 	        
 	        //String id = readInteger("_id", json);
 	        String usuario = readString("usuario", json);
-	        String nombreprov = readString("nombreprov", json);
 	        int unidadesadquiridas = readInteger("unidadesadquiridas", json);
 	        int costounitario = readInteger("costounitario", json);
 	        String fechapedida = readString("fechapedida", json);
 	        String fecharecibo = readString("fecharecibo", json);
+	        String nombreprov = readString("nombreprov", json);
 	        Articulo articulo;
+	        String descripcion = readStringInObject("articulo", "descripcion", json);
 	        String nombretipo = readStringInObject("articulo", "nombretipo", json);
 	        String nombremarca = readStringInObject("articulo", "nombremarca", json);
 	        int stock = readIntegerInObject("articulo", "stock", json);
 	        int preciounitario = readIntegerInObject("articulo", "preciounitario", json);
-	        String descripcion = readStringInObject("articulo", "descripcion", json);
 	        
 	        Medida medidas = null;
 	        try {
 	       	 int alto = readIntegerIntoObjectInObject("articulo", "medidas", "alto", json);
-	       	 int ancho = readIntegerIntoObjectInObject("articulo", "medidas", "ancho", json);
 	       	 int largo = readIntegerIntoObjectInObject("articulo", "medidas", "largo", json);
+	       	 int ancho = readIntegerIntoObjectInObject("articulo", "medidas", "ancho", json);
 	       	 medidas = new Medida(alto, ancho, largo);
 	        } catch (Exception e) {
 	       	 String medidaespecifica = readStringIntoObjectInObject("articulo", "medidas", "medidaespecifica", json);
 	       	 medidas = new Medida(medidaespecifica);
 	        }
 	        
-	        articulo = new Articulo(nombretipo, nombremarca, descripcion, stock, preciounitario, medidas);
+	        articulo = new Articulo(descripcion, nombretipo, nombremarca, stock, preciounitario, medidas);
 	        
 	        return new RegistroCompra(nombreprov, usuario, unidadesadquiridas, costounitario, fechapedida, fecharecibo, articulo);
 		}
@@ -169,7 +169,7 @@ public class Consulta extends Utils {
 		        MongoDatabase database = mongoClient.getDatabase(db);
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.ARTICULO.toString());
 		        
-		        Bson projectionFields = Projections.fields(Projections.include("descripcion", "preciounitario"));
+		        Bson projectionFields = Projections.fields(Projections.include("descripcion", "nombretipo", "nombremarca", "preciounitario"));
 		        
 		        MongoCursor<Document> cursor = collection.find(gt("stock", 0))
 		       		 .projection(projectionFields)
@@ -182,7 +182,9 @@ public class Consulta extends Utils {
 		       		 String json = cursor.next().toJson();
 	       			 String id = readObjectId("_id", json);
 	       			 String descripcion = readString("descripcion", json);
-	       			 articulos.add(new ArticuloID(id, descripcion)); 
+	       			 String nombretipo = readString("nombretipo", json);
+	       			 String nombremarca = readString("nombremarca", json);
+	       			 articulos.add(new ArticuloID(id, descripcion, nombretipo, nombremarca)); 
 		       	 }
 		        } finally {
 		       	 cursor.close();
@@ -218,7 +220,6 @@ public class Consulta extends Utils {
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.ARTICULO.toString());
 		        
 		        Document replaceDocument = new Document()
-		       		 .append("_id", _id)
 		       		 .append("nombretipo", articulo.get_nombretipo())
 		       		 .append("nombremarca", articulo.get_nombremarca())
 		       		 .append("descripcion", articulo.get_descripcion())
@@ -234,47 +235,46 @@ public class Consulta extends Utils {
 		       			 .append("ancho", articulo.get_medida().get_ancho())
 		       			 .append("largo", articulo.get_medida().get_largo()));
 		        }
-		        collection.replaceOne(Filters.eq("_id", _id), replaceDocument);
+		        collection.replaceOne(Filters.eq("_id", new ObjectId(_id)), replaceDocument);
 		}
 	}
 	
-	public void updtRegistroCompra(int _id, RegistroCompra registroCompra) {
+	public void updtRegistroCompra(String _id, RegistroCompra registroCompra) {
 		try (MongoClient mongoClient = MongoClients.create(uri)) {
 		        MongoDatabase database = mongoClient.getDatabase(db);
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROCOMPRA.toString());
 		        
 		        Document replaceDocument = new Document()
-		       		 .append("_id", _id)
 		       		 .append("usuario", registroCompra.get_usuario())
-		       		 .append("nombreprov", registroCompra.get_nombreprov())
 		       		 .append("unidadesadquiridas", registroCompra.get_unidadesadquiridas())
 		       		 .append("costounitario", registroCompra.get_costounitario())
 		       		 .append("fechapedida", registroCompra.get_fechapedida())
-		       		 .append("fecharecibo", registroCompra.get_fecharecibo());
+		       		 .append("fecharecibo", registroCompra.get_fecharecibo())
+		       		 .append("nombreprov", registroCompra.get_nombreprov());
 		        
 		        if (registroCompra.get_articulo().get_medida().get_alto() == 0 && registroCompra.get_articulo().get_medida().get_ancho() == 0 &&
 		       		 registroCompra.get_articulo().get_medida().get_largo() == 0) {
 		       	 replaceDocument.append("articulo", new Document()
+		       			 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 		       			 .append("nombretipo", registroCompra.get_articulo().get_nombretipo())
 		       			 .append("nombremarca", registroCompra.get_articulo().get_nombremarca())
-		       			 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 		       			 .append("stock", registroCompra.get_articulo().get_stock())
 		       			 .append("preciounitario", registroCompra.get_articulo().get_preciounitario())
 		       			 .append("medidas", new Document()
 		       					 .append("medidaespecifica", registroCompra.get_articulo().get_medida().get_medidaespecifica())));
 		        } else {
 		       	 replaceDocument.append("articulo", new Document()
+		       			 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 		       			 .append("nombretipo", registroCompra.get_articulo().get_nombretipo())
 		       			 .append("nombremarca", registroCompra.get_articulo().get_nombremarca())
-		       			 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 		       			 .append("stock", registroCompra.get_articulo().get_stock())
 		       			 .append("preciounitario", registroCompra.get_articulo().get_preciounitario())
 		       			 .append("medidas", new Document()
+		       					 .append("alto", registroCompra.get_articulo().get_medida().get_alto())
 		       					 .append("largo", registroCompra.get_articulo().get_medida().get_largo())
-		       					 .append("ancho", registroCompra.get_articulo().get_medida().get_ancho())
-		       					 .append("alto", registroCompra.get_articulo().get_medida().get_alto())));
+		       					 .append("ancho", registroCompra.get_articulo().get_medida().get_ancho())));
 		        }
-		        collection.updateOne(Filters.eq("_id", _id), replaceDocument);
+		        collection.replaceOne(Filters.eq("_id", new ObjectId(_id)), replaceDocument);
 		}
 	}
 	
@@ -284,7 +284,6 @@ public class Consulta extends Utils {
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROVENTA.toString());
 		        
 		        Document replaceDocument = new Document()
-		       		 .append("_id", _id)
 		       		 .append("fechaventa", registroVenta.get_fechaventa())
 		       		 .append("cantidadvendida", registroVenta.get_cantidadvendida())
 		       		 .append("usuario", new Document()
@@ -304,7 +303,7 @@ public class Consulta extends Utils {
 		       				 .append("nombretipo", registroVenta.get_articulo().get_nombretipo())
 		       				 .append("descripcion", registroVenta.get_articulo().get_descripcion())
 		       				 .append("preciounitario", registroVenta.get_articulo().get_preciounitario()));
-		        collection.updateOne(Filters.eq("_id", _id), replaceDocument);
+		        collection.replaceOne(Filters.eq("_id", new ObjectId(_id)), replaceDocument);
 		}
 	}
 	
@@ -374,33 +373,33 @@ public class Consulta extends Utils {
 		        Document doc = new Document()
 		       		 //.append("_id", registroCompra.get_id())
 		       		 .append("usuario", registroCompra.get_usuario())
-		       		 .append("nombreprov", registroCompra.get_nombreprov())
 		       		 .append("unidadesadquiridas", registroCompra.get_unidadesadquiridas())
 		       		 .append("costounitario", registroCompra.get_costounitario())
 		       		 .append("fechapedida", registroCompra.get_fechapedida())
-		       		 .append("fecharecibo", registroCompra.get_fecharecibo());
+		       		 .append("fecharecibo", registroCompra.get_fecharecibo())
+		       		 .append("nombreprov", registroCompra.get_nombreprov());
 		        
 		        if (registroCompra.get_articulo().get_medida().get_alto() == 0 && registroCompra.get_articulo().get_medida().get_ancho() == 0 &&
 		       		 registroCompra.get_articulo().get_medida().get_largo() == 0) {
 		       	 doc.append("articulo", new Document()
+		       			 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 	       				 .append("nombretipo", registroCompra.get_articulo().get_nombretipo())
 	       				 .append("nombremarca", registroCompra.get_articulo().get_nombremarca())
-	       				 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 	       				 .append("stock", registroCompra.get_articulo().get_stock())
 	       				 .append("preciounitario", registroCompra.get_articulo().get_preciounitario())
 	       				 .append("medidas", new Document()
 	       						 .append("medidaespecifica", registroCompra.get_articulo().get_medida().get_medidaespecifica())));
 		        } else {
 		       	 doc.append("articulo", new Document()
+		       			 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 	       				 .append("nombretipo", registroCompra.get_articulo().get_nombretipo())
 	       				 .append("nombremarca", registroCompra.get_articulo().get_nombremarca())
-	       				 .append("descripcion", registroCompra.get_articulo().get_descripcion())
 	       				 .append("stock", registroCompra.get_articulo().get_stock())
 	       				 .append("preciounitario", registroCompra.get_articulo().get_preciounitario())
 	       				 .append("medidas", new Document()
+	       						 .append("alto", registroCompra.get_articulo().get_medida().get_alto())
 	       						 .append("largo", registroCompra.get_articulo().get_medida().get_largo())
-	       						 .append("ancho", registroCompra.get_articulo().get_medida().get_ancho())
-	       						 .append("alto", registroCompra.get_articulo().get_medida().get_alto())));
+	       						 .append("ancho", registroCompra.get_articulo().get_medida().get_ancho())));
 		        }
 		        collection.insertOne(doc);
 		}
@@ -416,7 +415,7 @@ public class Consulta extends Utils {
 		       		 .append("fechaventa", registroVenta.get_fechaventa())
 		       		 .append("cantidadvendida", registroVenta.get_cantidadvendida())
 		       		 .append("usuario", new Document()
-		       				 .append("usuario", registroVenta.get_usuario().get__id())
+		       				 .append("rut", registroVenta.get_usuario().get__id())
 		       				 .append("nombreusuario", registroVenta.get_usuario().get_nombreusuario())
 		       				 .append("apellidos", registroVenta.get_usuario().get_apellidos())
 		       				 .append("telefono", registroVenta.get_usuario().get_telefono())
@@ -425,7 +424,8 @@ public class Consulta extends Utils {
 		       						 .append("calle", registroVenta.get_usuario().get_direccion().get_calle())
 		       						 .append("numerodomicilio", registroVenta.get_usuario().get_direccion().get_numerodomicilio())
 		       						 .append("nombreregion", registroVenta.get_usuario().get_direccion().get_nombreregion())
-		       						 .append("ciudad", registroVenta.get_usuario().get_direccion().get_ciudad())))
+		       						 .append("ciudad", registroVenta.get_usuario().get_direccion().get_ciudad())
+		       						 .append("comuna", registroVenta.get_usuario().get_direccion().get_comuna())))
 		       		 .append("articulo", new Document()
 		       				 .append("nombremarca", registroVenta.get_articulo().get_nombremarca())
 		       				 .append("nombretipo", registroVenta.get_articulo().get_nombretipo())
@@ -548,7 +548,7 @@ public class Consulta extends Utils {
 		        MongoDatabase database = mongoClient.getDatabase(db);
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.ARTICULO.toString());
 		        
-		        Bson query = eq("_id", _id);
+		        Bson query = eq("_id", new ObjectId(_id));
 		        try {
 		       	 collection.deleteOne(query);
 		        } catch (MongoException me) {
@@ -562,7 +562,7 @@ public class Consulta extends Utils {
 		        MongoDatabase database = mongoClient.getDatabase(db);
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROVENTA.toString());
 		        
-		        Bson query = eq("_id", _id);
+		        Bson query = eq("_id", new ObjectId(_id));
 		        try {
 		       	 collection.deleteOne(query);
 		        } catch (MongoException me) {
@@ -576,7 +576,7 @@ public class Consulta extends Utils {
 		        MongoDatabase database = mongoClient.getDatabase(db);
 		        MongoCollection<Document> collection = database.getCollection(Iloveny.REGISTROCOMPRA.toString());
 		        
-		        Bson query = eq("_id", _id);
+		        Bson query = eq("_id", new ObjectId(_id));
 		        try {
 		       	 collection.deleteOne(query);
 		        } catch (MongoException me) {

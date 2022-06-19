@@ -74,10 +74,14 @@ public class AgregarArticuloPanel extends JPanel {
 	private JTextField medidaTextField;
 	private JLabel lblMedida;
 	private JPanel lineaMedida;
+	private JRadioButton cbMedidaEspecifica;
+	private JRadioButton cbMedidaGeneral;
 	
 	private String tipo_medidas = "";
+	private String _id;
 	
-	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, ArrayList<String> elementoSeleccionado) {
+	public AgregarArticuloPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String _id) {
+		this._id = _id;
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		this.elementoSeleccionado = elementoSeleccionado;
@@ -323,8 +327,20 @@ public class AgregarArticuloPanel extends JPanel {
 		add(btnVolver);
 		
 		marcaTextField = new JTextField();
+		marcaTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarMarca();
+			}
+		});
+		marcaTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarMarca();
+			}
+		});
 		marcaTextField.setToolTipText("");
-		marcaTextField.setText("EJ: Anillo de Onyx");
+		marcaTextField.setText("EJ: Nike");
 		marcaTextField.setOpaque(false);
 		marcaTextField.setForeground(new Color(170, 170, 170));
 		marcaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -332,6 +348,7 @@ public class AgregarArticuloPanel extends JPanel {
 		marcaTextField.setBorder(null);
 		marcaTextField.setBackground(new Color(51, 51, 51));
 		marcaTextField.setBounds(138, 174, 214, 21);
+		eventoCambiarJTextField(marcaTextField, marcaTextField.getText(), 50);
 		add(marcaTextField);
 		
 		lineaMarca = new JPanel();
@@ -353,7 +370,19 @@ public class AgregarArticuloPanel extends JPanel {
 		lineaMarca.setLayout(gl_lineaMarca);
 		
 		tipoObjetoTextField = new JTextField();
-		tipoObjetoTextField.setText("EJ: 2000");
+		tipoObjetoTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarTipoObjeto();
+			}
+		});
+		tipoObjetoTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarTipoObjeto();
+			}
+		});
+		tipoObjetoTextField.setText("EJ: Zapatillas");
 		tipoObjetoTextField.setOpaque(false);
 		tipoObjetoTextField.setForeground(new Color(170, 170, 170));
 		tipoObjetoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -361,6 +390,7 @@ public class AgregarArticuloPanel extends JPanel {
 		tipoObjetoTextField.setBorder(null);
 		tipoObjetoTextField.setBackground(new Color(51, 51, 51));
 		tipoObjetoTextField.setBounds(383, 174, 214, 21);
+		eventoCambiarJTextField(tipoObjetoTextField, tipoObjetoTextField.getText(), 50);
 		add(tipoObjetoTextField);
 		
 		lineaTipoObjeto = new JPanel();
@@ -383,7 +413,7 @@ public class AgregarArticuloPanel extends JPanel {
 		
 		ButtonGroup group = new ButtonGroup();
 		
-		JRadioButton cbMedidaEspecifica = new JRadioButton("Medida especifica");
+		cbMedidaEspecifica = new JRadioButton("Medida especifica");
 		cbMedidaEspecifica.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisibleMedidaEspecifica(true);
@@ -396,7 +426,7 @@ public class AgregarArticuloPanel extends JPanel {
 		group.add(cbMedidaEspecifica);
 		
 		
-		JRadioButton cbMedidaGeneral = new JRadioButton("Medida general");
+		cbMedidaGeneral = new JRadioButton("Medida general");
 		cbMedidaGeneral.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisibleMedidaEspecifica(false);
@@ -421,7 +451,7 @@ public class AgregarArticuloPanel extends JPanel {
 		altoTextField = new JTextField();
 		altoTextField.setText("0");
 		altoTextField.setOpaque(false);
-		altoTextField.setForeground(new Color(170, 170, 170));
+		altoTextField.setForeground(Color.WHITE);
 		altoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		altoTextField.setCaretColor(Color.WHITE);
 		altoTextField.setBorder(null);
@@ -459,7 +489,7 @@ public class AgregarArticuloPanel extends JPanel {
 		anchoTextField = new JTextField();
 		anchoTextField.setText("0");
 		anchoTextField.setOpaque(false);
-		anchoTextField.setForeground(new Color(170, 170, 170));
+		anchoTextField.setForeground(Color.WHITE);
 		anchoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		anchoTextField.setCaretColor(Color.WHITE);
 		anchoTextField.setBorder(null);
@@ -497,7 +527,7 @@ public class AgregarArticuloPanel extends JPanel {
 		largoTextField = new JTextField();
 		largoTextField.setText("0");
 		largoTextField.setOpaque(false);
-		largoTextField.setForeground(new Color(170, 170, 170));
+		largoTextField.setForeground(Color.WHITE);
 		largoTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		largoTextField.setCaretColor(Color.WHITE);
 		largoTextField.setBorder(null);
@@ -528,7 +558,7 @@ public class AgregarArticuloPanel extends JPanel {
 		medidaTextField = new JTextField();
 		medidaTextField.setText("");
 		medidaTextField.setOpaque(false);
-		medidaTextField.setForeground(new Color(170, 170, 170));
+		medidaTextField.setForeground(Color.WHITE);
 		medidaTextField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		medidaTextField.setCaretColor(Color.WHITE);
 		medidaTextField.setBorder(null);
@@ -564,7 +594,7 @@ public class AgregarArticuloPanel extends JPanel {
 		lineaMedida.setLayout(gl_lineaMedida);
 		
 		if (modo == 2) {
-			setElementos(elementoSeleccionado);
+			setElementos(_id);
 		}
 	}
 	
@@ -591,11 +621,34 @@ public class AgregarArticuloPanel extends JPanel {
 			}
 	}
 	
-	private void setElementos(ArrayList<String> elementoSeleccionado) {
+	Articulo articulo;
+	private void setElementos(String _id) {
+		Consulta consulta = new Consulta();
+		articulo = consulta.getArticulo(_id);
+		marcaTextField.setText(articulo.get_nombremarca());
+		marcaTextField.setEnabled(false);
+		tipoObjetoTextField.setText(articulo.get_nombretipo());
+		tipoObjetoTextField.setEnabled(false);
+		descripcionTextField.setText(articulo.get_descripcion());
+		descripcionTextField.setEnabled(false);
+		precioTextField.setText(String.valueOf(articulo.get_preciounitario()));
+		stockTextField.setText(String.valueOf(articulo.get_stock()));
+		
+		altoTextField.setText(String.valueOf(articulo.get_medida().get_alto()));
+		anchoTextField.setText(String.valueOf(articulo.get_medida().get_ancho()));
+		largoTextField.setText(String.valueOf(articulo.get_medida().get_largo()));
+		
+		medidaTextField.setText(articulo.get_medida().get_medidaespecifica());
+		
+		if (articulo.get_medida().get_alto() == 0 && articulo.get_medida().get_ancho() == 0 && articulo.get_medida().get_largo() == 0) {
+			cbMedidaGeneral.setSelected(true);
+			setVisibleMedidaEspecifica(false);
+		} else {
+			cbMedidaEspecifica.setSelected(true);
+			setVisibleMedidaEspecifica(true);
+		}
+		
 		cambiarColorTextFieldsBlanco();
-		stockTextField.setText(elementoSeleccionado.get(3));
-		precioTextField.setText(elementoSeleccionado.get(4));
-		descripcionTextField.setText(elementoSeleccionado.get(5));
 	}
 	
 	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
@@ -641,8 +694,8 @@ public class AgregarArticuloPanel extends JPanel {
 				Integer.parseInt(stockTextField.getText()), Integer.parseInt(precioTextField.getText()), medidas);
 		if (modo == 1) {
 			consulta.addArticulo(articulo);
-		}else {
-			//consulta.updt
+		} else if (modo == 2) {
+			consulta.updtArticulo(_id, articulo);
 		}
 	}
 
@@ -663,7 +716,7 @@ public class AgregarArticuloPanel extends JPanel {
 	}
 	
 	private boolean verificarDescripcion() {
-		if(!descripcionTextField.getText().matches("[a-zA-Z0-9Ò— ]{1,50}")|| descripcionTextField.getText().charAt(0) == ' ') {
+		if(!descripcionTextField.getText().matches("[a-zA-Z0-9Ò— ]{1,50}") || descripcionTextField.getText().charAt(0) == ' ') {
 			setErroneo(lineaDescripcion, lblAlertaDescripcion);
 			return false;
 		}

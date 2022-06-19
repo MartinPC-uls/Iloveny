@@ -7,8 +7,11 @@ import javax.swing.JLabel;
 
 import mongodb.Consulta;
 import mongodb.RegistroVenta;
+import mongodb.Usuario;
 
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DetallesRegistroVenta {
 
@@ -17,6 +20,7 @@ private JFrame frame;
 	private JLabel fechaDeVenta, cantidadVendida, marca, tipo, descripcion, precioUnitario;
 
 	String _id;
+	String rut;
 	
 	public DetallesRegistroVenta(String _id) {
 		this._id = _id;
@@ -34,6 +38,7 @@ private JFrame frame;
 		this.tipo = new JLabel(String.valueOf(registroVenta.get_articulo().get_nombretipo()));
 		this.descripcion = new JLabel(registroVenta.get_articulo().get_descripcion());
 		this.precioUnitario = new JLabel(String.valueOf(registroVenta.get_articulo().get_preciounitario()));
+		this.rut = registroVenta.get_usuario().get__id();
 	}
 	
 	private void initialize() {
@@ -78,6 +83,11 @@ private JFrame frame;
 		frame.getContentPane().add(tipo);
 		
 		JButton btnDetallesUsuario = new JButton("< Detalles");
+		btnDetallesUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DetallesUsuario(rut);
+			}
+		});
 		btnDetallesUsuario.setBounds(378, 24, 89, 23);
 		frame.getContentPane().add(btnDetallesUsuario);
 		

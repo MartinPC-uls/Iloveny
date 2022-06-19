@@ -131,23 +131,26 @@ public class Administracion extends JFrame {
 		btnModificar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(tabla.getSelectedRow() > -1) {
-					ArrayList<String> elementoSeleccionado = getSelectedRow();
 					switch(modo) {
 					
 					case 1:
-						agregarUsuarioPanel = new AgregarUsuarioPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						String _id1 = tabla.getValueAt(tabla.getSelectedRow(), 0).toString();
+						agregarUsuarioPanel = new AgregarUsuarioPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, _id1);
 						cambiarPanel(agregarUsuarioPanel);
 						break;
 					case 2:
-						agregarArticuloPanel = new AgregarArticuloPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						String _id2 = tabla.getValueAt(tabla.getSelectedRow(), 5).toString();
+						agregarArticuloPanel = new AgregarArticuloPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, _id2);
 						cambiarPanel(agregarArticuloPanel);
 						break;
 					case 3:
-						agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, elementoSeleccionado);
+						String _id3 = tabla.getValueAt(tabla.getSelectedRow(), 3).toString();
+						agregarRegistroVentaPanel = new AgregarRegistroVentaPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, _id3);
 						cambiarPanel(agregarRegistroVentaPanel);
 						break;
 					case 4:
-						agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, elementoSeleccionado);
+						String _id4 = tabla.getValueAt(tabla.getSelectedRow(), 6).toString();
+						agregarRegistroCompraPanel = new AgregarRegistroCompraPanel(2, new JComponent[] {funcionesLayeredPane, panelPrincipal}, btnActualizar, nombreAdmin, _id4);
 						cambiarPanel(agregarRegistroCompraPanel);
 						break;
 					default:
@@ -331,8 +334,7 @@ public class Administracion extends JFrame {
 		Consulta consulta = new Consulta();
 		int row = tabla.getSelectedRow();
 		if(row>-1) {
-			String value = tabla.getValueAt(row, columnaPK).toString();
-			int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro que quiere eliminar " + value + "?");
+			int confirm = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar el elemento seleccionado?");
 			if (JOptionPane.YES_OPTION == confirm) {
 				switch(modo) {
 					case 1:

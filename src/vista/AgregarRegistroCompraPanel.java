@@ -68,9 +68,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private int stock;
 	private JLabel lblProveedor;
 	private JTextField proveedorTextField;
-	private JPanel lineaFechaRecibo_1;
+	private JPanel lineaProveedor;
+	private DefaultComboBoxModel modelo;
+	private String _id;
 	
-	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, ArrayList<String> elementoSeleccionado) {
+	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, String _id) {
+		this._id = _id;
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
 		setBounds(0,0,732,558);
@@ -146,11 +149,15 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		eventoCambiarJTextField(unidadesAdquiridasTextField, unidadesAdquiridasTextField.getText(), 50);
 		add(unidadesAdquiridasTextField);
 		
-		DefaultComboBoxModel modelo = crearModeloComboBoxArticulo();
+		if (modo == 1)
+			modelo = crearModeloComboBoxArticulo();
+		else if (modo == 2)
+			modelo = new DefaultComboBoxModel(new String[] {"No existen articulos"});
 		articuloCB = new JComboBox(new String[] {});
 		articuloCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				setArticuloSeleccionado(articuloCB.getSelectedIndex());
+				if (modo == 1)
+					setArticuloSeleccionado(articuloCB.getSelectedIndex());
 			}
 		});
 		articuloCB.addFocusListener(new FocusAdapter() {
@@ -309,6 +316,8 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lineaFechaRecibo.setLayout(gl_lineaFechaRecibo);
 		
 		JButton btnAgregarRegistroCompra = new JButton("AGREGAR REGISTRO COMPRA");
+		if (modo == 2)
+			btnAgregarRegistroCompra.setText("EDITAR REGISTRO COMPRA");
 		btnAgregarRegistroCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(isTodoCorrecto()) {
@@ -366,6 +375,8 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		lblAlertaArticulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAlertaArticulo.setBounds(98, 174, 30, 27);
 		add(lblAlertaArticulo);
+		if (modo == 2)
+			lblAlertaArticulo.setVisible(false);
 		
 		btnVolver = new JButton("");
 		btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -389,6 +400,18 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		add(lblProveedor);
 		
 		proveedorTextField = new JTextField();
+		proveedorTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				verificarProveedor();
+			}
+		});
+		proveedorTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				verificarProveedor();
+			}
+		});
 		proveedorTextField.setText("EJ: Proveedor1");
 		proveedorTextField.setOpaque(false);
 		proveedorTextField.setForeground(new Color(170, 170, 170));
@@ -397,43 +420,51 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		proveedorTextField.setBorder(null);
 		proveedorTextField.setBackground(new Color(51, 51, 51));
 		proveedorTextField.setBounds(383, 177, 214, 21);
+		eventoCambiarJTextField(proveedorTextField, proveedorTextField.getText(), 50);
 		add(proveedorTextField);
 		
-		lineaFechaRecibo_1 = new JPanel();
-		lineaFechaRecibo_1.setPreferredSize(new Dimension(0, 3));
-		lineaFechaRecibo_1.setBackground(Color.WHITE);
-		lineaFechaRecibo_1.setBounds(383, 201, 214, 3);
-		add(lineaFechaRecibo_1);
-		GroupLayout gl_lineaFechaRecibo_1 = new GroupLayout(lineaFechaRecibo_1);
-		gl_lineaFechaRecibo_1.setHorizontalGroup(
-			gl_lineaFechaRecibo_1.createParallelGroup(Alignment.LEADING)
+		lineaProveedor = new JPanel();
+		lineaProveedor.setPreferredSize(new Dimension(0, 3));
+		lineaProveedor.setBackground(Color.WHITE);
+		lineaProveedor.setBounds(383, 201, 214, 3);
+		add(lineaProveedor);
+		GroupLayout gl_lineaProveedor = new GroupLayout(lineaProveedor);
+		gl_lineaProveedor.setHorizontalGroup(
+			gl_lineaProveedor.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 214, Short.MAX_VALUE)
 				.addGap(0, 214, Short.MAX_VALUE)
 		);
-		gl_lineaFechaRecibo_1.setVerticalGroup(
-			gl_lineaFechaRecibo_1.createParallelGroup(Alignment.LEADING)
+		gl_lineaProveedor.setVerticalGroup(
+			gl_lineaProveedor.createParallelGroup(Alignment.LEADING)
 				.addGap(0, 3, Short.MAX_VALUE)
 				.addGap(0, 3, Short.MAX_VALUE)
 		);
-		lineaFechaRecibo_1.setLayout(gl_lineaFechaRecibo_1);
+		lineaProveedor.setLayout(gl_lineaProveedor);
 		
 		if (modo == 2) {
-			setElementos(elementoSeleccionado);
+			setElementos(_id);
 		}
 	}
 	
-	private void setElementos(ArrayList<String> elementoSeleccionado) {
-		unidadesAdquiridasAntigua = Integer.parseInt(elementoSeleccionado.get(3));
-		idCompraAntiguo = Integer.parseInt(elementoSeleccionado.get(7));
-		setIndiceElementoSeleccionado(articuloCB, elementoSeleccionado.get(0));
-		//setIndiceElementoSeleccionado(proveedorCB, elementoSeleccionado.get(2));
-		//idProveedor = Integer.parseInt(obtenerIdEnString(proveedorCB.getSelectedItem().toString()));
+	RegistroCompra registroCompra = null;
+	private void setElementos(String _id) {
+		Consulta consulta = new Consulta();
+		registroCompra = consulta.getRegistroCompra(_id);
+		articulo = registroCompra.get_articulo();
+		String nombreTipo = registroCompra.get_articulo().get_nombretipo();
+		String descripcion = registroCompra.get_articulo().get_descripcion();
+		String marca = registroCompra.get_articulo().get_nombremarca();
+		
+		modelo = new DefaultComboBoxModel(new String[] {nombreTipo + " " + descripcion + ", " + marca});
+		articuloCB.setModel(modelo);
+		
 		cambiarColorTextFieldsBlanco();
-		fechaPedidaTextField.setText(elementoSeleccionado.get(5));
-		fechaReciboTextField.setText(elementoSeleccionado.get(6));
-		unidadesAdquiridasTextField.setText(elementoSeleccionado.get(3));
-		costoUnitarioTextField.setText(elementoSeleccionado.get(4));
-		// TODO this.stock = consulta.getArticuloStock(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())));
+		
+		proveedorTextField.setText(registroCompra.get_nombreprov());
+		fechaPedidaTextField.setText(registroCompra.get_fechapedida());
+		fechaReciboTextField.setText(registroCompra.get_fecharecibo());
+		unidadesAdquiridasTextField.setText(String.valueOf(registroCompra.get_unidadesadquiridas()));
+		costoUnitarioTextField.setText(String.valueOf(registroCompra.get_costounitario()));
 	}
 	
 	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
@@ -455,12 +486,12 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private boolean verificarProveedor() {
-		/*if(proveedorCB.getSelectedIndex() == 0) {
-			lblAlertaProveedor.setVisible(true);
+		if(!proveedorTextField.getText().matches("[a-zA-Z0-9Ò— ]{1,50}") || proveedorTextField.getText().charAt(0) == ' ') {
+			setErroneo(lineaProveedor, lblAlertaProveedor);
 			return false;
 		}
-		lblAlertaProveedor.setVisible(false);*/
-		return true; // momentaneo
+		setAcertado(lineaProveedor, lblAlertaProveedor);
+		return true;
 	}
 	
 	String[] ids;
@@ -474,7 +505,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 			ids[0] = "0";
 			for(int i=1; i<=articulo.size();i++) {
 				articulos.add(articulo.get(i-1));
-				listaArticulos[i] = articulo.get(i-1).descripcion;
+				listaArticulos[i] = articulo.get(i-1).nombretipo + " " + articulo.get(i-1).descripcion + ", " + articulo.get(i-1).nombremarca;
 				ids[i] = articulo.get(i-1).objectId;
 			}
 			return new DefaultComboBoxModel(listaArticulos);
@@ -491,7 +522,11 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	static Articulo articulo = null;
 	private void setArticuloSeleccionado(int index) {
 		Consulta consulta = new Consulta();
-		String id = ids[index];
+		String id = null;
+		if (modo == 1)
+			id = ids[index];
+		else if (modo == 2)
+			id = _id;
 		System.out.println("id: " + id);
 		articulo = consulta.getArticulo(id);
 	}
@@ -508,13 +543,8 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		registroCompra = new RegistroCompra(nombreprov, usuario, unidadesadquiridas, costounitario, fechapedida, fecharecibo, articulo);
 		if (modo == 1) {
 			consulta.addRegistroCompra(registroCompra);
-			// TODO Actualizar stock de los articulos
 		} else if(modo == 2) {
-			/*consulta.updtRegistroCompra(nombreAdmin, idProveedor, Integer.parseInt(unidadesAdquiridasTextField.getText()),
-					Integer.parseInt(costoUnitarioTextField.getText()), fechaPedidaTextField.getText(), fechaReciboTextField.getText(),
-					Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), idCompraAntiguo);
-			consulta.updtStockArticulo(Integer.parseInt(obtenerIdEnString(articuloCB.getSelectedItem().toString())), getNewStock(stock,
-					Integer.parseInt(unidadesAdquiridasTextField.getText()), unidadesAdquiridasAntigua));*/
+			consulta.updtRegistroCompra(_id, registroCompra);
 		}
 	}
 	
@@ -553,7 +583,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 				return true;
 			}
 		} else if (modo == 2) {
-			if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarArticulo() && verificarFechaPedida() && verificarFechaRecibo() && verificarProveedor()
+			if(verificarUnidadesAdquiridas() && verificarCostoUnitario() && verificarFechaPedida() && verificarFechaRecibo() && verificarProveedor()
 					&& verificarFechas() && verificarStock()) {
 				return true;
 			}
@@ -574,7 +604,9 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private boolean verificarFechaRecibo() {
-		if(!fechaReciboTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
+		if (!fechaReciboTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$") && 
+				!fechaReciboTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1]) "
+						+ "([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")) {
 			lblAlertaFechaRecibo.setVisible(true);
 			setErroneo(lineaFechaRecibo, lblAlertaFechaRecibo);
 			return false;
@@ -585,7 +617,9 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	private boolean verificarFechaPedida() {
-		if(!fechaPedidaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$")) {
+		if(!fechaPedidaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1])$") && 
+				!fechaPedidaTextField.getText().matches("^([2][0][0-3][0-9])[-]([0][1-9]|[1][0-2])[-]([0][1-9]|[1-2][0-9]|[3][0-1]) "
+						+ "([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$")) {
 			setErroneo(lineaFechaPedida, lblAlertaFechaPedida);
 			return false;
 		}
