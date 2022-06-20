@@ -45,6 +45,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	
 	ArrayList<ArticuloID> articulos = new ArrayList<ArticuloID>();
 	private JLabel lblAlertaArticulo;
+	@SuppressWarnings("rawtypes")
 	private JComboBox articuloCB;
 	private JTextField fechaPedidaTextField;
 	private JLabel lblAlertaFechaPedida;
@@ -60,18 +61,19 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	private JPanel lineaFechaRecibo;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
+	@SuppressWarnings("unused")
 	private String nombreAdmin;
 	private JLabel lblAlertaUnidadesAdquirida;
-	private int idProveedor;
-	private int idCompraAntiguo;
 	private int unidadesAdquiridasAntigua;
 	private int stock;
 	private JLabel lblProveedor;
 	private JTextField proveedorTextField;
 	private JPanel lineaProveedor;
+	@SuppressWarnings("rawtypes")
 	private DefaultComboBoxModel modelo;
 	private String _id;
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public AgregarRegistroCompraPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String nombreAdmin, String _id) {
 		this._id = _id;
 		this.modo = modo;
@@ -447,6 +449,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	RegistroCompra registroCompra = null;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void setElementos(String _id) {
 		Consulta consulta = new Consulta();
 		registroCompra = consulta.getRegistroCompra(_id);
@@ -467,15 +470,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		costoUnitarioTextField.setText(String.valueOf(registroCompra.get_costounitario()));
 	}
 	
-	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
-	        for (int i = 0; i < comboBox.getItemCount(); i++) {
-	            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
-	                comboBox.setSelectedIndex(i);
-	                break;
-	            }
-	        }
-	    }
-	
 	private void cambiarColorTextFieldsBlanco() {
 		Component[] componentes = this.getComponents();
 	        for(int i = 0; i<componentes.length;i++) {
@@ -495,6 +489,7 @@ public class AgregarRegistroCompraPanel extends JPanel {
 	}
 	
 	String[] ids;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
 		Consulta consulta = new Consulta();
 		ArrayList<ArticuloID> articulo = consulta.getDescripcionArticulosConStock();
@@ -652,18 +647,6 @@ public class AgregarRegistroCompraPanel extends JPanel {
 		}
 		setAcertado(lineaUnidadesAdquiridas, lblAlertaUnidadesAdquirida);
 		return true;
-	}
-	
-	private String obtenerIdEnString(String opcionSeleccionada) {
-		char[] caracteres = opcionSeleccionada.toCharArray();
-		String id = "";
-		for(char c : caracteres) {
-			if(c == ' ') {
-				break;
-			}
-			id+= c;
-		}
-		return id;
 	}
 	
 	public void setAcertado(JPanel panel, JLabel label){

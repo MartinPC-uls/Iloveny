@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,58 +11,44 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-
-import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
-
 import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import mongodb.Consulta;
 import tablas.Articulos;
 import tablas.RegistrosCompras;
 import tablas.RegistrosVentas;
 import tablas.Usuarios;
-
 import javax.swing.JLabel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Cursor;
 import java.awt.Dimension;
-
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.EtchedBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.ScrollPaneConstants;
 
 public class Administracion extends JFrame {
 
-	//public JFrame frame;
+	private static final long serialVersionUID = 7758166338717075721L;
+	
 	public JLayeredPane layeredPane_1 = new JLayeredPane();
 	public DefaultTableModel modeloTabla;
 	public ArrayList<ArrayList<String>> elementosTabla;
@@ -84,7 +69,6 @@ public class Administracion extends JFrame {
 	private JPanel MenuConBotonesPanel;
 	private JButton btnUsuarios;
 	private JButton btnArticulos;
-	private JButton btnNewButton;
 	private JLabel lblX;
 	private JLabel lblTitulo;
 	private JTextField buscadorTextField;
@@ -606,7 +590,6 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Usuarios");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...","Rut", "Nombre", "Apellidos", "Telefono", "Email"});
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -642,8 +625,6 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Articulos");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Tipo", "Marca",
-							"Descripcion", "Stock", "Precio Unitario", "ID"});
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -678,7 +659,6 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro venta");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Fecha", "Cantidad Vendida", "Rut", "ID"});
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -714,8 +694,6 @@ public class Administracion extends JFrame {
 					eliminarDatosTabla();
 					lblTitulo.setText("Registro compra");
 					buscadorTextField.setText("");
-					DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>( new String[] {"Seleccione...", "Usuario", "Nombre Proveedor",
-							"Unidades Adquiridas", "Costo Unitario", "Fecha Pedida", "Fecha Recibo", "ID"});
 					tabla.setModel(new DefaultTableModel(
 							new Object[][] {
 							},
@@ -759,9 +737,9 @@ public class Administracion extends JFrame {
 		switch(modo) {
 		case 1:
 			elementosTablaUsuarios = consulta.getUsuarios();
-			Vector elementos1 = new Vector();
+			Vector<String> elementos1 = new Vector<String>();
 			for (int i = 0; i < elementosTablaUsuarios.size(); i++) {
-				elementos1 = new Vector();
+				elementos1 = new Vector<String>();
 				elementos1.add(elementosTablaUsuarios.get(i).get_Rut());
 				elementos1.add(elementosTablaUsuarios.get(i).get_Nombre());
 				elementos1.add(elementosTablaUsuarios.get(i).get_Apellidos());
@@ -772,25 +750,25 @@ public class Administracion extends JFrame {
 			break;
 		case 2:
 			elementosTablaArticulos = consulta.getArticulos();
-			Vector elementos2 = new Vector();
+			Vector<String> elementos2 = new Vector<String>();
 			for (int i = 0; i < elementosTablaArticulos.size(); i++) {
-				elementos2 = new Vector();
+				elementos2 = new Vector<String>();
 				elementos2.add(elementosTablaArticulos.get(i).get_Tipo());
 				elementos2.add(elementosTablaArticulos.get(i).get_Marca());
 				elementos2.add(elementosTablaArticulos.get(i).get_Descripcion());
-				elementos2.add(elementosTablaArticulos.get(i).get_Stock());
-				elementos2.add(elementosTablaArticulos.get(i).get_PrecioUnitario());
+				elementos2.add(String.valueOf(elementosTablaArticulos.get(i).get_Stock()));
+				elementos2.add(String.valueOf(elementosTablaArticulos.get(i).get_PrecioUnitario()));
 				elementos2.add(elementosTablaArticulos.get(i).get_ID());
 				modeloTabla.addRow(elementos2);
 			}
 			break;
 		case 3:
 			elementosTablaRegistrosVentas = consulta.getRegistrosVentas();
-			Vector elementos3 = new Vector();
+			Vector<String> elementos3 = new Vector<String>();
 			for (int i = 0; i < elementosTablaRegistrosVentas.size(); i++) {
-				elementos3 = new Vector();
+				elementos3 = new Vector<String>();
 				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Fecha());
-				elementos3.add(elementosTablaRegistrosVentas.get(i).get_CantidadVendida());
+				elementos3.add(String.valueOf(elementosTablaRegistrosVentas.get(i).get_CantidadVendida()));
 				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Rut());
 				elementos3.add(elementosTablaRegistrosVentas.get(i).get_ID());
 				modeloTabla.addRow(elementos3);
@@ -798,13 +776,13 @@ public class Administracion extends JFrame {
 			break;
 		case 4:
 			elementosTablaRegistrosCompras = consulta.getRegistrosCompras();
-			Vector elementos4 = new Vector();
+			Vector<String> elementos4 = new Vector<String>();
 			for (int i = 0; i < elementosTablaRegistrosCompras.size(); i++) {
-				elementos4 = new Vector();
+				elementos4 = new Vector<String>();
 				elementos4.add(elementosTablaRegistrosCompras.get(i).get_Usuario());
 				elementos4.add(elementosTablaRegistrosCompras.get(i).get_NombreProveedor());
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_UnidadesAdquiridas());
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_CostoUnitario());
+				elementos4.add(String.valueOf(elementosTablaRegistrosCompras.get(i).get_UnidadesAdquiridas()));
+				elementos4.add(String.valueOf(elementosTablaRegistrosCompras.get(i).get_CostoUnitario()));
 				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaPedida());
 				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaRecibo());
 				elementos4.add(elementosTablaRegistrosCompras.get(i).get_ID());
@@ -834,15 +812,6 @@ public class Administracion extends JFrame {
 		IconoIlovenyPanel.add(lblIcono);
 	}
 	
-	private ArrayList<String> getSelectedRow() {
-		ArrayList<String> elementos = new ArrayList<String>();
-		int row = tabla.getSelectedRow();
-		for (int i = 0; i < tabla.getColumnCount(); i++) {
-			elementos.add(String.valueOf(tabla.getValueAt(tabla.getSelectedRow(), i)));
-		}
-		return elementos;
-	}
-	
 	private void moverLayeredPanel() {
 		funcionesLayeredPane.setBounds(197, 39, 732, 558);
 	}
@@ -869,20 +838,15 @@ public class Administracion extends JFrame {
 	
 	public void addEventoBotonEnteredAndExited(JButton boton){
 		boton.addMouseListener(new MouseAdapter() {
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			boton.setBackground(new Color(31,31,31));
-		}
-		@Override
-		public void mouseExited(MouseEvent e) {
-			boton.setBackground(new Color(51,51,51));
-		}
-	});
-	}
-	
-	private void mostrarAlertaFilaNoSeleccionada() {
-		// TODO Auto-generated method stub
-		
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				boton.setBackground(new Color(31,31,31));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				boton.setBackground(new Color(51,51,51));
+			}
+		});
 	}
 	
 	private void eventoHeader() {

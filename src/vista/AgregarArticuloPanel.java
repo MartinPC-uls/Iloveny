@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,22 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JRadioButton;
-import javax.swing.event.ChangeListener;
-
 import mongodb.Articulo;
 import mongodb.Consulta;
 import mongodb.Medida;
-
-import javax.swing.event.ChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 public class AgregarArticuloPanel extends JPanel {
 
@@ -84,7 +75,6 @@ public class AgregarArticuloPanel extends JPanel {
 		this._id = _id;
 		this.modo = modo;
 		this.btnRefrezcar = btnRefrezcar;
-		this.elementoSeleccionado = elementoSeleccionado;
 		setBounds(0,0,732,558);
 		setBackground(new Color(51,51,51));
 		setLayout(null);
@@ -651,15 +641,6 @@ public class AgregarArticuloPanel extends JPanel {
 		cambiarColorTextFieldsBlanco();
 	}
 	
-	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
-		for (int i = 0; i < comboBox.getItemCount(); i++) {
-            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
-            	comboBox.setSelectedIndex(i);
-            	break;
-            }
-        }
-	}
-	
 	private void cambiarColorTextFieldsBlanco() {
 		Component[] componentes = this.getComponents();
 		for(int i = 0; i<componentes.length;i++) {
@@ -811,17 +792,5 @@ public class AgregarArticuloPanel extends JPanel {
 				boton.setFont(new Font("Roboto Light", Font.PLAIN, 25));
 			}
 		});
-	}
-	
-	private String obtenerIdEnString(String opcionSeleccionada) {
-		char[] caracteres = opcionSeleccionada.toCharArray();
-		String id = "";
-		for(char c : caracteres) {
-			if(c == ' ') {
-				break;
-			}
-			id+= c;
-		}
-		return id;
 	}
 }

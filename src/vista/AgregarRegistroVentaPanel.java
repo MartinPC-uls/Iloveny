@@ -11,13 +11,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.ArrayList;
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -51,7 +49,6 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	private JPanel lineaCantidadVendida;
 	private JButton btnVolver;
 	public JButton btnRefrezcar;
-	private int cantidadAntigua;
 	private JTextField rutTextField;
 	private JPanel lineaRut;
 	private JLabel lblRut;
@@ -59,7 +56,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	@SuppressWarnings("rawtypes")
 	private DefaultComboBoxModel modelo2;
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public AgregarRegistroVentaPanel(int modo, JComponent[] paneles, JButton btnRefrezcar, String _id) {
 		this._id = _id;
 		this.modo = modo;
@@ -319,16 +316,8 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		}
 	}
 	
-	private void setIndiceElementoSeleccionado(JComboBox comboBox, String elementoABuscar) {
-	        for (int i = 0; i < comboBox.getItemCount(); i++) {
-	            if (comboBox.getItemAt(i).toString().contains(elementoABuscar)) {
-	                comboBox.setSelectedIndex(i);
-	                break;
-	            }
-	        }
-	    } 
-	
 	ArticuloRegistroVenta articuloRegistroVenta;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void setElementos(String _id) {
 		Consulta consulta = new Consulta();
 		RegistroVenta registroVenta = consulta.getRegistroVenta(_id);
@@ -366,6 +355,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 	}
 	
 	static String[] ids;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private DefaultComboBoxModel crearModeloComboBoxArticulo() {
 		Consulta consulta = new Consulta();
 		ArrayList<ArticuloID> articulo = consulta.getDescripcionArticulosConStock();
@@ -392,18 +382,6 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		agregarRegistroVenta();
 	}
 	
-	private String obtenerIdEnString(String opcionSeleccionada) {
-		char[] caracteres = opcionSeleccionada.toCharArray();
-		String id = "";
-		for(char c : caracteres) {
-			if(c == ' ') {
-				break;
-			}
-			id+= c;
-		}
-		return id;
-	}
-	
 	private void agregarRegistroVenta() {
 		Consulta consulta = new Consulta();
 		RegistroVenta registroVenta;
@@ -423,17 +401,6 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			consulta.updtRegistroVenta(_id, registroVenta);
 		}
 	}
-	
-	private int getNewStock(int stock, int cantidadAntigua, int cantidadNueva) {
-		if (cantidadNueva > cantidadAntigua) {
-			return stock-(cantidadNueva-cantidadAntigua);
-		} else if (cantidadAntigua > cantidadNueva) {
-			return stock-(cantidadAntigua-cantidadNueva);
-		} else if (cantidadAntigua == cantidadNueva) {
-			return stock;
-		}
-		return stock;
-	}
 
 	private boolean isTodoCorrecto() {
 		if (verificarCantidadVendida() && verificarFecha() && verificarRut()) {
@@ -449,31 +416,6 @@ public class AgregarRegistroVentaPanel extends JPanel {
 			return true;
 		}
 		setErroneo(lineaRut, lblAlertaRut);
-		return false;
-	}
-	
-	private boolean verificarStock(int stock) {
-		if (modo == 1) {
-			if (stock < Integer.parseInt(cantidadVendidaTextField.getText())) {
-				setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
-				Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
-				JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
-				return false;
-			} else {
-				setAcertado(lineaCantidadVendida, lblAlertaCantidadVendida);
-				return true;
-			}
-		} else if (modo == 2) {
-			if (getNewStock(stock, cantidadAntigua, Integer.parseInt(cantidadVendidaTextField.getText())) < 0) {
-				setErroneo(lineaCantidadVendida, lblAlertaCantidadVendida);
-				Icon icon = new ImageIcon(Login.class.getResource("/imagenes/Exclamation-mark-icon.png"));
-				JOptionPane.showMessageDialog(null, "Las unidades adquiridas son mayores al stock disponible: " + stock,"Mensaje",JOptionPane.PLAIN_MESSAGE,icon);
-				return false;
-			} else {
-				setAcertado(lineaCantidadVendida, lblAlertaCantidadVendida);
-				return true;
-			}
-		}
 		return false;
 	}
 	
@@ -499,7 +441,7 @@ public class AgregarRegistroVentaPanel extends JPanel {
 		return true;
 	}
 
-	private boolean verificarCB(JComboBox comboBox, JLabel label) {
+	private boolean verificarCB(@SuppressWarnings("rawtypes") JComboBox comboBox, JLabel label) {
 		if(comboBox.getSelectedIndex() == 0) {
 			label.setVisible(true);
 			return false;
