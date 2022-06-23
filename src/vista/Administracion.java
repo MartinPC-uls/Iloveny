@@ -524,7 +524,7 @@ public class Administracion extends JFrame {
 		tablaScrollPane = new JScrollPane(tabla);
 		tablaScrollPane.getViewport().setOpaque(false);
 		tablaScrollPane.setOpaque(false);
-		tablaScrollPane.setBounds(10, 114, 711, 434);
+		tablaScrollPane.setBounds(0, 114, 721, 434);
 		
 		tabla.setBounds(0, 0, tablaScrollPane.getWidth(), tablaScrollPane.getHeight());
 		tabla.getTableHeader().setBackground(new Color(51,51,51));
@@ -564,19 +564,106 @@ public class Administracion extends JFrame {
 	}
 
 	public void construirPanelMenu() {
+	}
+	
+	private void reacomodarPaneles() {
+		panelPrincipal.setVisible(true);
+		funcionesLayeredPane.setBounds(929,39,732,558);
+	}	
+	
+	public void eliminarDatosTabla() {
+		int rowCount = modeloTabla.getRowCount();
+		for (int i = rowCount - 1; i >= 0; i--) {
+			modeloTabla.removeRow(i);
+		}
+	}
+	
+	public void rellenarTabla() {
+		Consulta consulta = new Consulta();
+		elementosTabla = new ArrayList<ArrayList<String>>();
+		switch(modo) {
+		case 1:
+			elementosTablaUsuarios = consulta.getUsuarios();
+			Vector<String> elementos1 = new Vector<String>();
+			for (int i = 0; i < elementosTablaUsuarios.size(); i++) {
+				elementos1 = new Vector<String>();
+				elementos1.add(elementosTablaUsuarios.get(i).get_Rut());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Nombre());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Apellidos());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Telefono());
+				elementos1.add(elementosTablaUsuarios.get(i).get_Email());
+				modeloTabla.addRow(elementos1);
+			}
+			break;
+		case 2:
+			elementosTablaArticulos = consulta.getArticulos();
+			Vector<String> elementos2 = new Vector<String>();
+			for (int i = 0; i < elementosTablaArticulos.size(); i++) {
+				elementos2 = new Vector<String>();
+				elementos2.add(elementosTablaArticulos.get(i).get_Tipo());
+				elementos2.add(elementosTablaArticulos.get(i).get_Marca());
+				elementos2.add(elementosTablaArticulos.get(i).get_Descripcion());
+				elementos2.add(String.valueOf(elementosTablaArticulos.get(i).get_Stock()));
+				elementos2.add(String.valueOf(elementosTablaArticulos.get(i).get_PrecioUnitario()));
+				elementos2.add(elementosTablaArticulos.get(i).get_ID());
+				modeloTabla.addRow(elementos2);
+			}
+			break;
+		case 3:
+			elementosTablaRegistrosVentas = consulta.getRegistrosVentas();
+			Vector<String> elementos3 = new Vector<String>();
+			for (int i = 0; i < elementosTablaRegistrosVentas.size(); i++) {
+				elementos3 = new Vector<String>();
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Fecha());
+				elementos3.add(String.valueOf(elementosTablaRegistrosVentas.get(i).get_CantidadVendida()));
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Rut());
+				elementos3.add(elementosTablaRegistrosVentas.get(i).get_ID());
+				modeloTabla.addRow(elementos3);
+			}
+			break;
+		case 4:
+			elementosTablaRegistrosCompras = consulta.getRegistrosCompras();
+			Vector<String> elementos4 = new Vector<String>();
+			for (int i = 0; i < elementosTablaRegistrosCompras.size(); i++) {
+				elementos4 = new Vector<String>();
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_Usuario());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_NombreProveedor());
+				elementos4.add(String.valueOf(elementosTablaRegistrosCompras.get(i).get_UnidadesAdquiridas()));
+				elementos4.add(String.valueOf(elementosTablaRegistrosCompras.get(i).get_CostoUnitario()));
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaPedida());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaRecibo());
+				elementos4.add(elementosTablaRegistrosCompras.get(i).get_ID());
+				modeloTabla.addRow(elementos4);
+			}
+			break;
+		}
+	}
+	
+	public void construirPanelIloveny() {
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBorder(null);
-		scrollPane.setViewportBorder(null);
-		scrollPane.setBounds(-1, 196, 202, 416);
-		getContentPane().add(scrollPane);
+		funcionesLayeredPane = new JLayeredPane();
+		funcionesLayeredPane.setLayout(null);
+		funcionesLayeredPane.setBounds(929, 39, 732, 558);
+		getContentPane().add(funcionesLayeredPane);
+		IconoIlovenyPanel = new JPanel();
+		IconoIlovenyPanel.setBounds(new Rectangle(0, 0, 197, 197));
+		IconoIlovenyPanel.setBounds(0, 0, 197, 197);
+		IconoIlovenyPanel.setBackground(new Color(34,34,34));
+		getContentPane().add(IconoIlovenyPanel);
+		
+		lblIcono = new JLabel("");
+		lblIcono.setBounds(new Rectangle(19, 18, 159, 156));
+		ImageIcon iloveny_icon = new ImageIcon(Administracion.class.getResource("/imagenes/iloveny-icon.png"));
+		IconoIlovenyPanel.setLayout(null);
+		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
+		IconoIlovenyPanel.add(lblIcono);
 		MenuConBotonesPanel = new JPanel();
-		scrollPane.setViewportView(MenuConBotonesPanel);
+		MenuConBotonesPanel.setBounds(0, 194, 197, 411);
+		//IconoIlovenyPanel.add(MenuConBotonesPanel);
 		MenuConBotonesPanel.setBackground(new Color(34, 34, 34));
-		MenuConBotonesPanel.setPreferredSize(new Dimension(170, 550));
+		MenuConBotonesPanel.setPreferredSize(new Dimension(170, 250));
 		MenuConBotonesPanel.setLayout(null);
+		getContentPane().add(MenuConBotonesPanel);
 		
 		btnUsuarios = new JButton("USUARIOS");
 		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -717,99 +804,6 @@ public class Administracion extends JFrame {
 		btnRegistroCompra.setBounds(0, 162, 197, 43);
 		addEventoBotonEnteredAndExitedMenu(btnRegistroCompra);
 		MenuConBotonesPanel.add(btnRegistroCompra);
-	}
-	
-	private void reacomodarPaneles() {
-		panelPrincipal.setVisible(true);
-		funcionesLayeredPane.setBounds(929,39,732,558);
-	}	
-	
-	public void eliminarDatosTabla() {
-		int rowCount = modeloTabla.getRowCount();
-		for (int i = rowCount - 1; i >= 0; i--) {
-			modeloTabla.removeRow(i);
-		}
-	}
-	
-	public void rellenarTabla() {
-		Consulta consulta = new Consulta();
-		elementosTabla = new ArrayList<ArrayList<String>>();
-		switch(modo) {
-		case 1:
-			elementosTablaUsuarios = consulta.getUsuarios();
-			Vector<String> elementos1 = new Vector<String>();
-			for (int i = 0; i < elementosTablaUsuarios.size(); i++) {
-				elementos1 = new Vector<String>();
-				elementos1.add(elementosTablaUsuarios.get(i).get_Rut());
-				elementos1.add(elementosTablaUsuarios.get(i).get_Nombre());
-				elementos1.add(elementosTablaUsuarios.get(i).get_Apellidos());
-				elementos1.add(elementosTablaUsuarios.get(i).get_Telefono());
-				elementos1.add(elementosTablaUsuarios.get(i).get_Email());
-				modeloTabla.addRow(elementos1);
-			}
-			break;
-		case 2:
-			elementosTablaArticulos = consulta.getArticulos();
-			Vector<String> elementos2 = new Vector<String>();
-			for (int i = 0; i < elementosTablaArticulos.size(); i++) {
-				elementos2 = new Vector<String>();
-				elementos2.add(elementosTablaArticulos.get(i).get_Tipo());
-				elementos2.add(elementosTablaArticulos.get(i).get_Marca());
-				elementos2.add(elementosTablaArticulos.get(i).get_Descripcion());
-				elementos2.add(String.valueOf(elementosTablaArticulos.get(i).get_Stock()));
-				elementos2.add(String.valueOf(elementosTablaArticulos.get(i).get_PrecioUnitario()));
-				elementos2.add(elementosTablaArticulos.get(i).get_ID());
-				modeloTabla.addRow(elementos2);
-			}
-			break;
-		case 3:
-			elementosTablaRegistrosVentas = consulta.getRegistrosVentas();
-			Vector<String> elementos3 = new Vector<String>();
-			for (int i = 0; i < elementosTablaRegistrosVentas.size(); i++) {
-				elementos3 = new Vector<String>();
-				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Fecha());
-				elementos3.add(String.valueOf(elementosTablaRegistrosVentas.get(i).get_CantidadVendida()));
-				elementos3.add(elementosTablaRegistrosVentas.get(i).get_Rut());
-				elementos3.add(elementosTablaRegistrosVentas.get(i).get_ID());
-				modeloTabla.addRow(elementos3);
-			}
-			break;
-		case 4:
-			elementosTablaRegistrosCompras = consulta.getRegistrosCompras();
-			Vector<String> elementos4 = new Vector<String>();
-			for (int i = 0; i < elementosTablaRegistrosCompras.size(); i++) {
-				elementos4 = new Vector<String>();
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_Usuario());
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_NombreProveedor());
-				elementos4.add(String.valueOf(elementosTablaRegistrosCompras.get(i).get_UnidadesAdquiridas()));
-				elementos4.add(String.valueOf(elementosTablaRegistrosCompras.get(i).get_CostoUnitario()));
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaPedida());
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_FechaRecibo());
-				elementos4.add(elementosTablaRegistrosCompras.get(i).get_ID());
-				modeloTabla.addRow(elementos4);
-			}
-			break;
-		}
-	}
-	
-	public void construirPanelIloveny() {
-		
-		funcionesLayeredPane = new JLayeredPane();
-		funcionesLayeredPane.setLayout(null);
-		funcionesLayeredPane.setBounds(929, 39, 732, 558);
-		getContentPane().add(funcionesLayeredPane);
-		IconoIlovenyPanel = new JPanel();
-		IconoIlovenyPanel.setBounds(new Rectangle(0, 0, 197, 197));
-		IconoIlovenyPanel.setBounds(0, 0, 197, 197);
-		IconoIlovenyPanel.setBackground(new Color(34,34,34));
-		getContentPane().add(IconoIlovenyPanel);
-		
-		lblIcono = new JLabel("");
-		lblIcono.setBounds(new Rectangle(19, 18, 159, 156));
-		ImageIcon iloveny_icon = new ImageIcon(Administracion.class.getResource("/imagenes/iloveny-icon.png"));
-		IconoIlovenyPanel.setLayout(null);
-		lblIcono.setIcon(new ImageIcon(iloveny_icon.getImage().getScaledInstance(lblIcono.getWidth(), lblIcono.getHeight(), Image.SCALE_SMOOTH)));
-		IconoIlovenyPanel.add(lblIcono);
 	}
 	
 	private void moverLayeredPanel() {
